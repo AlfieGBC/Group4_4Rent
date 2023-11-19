@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.pp.a4rent.app-mergeDebugResources-30:/layout/activity_main.xml",
+        "source": "com.pp.a4rent.app-main-33:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/pabitapun/.gradle/daemon/8.0/com.pp.a4rent.app-mergeDebugResources-30:/layout/activity_main.xml",
+        "source": "/Users/pabitapun/.gradle/daemon/8.0/com.pp.a4rent.app-main-33:/layout/activity_main.xml"
+    }
+]
