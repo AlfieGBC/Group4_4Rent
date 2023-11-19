@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -26,6 +27,9 @@ public final class ActivityMainBinding implements ViewBinding {
   public final ImageView homepageHeaderImg;
 
   @NonNull
+  public final LinearLayout llFooter;
+
+  @NonNull
   public final Toolbar menuToolbar;
 
   @NonNull
@@ -44,11 +48,12 @@ public final class ActivityMainBinding implements ViewBinding {
   public final TextView tvHeader4;
 
   private ActivityMainBinding(@NonNull ScrollView rootView, @NonNull ImageView homepageHeaderImg,
-      @NonNull Toolbar menuToolbar, @NonNull ConstraintLayout rootLayout,
-      @NonNull TextView tvHeader, @NonNull TextView tvHeader2, @NonNull TextView tvHeader3,
-      @NonNull TextView tvHeader4) {
+      @NonNull LinearLayout llFooter, @NonNull Toolbar menuToolbar,
+      @NonNull ConstraintLayout rootLayout, @NonNull TextView tvHeader, @NonNull TextView tvHeader2,
+      @NonNull TextView tvHeader3, @NonNull TextView tvHeader4) {
     this.rootView = rootView;
     this.homepageHeaderImg = homepageHeaderImg;
+    this.llFooter = llFooter;
     this.menuToolbar = menuToolbar;
     this.rootLayout = rootLayout;
     this.tvHeader = tvHeader;
@@ -90,6 +95,12 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.ll_footer;
+      LinearLayout llFooter = ViewBindings.findChildViewById(rootView, id);
+      if (llFooter == null) {
+        break missingId;
+      }
+
       id = R.id.menu_toolbar;
       Toolbar menuToolbar = ViewBindings.findChildViewById(rootView, id);
       if (menuToolbar == null) {
@@ -126,8 +137,8 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityMainBinding((ScrollView) rootView, homepageHeaderImg, menuToolbar,
-          rootLayout, tvHeader, tvHeader2, tvHeader3, tvHeader4);
+      return new ActivityMainBinding((ScrollView) rootView, homepageHeaderImg, llFooter,
+          menuToolbar, rootLayout, tvHeader, tvHeader2, tvHeader3, tvHeader4);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

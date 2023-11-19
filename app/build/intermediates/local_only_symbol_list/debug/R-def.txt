@@ -8,6 +8,7 @@ drawable home3
 drawable ic_launcher_background
 drawable ic_launcher_foreground
 id homepage_header_img
+id ll_footer
 id menu_item_blog
 id menu_item_login
 id menu_item_post_rental
