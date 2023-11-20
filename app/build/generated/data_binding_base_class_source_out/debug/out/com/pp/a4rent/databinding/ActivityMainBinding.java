@@ -4,6 +4,7 @@ package com.pp.a4rent.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -24,12 +25,36 @@ public final class ActivityMainBinding implements ViewBinding {
   private final ScrollView rootView;
 
   @NonNull
+  public final Button btnSearchToronto;
+
+  @NonNull
+  public final Button btnSearchVancouver;
+
+  @NonNull
+  public final Button btnSearchWinnipeg;
+
+  @NonNull
+  public final TextView footerBodyCopyright;
+
+  @NonNull
+  public final TextView footerBodyRights;
+
+  @NonNull
+  public final TextView footerHeading;
+
+  @NonNull
   public final ImageView homepageHeaderImg;
 
   @NonNull
   public final LinearLayout llFooter;
 
   @NonNull
+<<<<<<< HEAD
+=======
+  public final LinearLayout llSearchButtons;
+
+  @NonNull
+>>>>>>> 50b27bc (Some new elements added)
   public final Toolbar menuToolbar;
 
   @NonNull
@@ -47,13 +72,34 @@ public final class ActivityMainBinding implements ViewBinding {
   @NonNull
   public final TextView tvHeader4;
 
+<<<<<<< HEAD
   private ActivityMainBinding(@NonNull ScrollView rootView, @NonNull ImageView homepageHeaderImg,
       @NonNull LinearLayout llFooter, @NonNull Toolbar menuToolbar,
       @NonNull ConstraintLayout rootLayout, @NonNull TextView tvHeader, @NonNull TextView tvHeader2,
       @NonNull TextView tvHeader3, @NonNull TextView tvHeader4) {
+=======
+  private ActivityMainBinding(@NonNull ScrollView rootView, @NonNull Button btnSearchToronto,
+      @NonNull Button btnSearchVancouver, @NonNull Button btnSearchWinnipeg,
+      @NonNull TextView footerBodyCopyright, @NonNull TextView footerBodyRights,
+      @NonNull TextView footerHeading, @NonNull ImageView homepageHeaderImg,
+      @NonNull LinearLayout llFooter, @NonNull LinearLayout llSearchButtons,
+      @NonNull Toolbar menuToolbar, @NonNull ConstraintLayout rootLayout,
+      @NonNull TextView tvHeader, @NonNull TextView tvHeader2, @NonNull TextView tvHeader3,
+      @NonNull TextView tvHeader4) {
+>>>>>>> 50b27bc (Some new elements added)
     this.rootView = rootView;
+    this.btnSearchToronto = btnSearchToronto;
+    this.btnSearchVancouver = btnSearchVancouver;
+    this.btnSearchWinnipeg = btnSearchWinnipeg;
+    this.footerBodyCopyright = footerBodyCopyright;
+    this.footerBodyRights = footerBodyRights;
+    this.footerHeading = footerHeading;
     this.homepageHeaderImg = homepageHeaderImg;
     this.llFooter = llFooter;
+<<<<<<< HEAD
+=======
+    this.llSearchButtons = llSearchButtons;
+>>>>>>> 50b27bc (Some new elements added)
     this.menuToolbar = menuToolbar;
     this.rootLayout = rootLayout;
     this.tvHeader = tvHeader;
@@ -89,6 +135,42 @@ public final class ActivityMainBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.btnSearchToronto;
+      Button btnSearchToronto = ViewBindings.findChildViewById(rootView, id);
+      if (btnSearchToronto == null) {
+        break missingId;
+      }
+
+      id = R.id.btnSearchVancouver;
+      Button btnSearchVancouver = ViewBindings.findChildViewById(rootView, id);
+      if (btnSearchVancouver == null) {
+        break missingId;
+      }
+
+      id = R.id.btnSearchWinnipeg;
+      Button btnSearchWinnipeg = ViewBindings.findChildViewById(rootView, id);
+      if (btnSearchWinnipeg == null) {
+        break missingId;
+      }
+
+      id = R.id.footer_body_copyright;
+      TextView footerBodyCopyright = ViewBindings.findChildViewById(rootView, id);
+      if (footerBodyCopyright == null) {
+        break missingId;
+      }
+
+      id = R.id.footer_body_rights;
+      TextView footerBodyRights = ViewBindings.findChildViewById(rootView, id);
+      if (footerBodyRights == null) {
+        break missingId;
+      }
+
+      id = R.id.footer_heading;
+      TextView footerHeading = ViewBindings.findChildViewById(rootView, id);
+      if (footerHeading == null) {
+        break missingId;
+      }
+
       id = R.id.homepage_header_img;
       ImageView homepageHeaderImg = ViewBindings.findChildViewById(rootView, id);
       if (homepageHeaderImg == null) {
@@ -101,6 +183,15 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+<<<<<<< HEAD
+=======
+      id = R.id.ll_search_buttons;
+      LinearLayout llSearchButtons = ViewBindings.findChildViewById(rootView, id);
+      if (llSearchButtons == null) {
+        break missingId;
+      }
+
+>>>>>>> 50b27bc (Some new elements added)
       id = R.id.menu_toolbar;
       Toolbar menuToolbar = ViewBindings.findChildViewById(rootView, id);
       if (menuToolbar == null) {
@@ -137,8 +228,15 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+<<<<<<< HEAD
       return new ActivityMainBinding((ScrollView) rootView, homepageHeaderImg, llFooter,
           menuToolbar, rootLayout, tvHeader, tvHeader2, tvHeader3, tvHeader4);
+=======
+      return new ActivityMainBinding((ScrollView) rootView, btnSearchToronto, btnSearchVancouver,
+          btnSearchWinnipeg, footerBodyCopyright, footerBodyRights, footerHeading,
+          homepageHeaderImg, llFooter, llSearchButtons, menuToolbar, rootLayout, tvHeader,
+          tvHeader2, tvHeader3, tvHeader4);
+>>>>>>> 50b27bc (Some new elements added)
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
