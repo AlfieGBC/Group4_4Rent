@@ -1,0 +1,26 @@
+/build
+
+
+# Android build folders
+*.iml
+/.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+/.idea/dictionaries
+/captures
+/.externalNativeBuild
+/build
+
+# Gradle files
+.gradle/
+/build/
+
+# Generated files
+build/
+captures/
+
