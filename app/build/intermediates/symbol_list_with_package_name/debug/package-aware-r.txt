@@ -2952,6 +2952,7 @@ drawable design_ic_visibility
 drawable design_ic_visibility_off
 drawable design_password_eye
 drawable design_snackbar_background
+drawable fb
 drawable home1
 drawable home2
 drawable home3
@@ -2969,6 +2970,7 @@ drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
 drawable ic_search_black_24
+drawable ig
 drawable m3_appbar_background
 drawable m3_avd_hide_password
 drawable m3_avd_show_password
@@ -3044,6 +3046,8 @@ drawable notify_panel_notification_icon_bg
 drawable test_level_drawable
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
+drawable twitter
+drawable youtube
 id ALT
 id BOTTOM_END
 id BOTTOM_START
@@ -3142,6 +3146,9 @@ id bounce
 id bounceBoth
 id bounceEnd
 id bounceStart
+id btnSearchToronto
+id btnSearchVancouver
+id btnSearchWinnipeg
 id buttonPanel
 id cache_measures
 id callMeasure
@@ -3238,6 +3245,9 @@ id fitXY
 id fixed
 id flip
 id floating
+id footer_body_copyright
+id footer_body_rights
+id footer_heading
 id forever
 id fragment_container_view_tag
 id frost
@@ -3283,6 +3293,8 @@ id line3
 id linear
 id listMode
 id list_item
+id ll_footer
+id ll_search_buttons
 id m3_side_sheet
 id marquee
 id masked

@@ -2,12 +2,24 @@ R_DEF: Internal format may change without notice
 local
 color black
 color white
+drawable fb
 drawable home1
 drawable home2
 drawable home3
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable ig
+drawable twitter
+drawable youtube
+id btnSearchToronto
+id btnSearchVancouver
+id btnSearchWinnipeg
+id footer_body_copyright
+id footer_body_rights
+id footer_heading
 id homepage_header_img
+id ll_footer
+id ll_search_buttons
 id menu_item_blog
 id menu_item_login
 id menu_item_post_rental
