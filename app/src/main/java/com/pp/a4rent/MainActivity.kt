@@ -70,8 +70,8 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "onOptionsItemSelected: Sign Up option is selected")
 
                 // navigate to 2nd screen
-//                val sidebarIntent = Intent(this@MainActivity, AccountActivity::class.java)
-//                startActivity(sidebarIntent)
+                val sidebarIntent = Intent(this@MainActivity, SignUpActivity::class.java)
+                startActivity(sidebarIntent)
 
                 return true
             }
@@ -79,8 +79,8 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "onOptionsItemSelected: Log In option is selected")
 
                 // navigate to 2nd screen
-//                val sidebarIntent = Intent(this@MainActivity, AccountActivity::class.java)
-//                startActivity(sidebarIntent)
+                val sidebarIntent = Intent(this@MainActivity, LoginActivity::class.java)
+                startActivity(sidebarIntent)
 
                 return true
             }
