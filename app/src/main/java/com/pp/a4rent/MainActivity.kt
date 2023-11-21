@@ -9,6 +9,7 @@ import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.pp.a4rent.databinding.ActivityMainBinding
+import com.pp.a4rent.screens.TorontoRentalsActivity
 
 class MainActivity : AppCompatActivity() {
 

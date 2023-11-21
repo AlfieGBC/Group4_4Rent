@@ -1,4 +1,4 @@
-package com.pp.a4rent
+package com.pp.a4rent.screens
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +11,8 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.pp.a4rent.ProfileActivity
+import com.pp.a4rent.R
 import com.pp.a4rent.adapters.TorontoRentalsAdapter
 import com.pp.a4rent.databinding.ActivityTorontoRentalsBinding
 import com.pp.a4rent.models.Owner
@@ -26,10 +28,10 @@ class TorontoRentalsActivity : AppCompatActivity() {
 
     // made this mutable because we know that later on, we have to add fruits to it
     private var rentalDatasource:MutableList<PropertyRental> = mutableListOf<PropertyRental>(
-        PropertyRental("condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, "cool condo", "abc", 2500.0, true, "peter"),
-        PropertyRental("house", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, "cool condo","abc", 2500.0, true, "amy"),
-        PropertyRental("apartment", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, "cool condo", "abc", 2500.0, true, "alex"),
-        PropertyRental("basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, "cool condo", "abc", 2500.0, true, "jane"),
+        PropertyRental("condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "abc", 2500.0, true, "peter"),
+        PropertyRental("house", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","abc", 2500.0, true, "amy"),
+        PropertyRental("apartment", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "abc", 2500.0, true, "alex"),
+        PropertyRental("basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "abc", 2500.0, true, "jane"),
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,13 +78,31 @@ class TorontoRentalsActivity : AppCompatActivity() {
     }
 
     // rv:  Row click handler
-    fun rowClicked(position:Int){
+    fun rowClicked(rowPosition: Int){
 
-        var selectedRental:PropertyRental = rentalDatasource.get(position)
+        var selectedRental:PropertyRental = rentalDatasource.get(rowPosition)
         // snackbar
-        val snackbar = Snackbar.make(binding.root, "${selectedRental.toString()}", Snackbar.LENGTH_LONG)
+        val snackbar = Snackbar.make(binding.root, "${selectedRental.toString()}, for row${rowPosition}", Snackbar.LENGTH_LONG)
         snackbar.show()
+
+        // navigate to rental details page
+        val intent = Intent(this, RentalPostDetailActivity::class.java)
+        intent.putExtra("ROW_RENTAL_POST_DETAIL_POSITION", rowPosition)
+
+        // send the details of the rental post to next screen
+        // rentalDatasource -> PropertyRental class must be Serializable interface or protocol
+        intent.putExtra("ROW_RENTAL_POST_DETAIL",   rentalDatasource.get(rowPosition))
+
+
+        Log.d("TAG", "${rentalDatasource.get(rowPosition)}")
+
+
+        startActivity(intent)
+
     }
+
+    // click handler for the RV's entire row
+
 
     // rv: Favorite button click handler
     fun favButtonClicked(position:Int) {
