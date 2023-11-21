@@ -37,6 +37,18 @@ class MainActivity : AppCompatActivity() {
             binding.menuToolbar.overflowIcon = wrappedDrawable
         }
 
+        binding.btnSearchToronto.setOnClickListener {
+            this.goToTorontoRentals()
+        }
+    }
+
+    // Function to navigate users to Toronto Rentals page
+    // Shows list of rentals in Toronto area
+    fun goToTorontoRentals() {
+
+        // navigate to 2nd screen
+        val torontoRentalsIntent = Intent(this@MainActivity, TorontoRentalsActivity::class.java)
+        startActivity(torontoRentalsIntent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
