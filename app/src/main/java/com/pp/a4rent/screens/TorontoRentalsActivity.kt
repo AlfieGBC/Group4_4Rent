@@ -95,7 +95,7 @@ class TorontoRentalsActivity : AppCompatActivity() {
                         rental.available,
                         rental.imageFilename)
 
-                    // and add that into the empty list
+cb                    // and add that into the empty list
                     searchedRentalsList.add(rentalToAdd)
 
                     // setup adapter
