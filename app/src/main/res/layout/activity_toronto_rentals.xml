@@ -9,7 +9,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".TorontoRentalsActivity">
+        tools:context=".screens.TorontoRentalsActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/menu_toolbar"
@@ -30,16 +30,29 @@
             android:textSize="40sp"
             android:textColor="@color/black"
             android:textStyle="bold"
-            app:layout_constraintVertical_bias="0.1"
+            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/menu_toolbar"
+            />
+
+        <TextView
+            android:id="@+id/tv_rental_error_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textColor="#CF0808"
+            android:textStyle="bold"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_toronto_rental_header"
             />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_toronto_rental_header"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_rental_error_msg"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

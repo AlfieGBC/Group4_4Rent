@@ -9,6 +9,12 @@ import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.pp.a4rent.databinding.ActivityMainBinding
+import com.pp.a4rent.screens.TorontoRentalsActivity
+
+import com.pp.a4rent.screens.AccountActivity
+import com.pp.a4rent.screens.LoginActivity
+import com.pp.a4rent.screens.RegisterActivity
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,6 +46,10 @@ class MainActivity : AppCompatActivity() {
         binding.btnSearchToronto.setOnClickListener {
             this.goToTorontoRentals()
         }
+
+        binding.btnSearch.setOnClickListener {
+            this.goToRentalsPostList()
+        }
     }
 
     // Function to navigate users to Toronto Rentals page
@@ -49,6 +59,33 @@ class MainActivity : AppCompatActivity() {
         // navigate to 2nd screen
         val torontoRentalsIntent = Intent(this@MainActivity, TorontoRentalsActivity::class.java)
         startActivity(torontoRentalsIntent)
+    }
+
+    fun goToRentalsPostList() {
+        // get the input from edit text
+        val etSearchKeyword : String = binding.etSearch.text.toString()
+
+        // error handling
+        if (etSearchKeyword.isEmpty()) {
+            this.binding.tvErrorMsg.setText("ERROR: Search field must be filled in!")
+            return
+        } else {
+            // navigate to search result screen
+            val rentalPostListIntent = Intent(this@MainActivity, TorontoRentalsActivity::class.java)
+            rentalPostListIntent.putExtra("SEARCH_KEYWORD_FROM_ET", etSearchKeyword)
+
+//            val check = rentalPostListIntent.getStringExtra("SEARCH_KEYWORD_FROM_ET")
+//            Log.d("TAG", "$check")
+
+            startActivity(rentalPostListIntent)
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("TAG", "user returned to MainActivity!")
+        binding.etSearch.setText("")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -82,7 +119,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "onOptionsItemSelected: Sign Up option is selected")
 
                 // navigate to 2nd screen
-                val sidebarIntent = Intent(this@MainActivity, SignUpActivity::class.java)
+                val sidebarIntent = Intent(this@MainActivity, RegisterActivity::class.java)
                 startActivity(sidebarIntent)
 
                 return true

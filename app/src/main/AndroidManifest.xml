@@ -13,13 +13,19 @@
         android:theme="@style/Theme._4Rent"
         tools:targetApi="31">
         <activity
-            android:name=".adapters.MyListingsAdapter"
+            android:name=".screens.RentalPostDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".RentalFormActivity"
+            android:name=".screens.TorontoRentalsActivity"
             android:exported="false" />
         <activity
-            android:name=".TorontoRentalsActivity"
+            android:name=".screens.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.AccountActivity"
             android:exported="false" />
         <activity
             android:name=".MyListingsActivity"
