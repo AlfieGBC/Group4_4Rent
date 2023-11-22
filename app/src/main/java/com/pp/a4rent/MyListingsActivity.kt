@@ -18,6 +18,7 @@ import com.pp.a4rent.models.Property
 import com.pp.a4rent.models.PropertyRental
 import com.pp.a4rent.models.User
 import com.pp.a4rent.screens.LoginActivity
+import com.pp.a4rent.screens.MyListingDetailsActivity
 import java.io.Serializable
 
 class MyListingsActivity : AppCompatActivity() {
@@ -25,6 +26,7 @@ class MyListingsActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
     private var myListingsList = listOf<Property>()
+    private var userObj: User? = null
     private lateinit var adapter: MyListingsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,21 +36,21 @@ class MyListingsActivity : AppCompatActivity() {
         // set up menu
         setSupportActionBar(this.binding.menu)
 
+        // initiate shared preference
+        sharedPreferences = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+
         // get user object from intent
         val currIntent = this@MyListingsActivity.intent
         if (currIntent != null){
-            val userObj = if (currIntent.hasExtra("extra_userObj")) {
+            userObj = if (currIntent.hasExtra("extra_userObj")) {
                 currIntent.getSerializableExtra("extra_userObj") as User
             } else {null}
             if (userObj != null){
                 // if user object exist
 
-                // initiate shared preference
-                sharedPreferences = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
-                editor = sharedPreferences.edit()
-
                 // get myListings list from sharedPreference
-                val myListingsListJson = sharedPreferences.getString(userObj.userId, "")
+                val myListingsListJson = sharedPreferences.getString(userObj!!.userId, "")
                 if (myListingsListJson == ""){}else{
                     val gson = Gson()
                     val typeToken = object : TypeToken<List<Property>>() {}.type
@@ -56,7 +58,7 @@ class MyListingsActivity : AppCompatActivity() {
                 }
 
                 // set up the adapter
-                this.adapter = MyListingsAdapter(myListingsList)
+                this.adapter = MyListingsAdapter(myListingsList, {pos -> listingRowClicked(pos)})
                 binding.rvMyListings.adapter = adapter
                 binding.rvMyListings.layoutManager = LinearLayoutManager(this)
                 binding.rvMyListings.addItemDecoration(
@@ -76,6 +78,15 @@ class MyListingsActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    fun listingRowClicked(position:Int){
+
+        // pass through user object
+        val intent = Intent(this@MyListingsActivity, MyListingDetailsActivity::class.java)
+        intent.putExtra("extra_userObj", userObj)
+        intent.putExtra("extra_position", position)
+        startActivity(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

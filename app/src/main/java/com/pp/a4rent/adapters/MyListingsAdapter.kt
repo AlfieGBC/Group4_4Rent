@@ -9,9 +9,18 @@ import com.pp.a4rent.R
 import com.pp.a4rent.models.Property
 import com.pp.a4rent.models.PropertyRental
 
-class MyListingsAdapter(var myListings: List<Property>) : RecyclerView.Adapter<MyListingsAdapter.MyListingsViewHolder>() {
+class MyListingsAdapter(
+    var myListings: List<Property>,
+    val listingRowClickedHandler: (Int) -> Unit,
+) : RecyclerView.Adapter<MyListingsAdapter.MyListingsViewHolder>() {
 
-    inner class MyListingsViewHolder(itemView: View) : RecyclerView.ViewHolder (itemView) {}
+    inner class MyListingsViewHolder(itemView: View) : RecyclerView.ViewHolder (itemView) {
+        init {
+            itemView.setOnClickListener {
+                listingRowClickedHandler(adapterPosition)
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyListingsViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.activity_my_listings_adapter, parent, false)

@@ -22,7 +22,7 @@
             app:titleTextColor="@color/white" />
 
         <TextView
-            android:id="@+id/tv_1"
+            android:id="@+id/tv_1_listing_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -41,7 +41,7 @@
             android:layout_margin="8dp"
             tools:listitem="@layout/activity_my_listings_adapter"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_1" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_1_listing_details" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
