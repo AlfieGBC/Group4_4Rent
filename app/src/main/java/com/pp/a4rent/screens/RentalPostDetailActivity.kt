@@ -9,12 +9,13 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import com.pp.a4rent.LoginActivity
 import com.pp.a4rent.ProfileActivity
 import com.pp.a4rent.R
-import com.pp.a4rent.SignUpActivity
 import com.pp.a4rent.databinding.ActivityRentalPostDetailBinding
 import com.pp.a4rent.models.PropertyRental
+
+import com.pp.a4rent.screens.LoginActivity
+import com.pp.a4rent.screens.RegisterActivity
 
 class RentalPostDetailActivity : AppCompatActivity() {
 
@@ -108,7 +109,7 @@ class RentalPostDetailActivity : AppCompatActivity() {
                 Log.d("TAG", "onOptionsItemSelected: Sign Up option is selected")
 
                 // navigate to 2nd screen
-                val sidebarIntent = Intent(this@RentalPostDetailActivity, SignUpActivity::class.java)
+                val sidebarIntent = Intent(this@RentalPostDetailActivity, RegisterActivity::class.java)
                 startActivity(sidebarIntent)
 
                 return true

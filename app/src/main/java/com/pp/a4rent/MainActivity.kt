@@ -11,6 +11,11 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.pp.a4rent.databinding.ActivityMainBinding
 import com.pp.a4rent.screens.TorontoRentalsActivity
 
+import com.pp.a4rent.screens.AccountActivity
+import com.pp.a4rent.screens.LoginActivity
+import com.pp.a4rent.screens.RegisterActivity
+
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -115,7 +120,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "onOptionsItemSelected: Sign Up option is selected")
 
                 // navigate to 2nd screen
-                val sidebarIntent = Intent(this@MainActivity, SignUpActivity::class.java)
+                val sidebarIntent = Intent(this@MainActivity, RegisterActivity::class.java)
                 startActivity(sidebarIntent)
 
                 return true
