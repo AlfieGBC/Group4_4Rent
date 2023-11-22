@@ -31,6 +31,7 @@ class RentalFormActivity : AppCompatActivity() {
         binding = ActivityRentalFormBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // initiate shared preference
         sharedPreferences = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
 
@@ -41,6 +42,7 @@ class RentalFormActivity : AppCompatActivity() {
         val propertyTypeAdapter = ArrayAdapter<String>(this, R.layout.spinner_item_property_types, PropertyType.displayNames)
         binding.propertyTypeSpinner.adapter = propertyTypeAdapter
 
+        // when Publish button is clicked
         binding.btnPublish.setOnClickListener {
 
             // Get data from UI
@@ -76,8 +78,8 @@ class RentalFormActivity : AppCompatActivity() {
             val gson = Gson()
             val user = gson.fromJson(userJson, User::class.java)
 
-            // get my listings list from sharedPreference
-            val myListingsListJson = sharedPreferences.getString("MyListingsList", "")
+            // get myListings list from sharedPreference
+            val myListingsListJson = sharedPreferences.getString(user.userId, "")
             if (myListingsListJson == ""){}else{
                 val typeToken = object : TypeToken<List<Property>>() {}.type
                 propertiesList = gson.fromJson<List<Property>>(myListingsListJson, typeToken).toMutableList()
@@ -93,11 +95,12 @@ class RentalFormActivity : AppCompatActivity() {
             Log.d("propertiesList", "onCreate: propertiesList: $propertiesList\n" +
                     "propertiesList size: ${propertiesList.size}")
 
-            // convert list back to string
+            // convert list back to string, using user ID as KEY to store a list of listings
             val propertiesListJson = gson.toJson(propertiesList)
-            editor.putString("MyListingsList", propertiesListJson)
+            editor.putString(user.userId, propertiesListJson)
             editor.apply()
             val intent = Intent(this, MyListingsActivity::class.java)
+            intent.putExtra("extra_userObj", user)
             startActivity(intent)
 
         }
