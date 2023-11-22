@@ -11,7 +11,6 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.pp.a4rent.databinding.ActivityMainBinding
 import com.pp.a4rent.screens.RentalsPostListActivity
 
-import com.pp.a4rent.screens.AccountActivity
 import com.pp.a4rent.screens.LoginActivity
 import com.pp.a4rent.screens.RegisterActivity
 

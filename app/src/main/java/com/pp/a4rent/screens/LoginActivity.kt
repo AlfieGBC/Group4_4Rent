@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
                 val user = gson.fromJson(userJson, User::class.java)
                 if (user.password == password) {
                     Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, AccountActivity::class.java)
+                    val intent = Intent(this, TenantAccountActivity::class.java)
                     intent.putExtra("user", userJson)
                     startActivity(intent)
                 } else {
