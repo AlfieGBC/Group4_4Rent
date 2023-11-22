@@ -51,21 +51,54 @@
             app:layout_constraintTop_toBottomOf="@+id/menu_toolbar"
             />
 
-        <EditText
+<!--        Search by using edit text-->
+        <LinearLayout
+            android:id="@+id/ll_et_search_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="City, 4RentID, Property Manager or Address"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:background="@color/white"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="40dp"
-            android:padding="10sp"
-            app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_header"
-            />
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="10dp">
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:hint="City, 4RentID, Property Manager or Address"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:background="@color/white"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:padding="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_header"
+                />
+
+            <Button
+                android:id="@+id/btn_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search"
+                android:backgroundTint="#9C27B0"
+                app:layout_constraintTop_toBottomOf="@+id/tv_header"
+                app:layout_constraintStart_toEndOf="@+id/et_search"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </LinearLayout>
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_error_msg"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="20sp"-->
+<!--            android:textColor="#C50B0B"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textAlignment="center"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tv_header"-->
+<!--            app:layout_constraintStart_toEndOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            />-->
 
         <TextView
             android:id="@+id/tv_header2"
@@ -145,19 +178,7 @@
 
 
 
-        <TextView
-            android:id="@+id/tv_header4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Our rental magazines"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            app:layout_constraintTop_toBottomOf="@+id/ll_search_buttons"
-            android:layout_marginTop="20dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            />
+
 
 <!--        Footer section-->
         <LinearLayout
@@ -166,7 +187,7 @@
             android:layout_height="300dp"
             android:orientation="vertical"
             android:background="#1E436C"
-            app:layout_constraintTop_toBottomOf="@+id/tv_header4"
+            app:layout_constraintTop_toBottomOf="@+id/ll_search_buttons"
             android:layout_marginTop="40dp">
 
             <TextView

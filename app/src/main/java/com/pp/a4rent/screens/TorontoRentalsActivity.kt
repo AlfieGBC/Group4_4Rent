@@ -29,10 +29,12 @@ class TorontoRentalsActivity : AppCompatActivity() {
     // made this mutable because we know that later on, we have to add fruits to it
     private var rentalDatasource:MutableList<PropertyRental> = mutableListOf<PropertyRental>(
         PropertyRental("condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "abc", 2500.0, true, "peter"),
-        PropertyRental("house", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","abc", 2500.0, true, "amy"),
-        PropertyRental("apartment", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "abc", 2500.0, true, "alex"),
+        PropertyRental("condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","north york", 2500.0, true, "amy"),
+        PropertyRental("condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "abc", 2500.0, true, "alex"),
         PropertyRental("basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "abc", 2500.0, true, "jane"),
     )
+
+    var searchedRentalsList: MutableList<PropertyRental> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_toronto_rentals)
@@ -56,31 +58,75 @@ class TorontoRentalsActivity : AppCompatActivity() {
             binding.menuToolbar.overflowIcon = wrappedDrawable
         }
 
-        // setup adapter
-        // Update adapter to accept a list of rentals
-        this.adapter = TorontoRentalsAdapter(
-            rentalDatasource,
-            {pos -> rowClicked(pos) },
-            {pos -> favButtonClicked(pos)}
 
-        )
+        // TODO: Search System
+        // get intent data from main activity
+        // receive the search input data
+        val receiveSearchInput = intent.getStringExtra("SEARCH_KEYWORD_FROM_ET")
 
-        // setup rv
-        binding.rvItems.adapter = adapter
-        binding.rvItems.layoutManager = LinearLayoutManager(this)
-        binding.rvItems.addItemDecoration(
-            DividerItemDecoration(
-                this,
-                LinearLayoutManager.VERTICAL
-            )
-        )
+        if (receiveSearchInput != null) {
+            Log.d("TAG", receiveSearchInput)
+
+            // get the data from the array
+            for (rental in rentalDatasource) {
+                // check condition
+                if (rental.propertyType == receiveSearchInput.toLowerCase() ||
+                    rental.propertyAddress == receiveSearchInput.toLowerCase() ||
+                    rental.propertyType.contains(receiveSearchInput.toLowerCase()) ||
+                    rental.propertyAddress.contains(receiveSearchInput.toLowerCase()) ) {
+                    // - if yes, then store that into a variable
+                    val rentalToAdd = PropertyRental(
+                        rental.propertyType,
+                        rental.ownerInfo,
+                        rental.numberOfBedroom,
+                        rental.numberOKitchen,
+                        rental.numberOfBathroom,
+                        rental.area,
+                        rental.description,
+                        rental.propertyAddress,
+                        rental.rent,
+                        rental.available,
+                        rental.imageFilename)
+
+                    // and add that into the empty list
+                    searchedRentalsList.add(rentalToAdd)
+
+                    // setup adapter
+                    // Update adapter to accept a list of rentals
+                    this.adapter = TorontoRentalsAdapter(
+                        // pass the rental list data to the adapter
+                        searchedRentalsList,
+                        {pos -> rowClicked(pos) },
+                        {pos -> favButtonClicked(pos)}
+
+                    )
+
+                    // setup rv
+                    binding.rvItems.adapter = adapter
+                    binding.rvItems.layoutManager = LinearLayoutManager(this)
+                    binding.rvItems.addItemDecoration(
+                        DividerItemDecoration(
+                            this,
+                            LinearLayoutManager.VERTICAL
+                        )
+                    )
+                } else {
+
+                    // error handling
+
+                }
+            }
+
+        }
+
+
 
     }
 
     // rv:  Row click handler
     fun rowClicked(rowPosition: Int){
 
-        var selectedRental:PropertyRental = rentalDatasource.get(rowPosition)
+        var selectedRental:PropertyRental = searchedRentalsList.get(rowPosition)
         // snackbar
         val snackbar = Snackbar.make(binding.root, "${selectedRental.toString()}, for row${rowPosition}", Snackbar.LENGTH_LONG)
         snackbar.show()
@@ -91,18 +137,15 @@ class TorontoRentalsActivity : AppCompatActivity() {
 
         // send the details of the rental post to next screen
         // rentalDatasource -> PropertyRental class must be Serializable interface or protocol
-        intent.putExtra("ROW_RENTAL_POST_DETAIL",   rentalDatasource.get(rowPosition))
+        intent.putExtra("ROW_RENTAL_POST_DETAIL",   searchedRentalsList.get(rowPosition))
 
 
-        Log.d("TAG", "${rentalDatasource.get(rowPosition)}")
+        Log.d("TAG", "${searchedRentalsList.get(rowPosition)}")
 
 
         startActivity(intent)
 
     }
-
-    // click handler for the RV's entire row
-
 
     // rv: Favorite button click handler
     fun favButtonClicked(position:Int) {

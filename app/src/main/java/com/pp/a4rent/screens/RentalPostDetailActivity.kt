@@ -61,7 +61,7 @@ class RentalPostDetailActivity : AppCompatActivity() {
 
             // populate the rental post text
             binding.tvRentalAddress.text = singleRentalPostDetail.propertyAddress
-            //binding.ivRentalPost. = singleRentalPostDetail.imageFilename
+//            binding.ivRentalPost = singleRentalPostDetail.imageFilename
             binding.tvRentalBeds.text = singleRentalPostDetail.numberOfBedroom.toString()
             binding.tvRentalBaths.text = singleRentalPostDetail.numberOfBathroom.toString()
             binding.tvRentalArea.text = singleRentalPostDetail.area.toString()
@@ -72,6 +72,8 @@ class RentalPostDetailActivity : AppCompatActivity() {
             binding.tvOwnerInfo.setText("Owner Name: ${singleRentalPostDetail.ownerInfo.name}\n" +
                     "Owner email: ${singleRentalPostDetail.ownerInfo.email}\n" +
                     "Owner Phone number: ${singleRentalPostDetail.ownerInfo.phoneNumber}")
+
+
         }
     }
 
