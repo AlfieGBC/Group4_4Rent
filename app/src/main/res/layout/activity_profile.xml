@@ -12,6 +12,16 @@
         android:layout_height="match_parent"
         tools:context=".ProfileActivity">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#008ba6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleTextColor="@color/white" />
+
         <TextView
             android:id="@+id/textView5"
             android:layout_width="match_parent"
@@ -21,7 +31,7 @@
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/menu" />
 
         <TextView
             android:id="@+id/textView6"
@@ -69,11 +79,12 @@ You can edit and manage your account information here."
             app:layout_constraintTop_toBottomOf="@+id/et_last_name" />
 
         <Button
-            android:id="@+id/btn_edit_profile"
+            android:id="@+id/btn_update_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Edit"
+            android:text="Update"
+            android:backgroundTint="#008ba6"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_email" />

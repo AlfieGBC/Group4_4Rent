@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/mi_home_page"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:iconTint="@color/white"
+        app:showAsAction="always"
+        android:title="Home Page"/>
+    <item
+        android:id="@+id/mi_post_rental"
+        android:title="Post Rental"/>
+    <item
+        android:id="@+id/mi_my_account"
+        android:title="My Account"/>
+    <item
+        android:id="@+id/mi_my_listings"
+        android:title="My Listings"/>
+</menu>

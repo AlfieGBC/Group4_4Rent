@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "onOptionsItemSelected: Post Rental option is selected")
 
                 // navigate to 2nd screen
-                val sidebarIntent = Intent(this@MainActivity, ProfileActivity::class.java)
+                val sidebarIntent = Intent(this@MainActivity, RentalFormActivity::class.java)
                 startActivity(sidebarIntent)
 
                 return true

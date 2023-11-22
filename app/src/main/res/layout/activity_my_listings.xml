@@ -1,48 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="8dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MyListingsActivity">
 
-        <TextView
-            android:id="@+id/tv_title_my_listings"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#008ba6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleTextColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tv_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingTop="16dp"
             android:text="My Listings"
+            android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:layout_margin="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/menu" />
 
-        <TextView
-            android:id="@+id/textView2"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_my_listings"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Post your first listing and start getting leads."
-            android:textSize="20sp"
+            android:layout_height="match_parent"
             android:layout_margin="8dp"
+            android:layout_marginStart="16dp"
+            tools:listitem="@layout/activity_my_listings_adapter"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_title_my_listings" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_1" />
 
-        <Button
-            android:id="@+id/btn_post_listing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Post Listing"
-            android:textSize="20sp"
-            android:backgroundTint="#008ba6"
-            android:layout_margin="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
