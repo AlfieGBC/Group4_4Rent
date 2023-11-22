@@ -13,25 +13,34 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.pp.a4rent.ProfileActivity
 import com.pp.a4rent.R
-import com.pp.a4rent.adapters.TorontoRentalsAdapter
-import com.pp.a4rent.databinding.ActivityTorontoRentalsBinding
+import com.pp.a4rent.adapters.RentalsPostAdapter
+import com.pp.a4rent.databinding.ActivityRentalsPostListBinding
 import com.pp.a4rent.models.Owner
 import com.pp.a4rent.models.PropertyRental
 
-class TorontoRentalsActivity : AppCompatActivity() {
+class RentalsPostListActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityTorontoRentalsBinding
+    private lateinit var binding: ActivityRentalsPostListBinding
+
     private val TAG : String = "TorontoRentalsActivity"
 
     // Made the adapter global
-    private lateinit var adapter: TorontoRentalsAdapter
+    private lateinit var adapter: RentalsPostAdapter
 
     // made this mutable because we know that later on, we have to add fruits to it
     private var rentalDatasource:MutableList<PropertyRental> = mutableListOf<PropertyRental>(
-        PropertyRental("condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "abc", 2500.0, true, "peter"),
+        PropertyRental("condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Toronto", 2500.0, true, "peter"),
+        PropertyRental("condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","Winnipeg", 2500.0, true, "amy"),
+        PropertyRental("condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "vancouver", 2500.0, true, "alex"),
+        PropertyRental("basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", 2500.0, true, "jane"),
+        PropertyRental("condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Vancouver", 2500.0, true, "peter"),
+        PropertyRental("condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","North York", 2500.0, true, "amy"),
+        PropertyRental("condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "vancouver", 2500.0, true, "alex"),
+        PropertyRental("basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", 2500.0, true, "jane"),
+        PropertyRental("condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "toronto", 2500.0, true, "peter"),
         PropertyRental("condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","north york", 2500.0, true, "amy"),
-        PropertyRental("condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "abc", 2500.0, true, "alex"),
-        PropertyRental("basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "abc", 2500.0, true, "jane"),
+        PropertyRental("condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "Toronto", 2500.0, true, "alex"),
+        PropertyRental("basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", 2500.0, true, "jane"),
     )
 
     var searchedRentalsList: MutableList<PropertyRental> = mutableListOf()
@@ -39,7 +48,7 @@ class TorontoRentalsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_toronto_rentals)
 
-        this.binding = ActivityTorontoRentalsBinding.inflate(layoutInflater)
+        this.binding = ActivityRentalsPostListBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
 
         // display menu bar on the screen
@@ -62,7 +71,7 @@ class TorontoRentalsActivity : AppCompatActivity() {
         // TODO: Search System
         // get intent data from main activity
         // receive the search input data
-        val receiveSearchInput = intent.getStringExtra("SEARCH_KEYWORD_FROM_ET")
+        val receiveSearchInput = intent.getStringExtra("FILTER_DATA_EXTRA")
 
         if (receiveSearchInput != null) {
             Log.d("TAG", receiveSearchInput)
@@ -72,10 +81,10 @@ class TorontoRentalsActivity : AppCompatActivity() {
             for (rental in rentalDatasource) {
 
                 // check condition
-                if (rental.propertyType == receiveSearchInput.toLowerCase() ||
-                    rental.propertyAddress == receiveSearchInput.toLowerCase() ||
+                if (rental.propertyType.toLowerCase() == receiveSearchInput.toLowerCase() ||
+                    rental.propertyAddress.toLowerCase() == receiveSearchInput.toLowerCase() ||
                     rental.propertyType.contains(receiveSearchInput.toLowerCase()) ||
-                    rental.propertyAddress.contains(receiveSearchInput.toLowerCase()) ) {
+                    rental.propertyAddress.toLowerCase().contains(receiveSearchInput.toLowerCase()) ) {
 
                     Log.d("TAG", "PAss")
                     found = true
@@ -95,12 +104,12 @@ class TorontoRentalsActivity : AppCompatActivity() {
                         rental.available,
                         rental.imageFilename)
 
-cb                    // and add that into the empty list
+                    // and add that into the empty list
                     searchedRentalsList.add(rentalToAdd)
 
                     // setup adapter
                     // Update adapter to accept a list of rentals
-                    this.adapter = TorontoRentalsAdapter(
+                    this.adapter = RentalsPostAdapter(
                         // pass the rental list data to the adapter
                         searchedRentalsList,
                         {pos -> rowClicked(pos) },
@@ -128,13 +137,15 @@ cb                    // and add that into the empty list
 
         }
 
+
+
     }
 
 
     // rv:  Row click handler
     fun rowClicked(rowPosition: Int){
 
-        var selectedRental:PropertyRental = searchedRentalsList.get(rowPosition)
+        var selectedRental: PropertyRental = searchedRentalsList.get(rowPosition)
         // snackbar
         val snackbar = Snackbar.make(binding.root, "${selectedRental.toString()}, for row${rowPosition}", Snackbar.LENGTH_LONG)
         snackbar.show()
@@ -175,7 +186,7 @@ cb                    // and add that into the empty list
                 Log.d(TAG, "onOptionsItemSelected: Post Rental option is selected")
 
                 // navigate to 2nd screen
-                val sidebarIntent = Intent(this@TorontoRentalsActivity, ProfileActivity::class.java)
+                val sidebarIntent = Intent(this@RentalsPostListActivity, ProfileActivity::class.java)
                 startActivity(sidebarIntent)
 
                 return true
@@ -211,3 +222,5 @@ cb                    // and add that into the empty list
         }
     }
 }
+
+

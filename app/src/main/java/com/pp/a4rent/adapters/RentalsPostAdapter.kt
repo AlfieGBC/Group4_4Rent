@@ -10,13 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pp.a4rent.R
 import com.pp.a4rent.models.PropertyRental
 
-class TorontoRentalsAdapter(
+class RentalsPostAdapter(
     private val rentalsList:MutableList<PropertyRental>,
     private val rowClickHandler: (Int) -> Unit,
     private val favBtnClickHandler: (Int) -> Unit
-) : RecyclerView.Adapter<TorontoRentalsAdapter.TorontoRentalsViewHolder>() {
+) : RecyclerView.Adapter<RentalsPostAdapter.RentalsPostViewHolder>() {
 
-    inner class TorontoRentalsViewHolder(itemView: View) : RecyclerView.ViewHolder (itemView) {
+    inner class RentalsPostViewHolder(itemView: View) : RecyclerView.ViewHolder (itemView) {
         init {
             itemView.setOnClickListener {
                 rowClickHandler(adapterPosition)
@@ -27,18 +27,16 @@ class TorontoRentalsAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TorontoRentalsViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RentalsPostViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.row_rental_post, parent, false)
-        return TorontoRentalsViewHolder(view)
+        return RentalsPostViewHolder(view)
     }
 
     override fun getItemCount(): Int {
         return rentalsList.size
     }
 
-    override fun onBindViewHolder(holder: TorontoRentalsViewHolder, position: Int) {
-
-
+    override fun onBindViewHolder(holder: RentalsPostViewHolder, position: Int) {
 
 
         // Get the current rental post

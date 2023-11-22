@@ -9,7 +9,7 @@ import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.pp.a4rent.databinding.ActivityMainBinding
-import com.pp.a4rent.screens.TorontoRentalsActivity
+import com.pp.a4rent.screens.RentalsPostListActivity
 
 import com.pp.a4rent.screens.AccountActivity
 import com.pp.a4rent.screens.LoginActivity
@@ -50,15 +50,44 @@ class MainActivity : AppCompatActivity() {
         binding.btnSearch.setOnClickListener {
             this.goToRentalsPostList()
         }
+
+        binding.btnSearchVancouver.setOnClickListener {
+            this.goToVancouverRentals()
+        }
+
+        binding.btnSearchWinnipeg.setOnClickListener {
+            this.goToWinnipegRentals()
+        }
     }
 
-    // Function to navigate users to Toronto Rentals page
+    // Function to navigate users to the list of Rentals post page
     // Shows list of rentals in Toronto area
     fun goToTorontoRentals() {
 
         // navigate to 2nd screen
-        val torontoRentalsIntent = Intent(this@MainActivity, TorontoRentalsActivity::class.java)
+        val torontoRentalsIntent = Intent(this@MainActivity, RentalsPostListActivity::class.java)
+        torontoRentalsIntent.putExtra("FILTER_DATA_EXTRA", "Toronto")
         startActivity(torontoRentalsIntent)
+    }
+
+    // Function to navigate users to the list of Rentals post page
+    // Shows list of rentals in Vancouver area
+    fun goToVancouverRentals() {
+
+        // navigate to 2nd screen
+        val vancouverRentalsIntent = Intent(this@MainActivity, RentalsPostListActivity::class.java)
+        vancouverRentalsIntent.putExtra("FILTER_DATA_EXTRA", "Vancouver")
+        startActivity(vancouverRentalsIntent)
+    }
+
+    // Function to navigate users to the list of Rentals post page
+    // Shows list of rentals in Winnipeg area
+    fun goToWinnipegRentals() {
+
+        // navigate to 2nd screen
+        val winnipegRentalsIntent = Intent(this@MainActivity, RentalsPostListActivity::class.java)
+        winnipegRentalsIntent.putExtra("FILTER_DATA_EXTRA", "Winnipeg")
+        startActivity(winnipegRentalsIntent)
     }
 
     fun goToRentalsPostList() {
@@ -71,8 +100,8 @@ class MainActivity : AppCompatActivity() {
             return
         } else {
             // navigate to search result screen
-            val rentalPostListIntent = Intent(this@MainActivity, TorontoRentalsActivity::class.java)
-            rentalPostListIntent.putExtra("SEARCH_KEYWORD_FROM_ET", etSearchKeyword)
+            val rentalPostListIntent = Intent(this@MainActivity, RentalsPostListActivity::class.java)
+            rentalPostListIntent.putExtra("FILTER_DATA_EXTRA", etSearchKeyword)
 
 //            val check = rentalPostListIntent.getStringExtra("SEARCH_KEYWORD_FROM_ET")
 //            Log.d("TAG", "$check")
