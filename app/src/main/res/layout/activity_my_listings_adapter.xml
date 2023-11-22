@@ -12,17 +12,17 @@
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="8dp"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/bedroom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_rent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="32dp"
         android:text="$2,000"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -33,24 +33,24 @@
         android:id="@+id/tv_num_of_rooms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="32dp"
-        android:text="2 Beds | 1 bath"
+        android:text="2 Beds | 1 Bath"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/iv_rental_image"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_rent" />
 
     <TextView
         android:id="@+id/tv_property_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="32dp"
         android:text="Apartment"
+        android:textColor="#008ba6"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#008ba6"
         app:layout_constraintStart_toEndOf="@+id/iv_rental_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_num_of_rooms" />
 
@@ -58,9 +58,8 @@
         android:id="@+id/tv_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:text="6767 Elbow Drive SW"
         android:textColor="#707070"
         android:textSize="18sp"

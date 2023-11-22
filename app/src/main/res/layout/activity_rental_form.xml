@@ -22,6 +22,29 @@
             app:titleTextColor="@color/white" />
 
         <TextView
+            android:id="@+id/tv_title_contact_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingTop="16dp"
+            android:text="Contact Info"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/menu" />
+
+        <EditText
+            android:id="@+id/tv_email"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:hint="email@example.com"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_contact_info" />
+
+        <TextView
             android:id="@+id/tv_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,7 +55,7 @@
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/menu" />
+            app:layout_constraintTop_toBottomOf="@id/tv_email" />
 
         <TextView
             android:id="@+id/tv_3"
@@ -40,9 +63,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:paddingTop="16dp"
-            android:text="Please fill in the boxes below with as much detail as possible."
-            android:textAlignment="center"
-            android:textSize="18sp"
+            android:text="Property Type:"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_1" />
 
@@ -51,6 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_3" />
 
 
@@ -118,6 +141,28 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_num_of_kitchen" />
 
+        <TextView
+            android:id="@+id/tv_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Total Area:"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/et_area" />
+
+        <EditText
+            android:id="@+id/et_area"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:inputType="numberDecimal"
+            android:textSize="20sp"
+            android:hint="square meters"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_num_of_bathroom" />
+
         <EditText
             android:id="@+id/et_description"
             android:layout_width="match_parent"
@@ -126,7 +171,7 @@
             android:inputType="text|textMultiLine"
             android:layout_margin="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_num_of_bathroom" />
+            app:layout_constraintTop_toBottomOf="@+id/et_area" />
 
         <EditText
             android:id="@+id/et_address"
@@ -143,7 +188,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="Monthly rent: $0.00"
-            android:textAlignment="center"
             android:inputType="numberDecimal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_address" />
@@ -168,36 +212,6 @@
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/is_available" />
-
-        <!--        <RadioGroup-->
-<!--            android:id="@+id/rgroup"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_margin="8dp"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/tv_3">-->
-
-<!--            <RadioButton-->
-<!--                android:id="@+id/rbtn_1"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="8dp"-->
-<!--                android:text="ONE STANDARD LISTING &#45;&#45;&#45;&#45; $29" />-->
-<!--            <RadioButton-->
-<!--                android:id="@+id/rbtn_2"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="8dp"-->
-<!--                android:text="ONE PREMIUM LISTING &#45;&#45;&#45;&#45; $59" />-->
-<!--            <RadioButton-->
-<!--                android:id="@+id/rbtn_3"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="8dp"-->
-<!--                android:text="ONE FEATURED LISTING &#45;&#45;&#45;&#45; $139" />-->
-
-<!--        </RadioGroup>-->
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
