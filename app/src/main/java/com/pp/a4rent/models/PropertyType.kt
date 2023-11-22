@@ -8,5 +8,10 @@ enum class PropertyType(val displayName: String) {
 
     companion object {
         val displayNames = values().map { it.displayName }
+
+        // The fromDisplayName method takes a string and returns the corresponding PropertyType enum value.
+        fun fromDisplayName(displayName: String): PropertyType {
+            return values().first { it.displayName == displayName }
+        }
     }
 }

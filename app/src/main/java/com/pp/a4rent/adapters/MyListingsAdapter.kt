@@ -3,11 +3,13 @@ package com.pp.a4rent.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.pp.a4rent.R
+import com.pp.a4rent.models.Property
 import com.pp.a4rent.models.PropertyRental
 
-class MyListingsAdapter(var myListings: List<PropertyRental>) : RecyclerView.Adapter<MyListingsAdapter.MyListingsViewHolder>() {
+class MyListingsAdapter(var myListings: List<Property>) : RecyclerView.Adapter<MyListingsAdapter.MyListingsViewHolder>() {
 
     inner class MyListingsViewHolder(itemView: View) : RecyclerView.ViewHolder (itemView) {}
 
@@ -21,8 +23,17 @@ class MyListingsAdapter(var myListings: List<PropertyRental>) : RecyclerView.Ada
     }
 
     override fun onBindViewHolder(holder: MyListingsViewHolder, position: Int) {
-//        val tvLabel = holder.itemView.findViewById<TextView>(R.id.tvRowLine1)
-//        tvLabel.text = "Task: ${myListings[position]}"
+        val currListing = myListings[position]
+
+        val tvRent = holder.itemView.findViewById<TextView>(R.id.tv_rent)
+        val tvNumOfRooms = holder.itemView.findViewById<TextView>(R.id.tv_num_of_rooms)
+        val tvPropertyType = holder.itemView.findViewById<TextView>(R.id.tv_property_type)
+        val tvAddress = holder.itemView.findViewById<TextView>(R.id.tv_address)
+
+        tvRent.text = "$${currListing.rent}"
+        tvNumOfRooms.text = "${currListing.numberOfBedroom} Beds | ${currListing.numberOfBathroom} Baths"
+        tvPropertyType.text = "${currListing.propertyType.displayName}"
+        tvAddress.text = "${currListing.propertyAddress}"
     }
 
 }
