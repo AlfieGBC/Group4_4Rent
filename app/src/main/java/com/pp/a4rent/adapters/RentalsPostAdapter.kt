@@ -51,7 +51,7 @@ class RentalsPostAdapter(
         val tvDetail = holder.itemView.findViewById<TextView>(R.id.tvDetail)
         tvDetail.setText("${currRentalPost.propertyType}")
 
-        // 2c. Populate the image
+        // Populate the image
         // - getting a context variable
         val context = holder.itemView.context
 

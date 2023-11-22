@@ -13,6 +13,9 @@
         android:theme="@style/Theme._4Rent"
         tools:targetApi="31" >
         <activity
+            android:name=".screens.TenantProfileInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.RentalsPostListActivity"
             android:exported="false" />
         <activity
@@ -25,7 +28,7 @@
             android:name=".screens.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".screens.AccountActivity"
+            android:name=".screens.TenantAccountActivity"
             android:exported="false" />
         <activity
             android:name=".MyListingsActivity"
