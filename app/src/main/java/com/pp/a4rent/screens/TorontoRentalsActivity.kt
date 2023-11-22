@@ -67,13 +67,20 @@ class TorontoRentalsActivity : AppCompatActivity() {
         if (receiveSearchInput != null) {
             Log.d("TAG", receiveSearchInput)
 
+            var found = false;
             // get the data from the array
             for (rental in rentalDatasource) {
+
                 // check condition
                 if (rental.propertyType == receiveSearchInput.toLowerCase() ||
                     rental.propertyAddress == receiveSearchInput.toLowerCase() ||
                     rental.propertyType.contains(receiveSearchInput.toLowerCase()) ||
                     rental.propertyAddress.contains(receiveSearchInput.toLowerCase()) ) {
+
+                    Log.d("TAG", "PAss")
+                    found = true
+//                    binding.tvRentalErrorMsg.setText("")
+
                     // - if yes, then store that into a variable
                     val rentalToAdd = PropertyRental(
                         rental.propertyType,
@@ -110,18 +117,19 @@ class TorontoRentalsActivity : AppCompatActivity() {
                             LinearLayoutManager.VERTICAL
                         )
                     )
-                } else {
-
-                    // error handling
 
                 }
             }
 
+            if (!found)
+            {
+                binding.tvRentalErrorMsg.setText("Result not found!")
+            }
+
         }
 
-
-
     }
+
 
     // rv:  Row click handler
     fun rowClicked(rowPosition: Int){
@@ -152,7 +160,6 @@ class TorontoRentalsActivity : AppCompatActivity() {
         val snackbar = Snackbar.make(binding.root, "Favorite ${position}", Snackbar.LENGTH_LONG)
         snackbar.show()
     }
-
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
