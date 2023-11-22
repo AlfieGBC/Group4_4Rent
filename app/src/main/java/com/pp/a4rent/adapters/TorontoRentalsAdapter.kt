@@ -37,6 +37,10 @@ class TorontoRentalsAdapter(
     }
 
     override fun onBindViewHolder(holder: TorontoRentalsViewHolder, position: Int) {
+
+
+
+
         // Get the current rental post
         var currRentalPost:PropertyRental = rentalsList.get(position)
 

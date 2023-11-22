@@ -41,6 +41,6 @@ class PropertyRental(
                 "PropertyAddress=$propertyAddress\n" +
                 "Rent=$rent\n" +
                 "Available=$available\n" +
-                "ImageFileName=$imageFilename"
+                "ImageFileName=$imageFilename\n"
     }
 }
