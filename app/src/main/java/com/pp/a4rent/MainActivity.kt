@@ -62,17 +62,16 @@ class MainActivity : AppCompatActivity() {
 
         // error handling
         if (etSearchKeyword.isEmpty()) {
-//            this.binding.tvErrorMsg.setError("ERROR: All fields must be filled in!")
-//            return
+            this.binding.tvErrorMsg.setText("ERROR: Search field must be filled in!")
+            return
         } else {
             // navigate to search result screen
             val rentalPostListIntent = Intent(this@MainActivity, TorontoRentalsActivity::class.java)
             rentalPostListIntent.putExtra("SEARCH_KEYWORD_FROM_ET", etSearchKeyword)
 
 //            val check = rentalPostListIntent.getStringExtra("SEARCH_KEYWORD_FROM_ET")
-//
-//
 //            Log.d("TAG", "$check")
+
             startActivity(rentalPostListIntent)
         }
 
