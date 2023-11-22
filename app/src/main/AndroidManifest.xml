@@ -19,6 +19,15 @@
             android:name=".screens.TorontoRentalsActivity"
             android:exported="false" />
         <activity
+            android:name=".screens.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.AccountActivity"
+            android:exported="false" />
+        <activity
             android:name=".MyListingsActivity"
             android:exported="false" />
         <activity
