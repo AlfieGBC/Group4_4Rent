@@ -64,17 +64,24 @@ class TenantAccountActivity : AppCompatActivity() {
         // Get existing rental list from SharedPreferences
         this.prefEditor = this.sharedPreferences.edit()
 
+        val gson = Gson()
+        val userJson = intent.getStringExtra("user")
+        Log.d("TAG", "user ${userJson}")
+        var resultsFromSP: String? = null
+        var user: User? = null
+        if(userJson != null) {
+            user = gson.fromJson(userJson, User::class.java)
+            resultsFromSP = sharedPreferences.getString("KEY_RENTALS_DATASOURCE"+user.userId, "")
+            Log.d("TAG", "Incoming result ${"KEY_RENTALS_DATASOURCE"+user.userId}")
+            Log.d("TAG", "Incoming result2 ${resultsFromSP}")
+        }
 
-        val resultsFromSP = sharedPreferences.getString("KEY_RENTALS_DATASOURCE", "")
-        Log.d("TAG", "Incoming result ${resultsFromSP}")
 
-
-        if (resultsFromSP == "") {
+        if (resultsFromSP == null || resultsFromSP == "" ) {
             // - if no, we should create a brand new list of fruits
             // do nothing!
         } else {
             // if yes, convert the string back to list of rentals
-            val gson = Gson()
             val typeToken = object : TypeToken<List<PropertyRental>>() {}.type
             // convert the string back to a list
             val rentalsList = gson.fromJson<List<PropertyRental>>(resultsFromSP, typeToken)
@@ -88,7 +95,6 @@ class TenantAccountActivity : AppCompatActivity() {
         }
 
         // setup adapter
-        // TODO: Update adapter to accept a list of fruits
         adapter = RentalsPostAdapter(
             favRentalPostsList,
             {pos -> rowClicked(pos) },
@@ -110,14 +116,17 @@ class TenantAccountActivity : AppCompatActivity() {
 
 
         binding.btnDeleteAll.setOnClickListener {
-            prefEditor.remove("KEY_RENTALS_DATASOURCE")
+            if(user != null) {
+                prefEditor.remove("KEY_RENTALS_DATASOURCE"+user.userId)
 
-            // commit our changes
-            prefEditor.apply()
+                // commit our changes
+                prefEditor.apply()
 
-            // update the RV to show that there are no more items
-            favRentalPostsList.clear()
-            adapter.notifyDataSetChanged()
+                // update the RV to show that there are no more items
+                favRentalPostsList.clear()
+                adapter.notifyDataSetChanged()
+            }
+
         }
 
 
@@ -152,10 +161,15 @@ class TenantAccountActivity : AppCompatActivity() {
         val snackbar = Snackbar.make(binding.root, "Favorite ${position}", Snackbar.LENGTH_LONG)
         snackbar.show()
 
-        favRentalPostsList.removeAt(position)
-        adapter.notifyItemRemoved(position)
-        prefEditor.putString("KEY_RENTALS_DATASOURCE", Gson().toJson(favRentalPostsList))
-        prefEditor.apply()
+        val gson = Gson()
+        val userJson = intent.getStringExtra("user")
+        if(userJson != null) {
+            val user = gson.fromJson(userJson, User::class.java)
+            favRentalPostsList.removeAt(position)
+            adapter.notifyItemRemoved(position)
+            prefEditor.putString("KEY_RENTALS_DATASOURCE"+user.userId, Gson().toJson(favRentalPostsList))
+            prefEditor.apply()
+        }
     }
 
 
