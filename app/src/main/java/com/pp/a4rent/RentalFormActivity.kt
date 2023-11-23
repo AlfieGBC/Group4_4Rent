@@ -16,7 +16,9 @@ import com.pp.a4rent.databinding.ActivityRentalFormBinding
 import com.pp.a4rent.models.Property
 import com.pp.a4rent.models.PropertyType
 import com.pp.a4rent.models.User
+
 import com.pp.a4rent.screens.LoginActivity
+import com.pp.a4rent.screens.BlogListActivity
 
 
 class RentalFormActivity : AppCompatActivity() {
@@ -149,7 +151,7 @@ class RentalFormActivity : AppCompatActivity() {
                 Log.d("TAG", "onOptionsItemSelected: Blog option is selected")
 
                 // navigate to 2nd screen
-               val sidebarIntent = Intent(this@MainActivity, BlogListActivity::class.java)
+               val sidebarIntent = Intent(this@RentalFormActivity, BlogListActivity::class.java)
                startActivity(sidebarIntent)
 
                 return true

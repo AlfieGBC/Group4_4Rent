@@ -19,6 +19,7 @@ import com.pp.a4rent.models.User
 
 import com.pp.a4rent.screens.LoginActivity
 import com.pp.a4rent.screens.RegisterActivity
+import com.pp.a4rent.screens.BlogListActivity
 
 class RentalPostDetailActivity : AppCompatActivity() {
 
@@ -137,7 +138,7 @@ class RentalPostDetailActivity : AppCompatActivity() {
                 Log.d("TAG", "onOptionsItemSelected: Blog option is selected")
 
                 // navigate to 2nd screen
-               val sidebarIntent = Intent(this@MainActivity, BlogListActivity::class.java)
+               val sidebarIntent = Intent(this@RentalPostDetailActivity, BlogListActivity::class.java)
                startActivity(sidebarIntent)
 
                 return true

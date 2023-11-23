@@ -10,6 +10,8 @@ import com.google.gson.Gson
 import com.pp.a4rent.databinding.ActivityProfileBinding
 import com.pp.a4rent.models.User
 
+import com.pp.a4rent.screens.BlogListActivity
+
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProfileBinding
@@ -68,7 +70,7 @@ class ProfileActivity : AppCompatActivity() {
                 Log.d("TAG", "onOptionsItemSelected: Blog option is selected")
 
                 // navigate to 2nd screen
-                val sidebarIntent = Intent(this@MainActivity, BlogListActivity::class.java)
+                val sidebarIntent = Intent(this@ProfileActivity, BlogListActivity::class.java)
                 startActivity(sidebarIntent)
 
                 return true
