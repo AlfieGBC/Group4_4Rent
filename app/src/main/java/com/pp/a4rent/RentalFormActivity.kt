@@ -39,7 +39,7 @@ class RentalFormActivity : AppCompatActivity() {
         setSupportActionBar(this.binding.menu)
 
         // set up spinner
-        val propertyTypeAdapter = ArrayAdapter<String>(this, R.layout.spinner_item_property_types, PropertyType.displayNames)
+        val propertyTypeAdapter = ArrayAdapter(this, R.layout.spinner_item_property_types, PropertyType.displayNames)
         binding.propertyTypeSpinner.adapter = propertyTypeAdapter
 
         // when Publish button is clicked
@@ -137,4 +137,5 @@ class RentalFormActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }

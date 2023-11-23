@@ -25,7 +25,7 @@ class MyListingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMyListingsBinding
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
-    private var myListingsList = listOf<Property>()
+    private var myListingsList = mutableListOf<Property>()
     private var userObj: User? = null
     private lateinit var adapter: MyListingsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +54,7 @@ class MyListingsActivity : AppCompatActivity() {
                 if (myListingsListJson == ""){}else{
                     val gson = Gson()
                     val typeToken = object : TypeToken<List<Property>>() {}.type
-                    myListingsList = gson.fromJson<List<Property>>(myListingsListJson, typeToken).toList()
+                    myListingsList = gson.fromJson<List<Property>>(myListingsListJson, typeToken).toMutableList()
                 }
 
                 // set up the adapter
@@ -122,5 +122,24 @@ class MyListingsActivity : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("onResume:MyListingsActivity", "onResume: user returned to MyListingsActivity.kt")
+
+        // get the updated myListings list from sharePreference
+        val updatedListJson = sharedPreferences.getString(userObj!!.userId, "")
+        if (updatedListJson == ""){}else{
+            val gson = Gson()
+            val typeToken = object : TypeToken<List<Property>>() {}.type
+            val updatedList = gson.fromJson<List<Property>>(updatedListJson, typeToken).toMutableList()
+
+            // clear the the original myListings list, and add the updated list
+            myListingsList.clear()
+            myListingsList.addAll(updatedList)
+            adapter.notifyDataSetChanged()
+        }
+
     }
 }
