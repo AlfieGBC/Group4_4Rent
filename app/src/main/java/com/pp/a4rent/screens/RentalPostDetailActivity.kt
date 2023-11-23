@@ -137,8 +137,8 @@ class RentalPostDetailActivity : AppCompatActivity() {
                 Log.d("TAG", "onOptionsItemSelected: Blog option is selected")
 
                 // navigate to 2nd screen
-//                val sidebarIntent = Intent(this@MainActivity, AccountActivity::class.java)
-//                startActivity(sidebarIntent)
+               val sidebarIntent = Intent(this@MainActivity, BlogListActivity::class.java)
+               startActivity(sidebarIntent)
 
                 return true
             }
