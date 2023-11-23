@@ -1,5 +1,6 @@
 package com.pp.a4rent.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,10 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.pp.a4rent.R
 import com.pp.a4rent.models.Property
-import com.pp.a4rent.models.PropertyRental
 
 class MyListingsAdapter(
-    var myListings: List<Property>,
+    private var myListings: List<Property>,
     val listingRowClickedHandler: (Int) -> Unit,
 ) : RecyclerView.Adapter<MyListingsAdapter.MyListingsViewHolder>() {
 
@@ -31,6 +31,7 @@ class MyListingsAdapter(
         return myListings.size
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyListingsViewHolder, position: Int) {
         val currListing = myListings[position]
 
@@ -41,8 +42,8 @@ class MyListingsAdapter(
 
         tvRent.text = "$${currListing.rent}"
         tvNumOfRooms.text = "${currListing.numberOfBedroom} Beds | ${currListing.numberOfBathroom} Baths"
-        tvPropertyType.text = "${currListing.propertyType.displayName}"
-        tvAddress.text = "${currListing.propertyAddress}"
+        tvPropertyType.text = currListing.propertyType.displayName
+        tvAddress.text = currListing.propertyAddress
     }
 
 }

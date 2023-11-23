@@ -22,6 +22,7 @@ class MyListingDetailsActivity : AppCompatActivity() {
     private var myListingsList = mutableListOf<Property>()
     private var position: Int? = null
     private var userObj: User? = null
+    private val gson = Gson()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyListingDetailsBinding.inflate(layoutInflater)
@@ -52,8 +53,7 @@ class MyListingDetailsActivity : AppCompatActivity() {
 
                 // get myListings list from sharedPreference
                 val myListingsListJson = sharedPreferences.getString(userObj!!.userId, "")
-                if (myListingsListJson == ""){}else{
-                    val gson = Gson()
+                if (myListingsListJson != ""){
                     val typeToken = object : TypeToken<List<Property>>() {}.type
                     myListingsList =
                         gson.fromJson<List<Property>>(myListingsListJson, typeToken).toMutableList()
@@ -96,28 +96,27 @@ class MyListingDetailsActivity : AppCompatActivity() {
 
     }
 
-    fun getSpinnerPositionForPropertyType(propertyType: PropertyType): Int {
+    private fun getSpinnerPositionForPropertyType(propertyType: PropertyType): Int {
         val displayNames = PropertyType.displayNames
         return displayNames.indexOf(propertyType.displayName)
     }
 
-    fun btnDeleteClicked(){
+    private fun btnDeleteClicked(){
         // remove current listing object from myListings List
         myListingsList.remove(myListingsList[position!!])
 
         // update sharedPreference
-        val gson = Gson()
         val updatedListJson = gson.toJson(myListingsList)
         editor.putString(userObj!!.userId, updatedListJson)
         editor.apply()
     }
 
-    fun btnSaveClicked(currListingObj: Property){
+    private fun btnSaveClicked(currListingObj: Property){
         // Get data from UI
         val selectedPropertyTypeName = binding.propertyTypeSpinnerListingDetails.selectedItem.toString()
         val numOfBedrooms = binding.etNumOfBedroomListingDetails.text.toString().toIntOrNull()?:0
-        val numOfkitchens = binding.etNumOfKitchenListingDetails.text.toString().toIntOrNull()?:0
-        val numOfbathrooms = binding.etNumOfBathroomListingDetails.text.toString().toIntOrNull()?:0
+        val numOfKitchens = binding.etNumOfKitchenListingDetails.text.toString().toIntOrNull()?:0
+        val numOfBathrooms = binding.etNumOfBathroomListingDetails.text.toString().toIntOrNull()?:0
         val areaFromUI = binding.etAreaListingDetails.text.toString().toDoubleOrNull()?:0.0
         val descriptionFromUI = binding.etDescriptionListingDetails.text.toString()
         val address = binding.etAddressListingDetails.text.toString()
@@ -126,7 +125,7 @@ class MyListingDetailsActivity : AppCompatActivity() {
 
         // Error handling
         if (
-            numOfBedrooms <= 0 || numOfkitchens <= 0 || numOfbathrooms <= 0 || areaFromUI <= 0.0 ||
+            numOfBedrooms <= 0 || numOfKitchens <= 0 || numOfBathrooms <= 0 || areaFromUI <= 0.0 ||
             descriptionFromUI.isEmpty() || address.isEmpty() || rentFromUI <= 0.0
         ) {
             Snackbar.make(binding.root, "Please fill out all the fields.", Snackbar.LENGTH_LONG).show()
@@ -138,8 +137,8 @@ class MyListingDetailsActivity : AppCompatActivity() {
             propertyType = PropertyType.fromDisplayName(selectedPropertyTypeName)
             ownerInfo = userObj as User
             numberOfBedroom = numOfBedrooms
-            numberOKitchen = numOfkitchens
-            numberOfBathroom = numOfbathrooms
+            numberOKitchen = numOfKitchens
+            numberOfBathroom = numOfBathrooms
             area = areaFromUI
             description = descriptionFromUI
             propertyAddress = address
@@ -150,7 +149,6 @@ class MyListingDetailsActivity : AppCompatActivity() {
         Log.d("currListingObj", "onCreate: currListingObj after updating: $currListingObj\n")
 
         // convert the list back to JSON and save it to SharedPreferences
-        val gson = Gson()
         val updatedListJson = gson.toJson(myListingsList)
         editor.putString(userObj!!.userId, updatedListJson)
         editor.apply()

@@ -15,7 +15,6 @@ import com.google.gson.reflect.TypeToken
 import com.pp.a4rent.adapters.MyListingsAdapter
 import com.pp.a4rent.databinding.ActivityMyListingsBinding
 import com.pp.a4rent.models.Property
-import com.pp.a4rent.models.PropertyRental
 import com.pp.a4rent.models.User
 import com.pp.a4rent.screens.LoginActivity
 import com.pp.a4rent.screens.MyListingDetailsActivity
@@ -51,14 +50,14 @@ class MyListingsActivity : AppCompatActivity() {
 
                 // get myListings list from sharedPreference
                 val myListingsListJson = sharedPreferences.getString(userObj!!.userId, "")
-                if (myListingsListJson == ""){}else{
+                if (myListingsListJson != ""){
                     val gson = Gson()
                     val typeToken = object : TypeToken<List<Property>>() {}.type
                     myListingsList = gson.fromJson<List<Property>>(myListingsListJson, typeToken).toMutableList()
                 }
 
                 // set up the adapter
-                this.adapter = MyListingsAdapter(myListingsList, {pos -> listingRowClicked(pos)})
+                this.adapter = MyListingsAdapter(myListingsList) { pos -> listingRowClicked(pos) }
                 binding.rvMyListings.adapter = adapter
                 binding.rvMyListings.layoutManager = LinearLayoutManager(this)
                 binding.rvMyListings.addItemDecoration(
@@ -80,7 +79,7 @@ class MyListingsActivity : AppCompatActivity() {
 
     }
 
-    fun listingRowClicked(position:Int){
+    private fun listingRowClicked(position:Int){
 
         // pass through user object
         val intent = Intent(this@MyListingsActivity, MyListingDetailsActivity::class.java)
@@ -130,7 +129,7 @@ class MyListingsActivity : AppCompatActivity() {
 
         // get the updated myListings list from sharePreference
         val updatedListJson = sharedPreferences.getString(userObj!!.userId, "")
-        if (updatedListJson == ""){}else{
+        if (updatedListJson != ""){
             val gson = Gson()
             val typeToken = object : TypeToken<List<Property>>() {}.type
             val updatedList = gson.fromJson<List<Property>>(updatedListJson, typeToken).toMutableList()
