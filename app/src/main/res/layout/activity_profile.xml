@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="8dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ProfileActivity">
@@ -51,7 +50,6 @@ You can edit and manage your account information here."
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="First Name"
-            android:text="Harry"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -62,7 +60,6 @@ You can edit and manage your account information here."
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="Last Name"
-            android:text="Potter"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/et_first_name"
             app:layout_constraintTop_toBottomOf="@+id/et_first_name" />
@@ -73,21 +70,43 @@ You can edit and manage your account information here."
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="Email"
-            android:text="harry@gmail.com"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_last_name" />
+
+        <EditText
+            android:id="@+id/et_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Phone Number"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_email" />
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Password"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_phone_number" />
 
         <Button
             android:id="@+id/btn_update_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Update"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
             android:backgroundTint="#008ba6"
+            android:text="Update"
             android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_email" />
+            app:layout_constraintTop_toBottomOf="@+id/et_password" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

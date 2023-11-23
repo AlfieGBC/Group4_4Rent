@@ -21,28 +21,28 @@
             app:layout_constraintTop_toTopOf="parent"
             app:titleTextColor="@color/white" />
 
-        <TextView
-            android:id="@+id/tv_title_contact_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:paddingTop="16dp"
-            android:text="Contact Info"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/menu" />
+<!--        <TextView-->
+<!--            android:id="@+id/tv_title_contact_info"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="8dp"-->
+<!--            android:paddingTop="16dp"-->
+<!--            android:text="Contact Info"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="24sp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/menu" />-->
 
-        <EditText
-            android:id="@+id/tv_email"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            android:hint="email@example.com"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title_contact_info" />
+<!--        <EditText-->
+<!--            android:id="@+id/tv_email"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_margin="8dp"-->
+<!--            android:hint="email@example.com"-->
+<!--            android:textSize="20sp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tv_title_contact_info" />-->
 
         <TextView
             android:id="@+id/tv_1"
@@ -55,7 +55,7 @@
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_email" />
+            app:layout_constraintTop_toBottomOf="@id/menu" />
 
         <TextView
             android:id="@+id/tv_3"

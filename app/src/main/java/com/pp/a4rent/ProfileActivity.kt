@@ -1,51 +1,96 @@
 package com.pp.a4rent
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.pp.a4rent.databinding.ActivityProfileBinding
+import com.pp.a4rent.models.Property
 import com.pp.a4rent.models.User
 
 import com.pp.a4rent.screens.BlogListActivity
+import com.pp.a4rent.screens.LoginActivity
 
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProfileBinding
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+    private var myListingsList = mutableListOf<Property>()
+    private var userObj: User? = null
+    private val gson = Gson()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // set up menu
         setSupportActionBar(this.binding.menu)
 
-//        binding.btnUpdateProfile.setOnClickListener {
-//
-//        }
+        // initiate shared preference
+        sharedPreferences = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
 
+        // get the user object from intent
+        if (intent != null) {
+            userObj = if (intent.hasExtra("extra_userObj")) {
+                intent.getSerializableExtra("extra_userObj") as User
+            } else {null}
+
+            // if userObj does exist, the uer is NOT logged in
+            if (userObj == null){
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+            } else {
+
+                // prefill the profile page
+                binding.apply {
+                    etFirstName.setText(userObj!!.firstName)
+                    etLastName.setText(userObj!!.lastName)
+                    etEmail.setText(userObj!!.email)
+                    etPhoneNumber.setText(userObj!!.phoneNumber)
+                    etPassword.setText(userObj!!.password)
+                }
+
+                // when update button is clicked
+                binding.btnUpdateProfile.setOnClickListener {
+                    updateBtnClicked()
+                }
+            }
+
+        }
+
+    }
+
+    private fun updateBtnClicked(){
+        // save all the fields to the current user object
+        userObj!!.apply {
+            firstName = binding.etFirstName.text.toString()
+            lastName = binding.etLastName.text.toString()
+            email = binding.etEmail.text.toString()
+            phoneNumber = binding.etPhoneNumber.text.toString()
+            password = binding.etPassword.text.toString()
+        }
+
+        val gson = Gson()
+        val userJson = gson.toJson(userObj)
+        editor.putString(userObj!!.email, userJson)
+        editor.apply()
+
+        // inform the user
+        Snackbar.make(binding.root, "Update successfully!", Snackbar.LENGTH_LONG).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_menu_options, menu)
-
-        // checks user is logged in or not
-        val userJson = intent.getStringExtra("user")
-        if (userJson != null) {
-            val gson = Gson()
-            val user = gson.fromJson(userJson, User::class.java)
-
-            if (user.role == "Tenant") {
-                menuInflater.inflate(R.menu.tenant_profile_options, menu)
-            } else if (user.role == "Landlord") {
-                menuInflater.inflate(R.menu.landlord_profile_options, menu)
-            }
-
-        } else {
-            menuInflater.inflate(R.menu.guest_menu_options, menu)
-        }
+        menuInflater.inflate(R.menu.landlord_profile_options, menu)
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -70,36 +115,32 @@ class ProfileActivity : AppCompatActivity() {
                 Log.d("TAG", "onOptionsItemSelected: Blog option is selected")
 
                 // navigate to 2nd screen
-                val sidebarIntent = Intent(this@ProfileActivity, BlogListActivity::class.java)
+                val sidebarIntent = Intent(this, BlogListActivity::class.java)
                 startActivity(sidebarIntent)
 
                 return true
             }
 
             R.id.mi_post_rental -> {
+                // pass through the user object
                 val intent = Intent(this, RentalFormActivity::class.java)
-                // get the user info from login page
-                val userJson = intent.getStringExtra("user")
-                // pass this info to next page, which is tenant profile info page
-                intent.putExtra("user", userJson)
+                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
             R.id.mi_my_account -> {
+
+                // pass through the user object
                 val intent = Intent(this, ProfileActivity::class.java)
-                // get the user info from login page
-                val userJson = intent.getStringExtra("user")
-                // pass this info to next page, which is tenant profile info page
-                intent.putExtra("user", userJson)
+                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
             R.id.mi_my_listings -> {
+
+                // pass through the user object
                 val intent = Intent(this, MyListingsActivity::class.java)
-                // get the user info from login page
-                val userJson = intent.getStringExtra("user")
-                // pass this info to next page, which is tenant profile info page
-                intent.putExtra("user", userJson)
+                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }

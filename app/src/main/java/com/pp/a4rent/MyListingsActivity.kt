@@ -26,6 +26,7 @@ class MyListingsActivity : AppCompatActivity() {
     private lateinit var editor: SharedPreferences.Editor
     private var myListingsList = mutableListOf<Property>()
     private var userObj: User? = null
+    private val gson = Gson()
     private lateinit var adapter: MyListingsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +52,6 @@ class MyListingsActivity : AppCompatActivity() {
                 // get myListings list from sharedPreference
                 val myListingsListJson = sharedPreferences.getString(userObj!!.userId, "")
                 if (myListingsListJson != ""){
-                    val gson = Gson()
                     val typeToken = object : TypeToken<List<Property>>() {}.type
                     myListingsList = gson.fromJson<List<Property>>(myListingsListJson, typeToken).toMutableList()
                 }
@@ -90,23 +90,7 @@ class MyListingsActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_menu_options, menu)
-
-
-        // checks user is logged in or not
-        val userJson = intent.getStringExtra("user")
-        if (userJson != null) {
-            val gson = Gson()
-            val user = gson.fromJson(userJson, User::class.java)
-
-            if (user.role == "Tenant") {
-                menuInflater.inflate(R.menu.tenant_profile_options, menu)
-            } else if (user.role == "Landlord") {
-                menuInflater.inflate(R.menu.landlord_profile_options, menu)
-            }
-
-        } else {
-            menuInflater.inflate(R.menu.guest_menu_options, menu)
-        }
+        menuInflater.inflate(R.menu.landlord_profile_options, menu)
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -138,31 +122,27 @@ class MyListingsActivity : AppCompatActivity() {
             }
 
             R.id.mi_post_rental -> {
+                // pass through the user object
                 val intent = Intent(this, RentalFormActivity::class.java)
-                // get the user info from login page
-                val userJson = intent.getStringExtra("user")
-                // pass this info to next page, which is tenant profile info page
-                intent.putExtra("user", userJson)
+                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
 
             R.id.mi_my_account -> {
+
+                // pass through the user object
                 val intent = Intent(this, ProfileActivity::class.java)
-                // get the user info from login page
-                val userJson = intent.getStringExtra("user")
-                // pass this info to next page, which is tenant profile info page
-                intent.putExtra("user", userJson)
+                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
 
             R.id.mi_my_listings -> {
+
+                // pass through the user object
                 val intent = Intent(this, MyListingsActivity::class.java)
-                // get the user info from login page
-                val userJson = intent.getStringExtra("user")
-                // pass this info to next page, which is tenant profile info page
-                intent.putExtra("user", userJson)
+                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
@@ -187,7 +167,6 @@ class MyListingsActivity : AppCompatActivity() {
         // get the updated myListings list from sharePreference
         val updatedListJson = sharedPreferences.getString(userObj!!.userId, "")
         if (updatedListJson != ""){
-            val gson = Gson()
             val typeToken = object : TypeToken<List<Property>>() {}.type
             val updatedList = gson.fromJson<List<Property>>(updatedListJson, typeToken).toMutableList()
 

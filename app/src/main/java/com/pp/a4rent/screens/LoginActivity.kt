@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 import com.google.gson.Gson
+import com.pp.a4rent.ProfileActivity
 import com.pp.a4rent.databinding.ActivityLoginBinding
 import com.pp.a4rent.models.User
 
@@ -33,9 +34,21 @@ class LoginActivity : AppCompatActivity() {
                 val user = gson.fromJson(userJson, User::class.java)
                 if (user.password == password) {
                     Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, TenantAccountActivity::class.java)
-                    intent.putExtra("user", userJson)
-                    startActivity(intent)
+
+                    // Redirect users to different profile pages based on their role
+                    if (user.role == "Landlord"){
+
+                        // If a user is Landlord
+                        val intent = Intent(this, ProfileActivity::class.java)
+                        intent.putExtra("extra_userObj", user)
+                        startActivity(intent)
+                    } else {
+
+                        // If a user is Tenant
+                        val intent = Intent(this, TenantAccountActivity::class.java)
+                        intent.putExtra("user", userJson)
+                        startActivity(intent)
+                    }
                 } else {
                     Toast.makeText(this, "Incorrect password", Toast.LENGTH_SHORT).show()
                 }

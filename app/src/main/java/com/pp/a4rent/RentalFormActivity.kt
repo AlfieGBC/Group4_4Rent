@@ -26,6 +26,9 @@ class RentalFormActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
     private var propertiesList = mutableListOf<Property>()
+    private var userObj: User? = null
+    private val gson = Gson()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,99 +43,108 @@ class RentalFormActivity : AppCompatActivity() {
         setSupportActionBar(this.binding.menu)
 
         // set up spinner
-        val propertyTypeAdapter = ArrayAdapter(this, R.layout.spinner_item_property_types, PropertyType.displayNames)
+        val propertyTypeAdapter =
+            ArrayAdapter(this, R.layout.spinner_item_property_types, PropertyType.displayNames)
         binding.propertyTypeSpinner.adapter = propertyTypeAdapter
 
-        // when Publish button is clicked
-        binding.btnPublish.setOnClickListener {
+        if (intent != null) {
 
-            // Get data from UI
-            val email = binding.tvEmail.text.toString()
-            val selectedPropertyTypeName = binding.propertyTypeSpinner.selectedItem.toString()
-            val numOfBedrooms = binding.etNumOfBedroom.text.toString().toIntOrNull()?:0
-            val numOfKitchens = binding.etNumOfKitchen.text.toString().toIntOrNull()?:0
-            val numOfBathrooms = binding.etNumOfBathroom.text.toString().toIntOrNull()?:0
-            val area = binding.etArea.text.toString().toDoubleOrNull()?:0.0
-            val description = binding.etDescription.text.toString()
-            val address = binding.etAddress.text.toString()
-            val rent = binding.etRent.text.toString().toDoubleOrNull()?:0.0
-            val isAvailable = binding.isAvailable.isChecked
+            // get the user object from intent
+            userObj = if (intent.hasExtra("extra_userObj")) {
+                intent.getSerializableExtra("extra_userObj") as User
+            } else {null}
 
-            // Error handling
-            if (
-                numOfBedrooms <= 0 || numOfKitchens <= 0 || numOfBathrooms <= 0 || area <= 0.0 ||
-                email.isEmpty() || description.isEmpty() || address.isEmpty() || rent <= 0.0
-            ) {
-                Snackbar.make(binding.root, "Please fill out all the fields.", Snackbar.LENGTH_LONG).show()
-                return@setOnClickListener
-            }
-
-            // get user object from shared preference
-            val userJson = sharedPreferences.getString(email, "")
-            if (userJson == ""){
-                // if user not logged in
-                Snackbar.make(binding.root, "Please login first.", Snackbar.LENGTH_LONG).show()
+            // if userObj doesn't exist, the uer is NOT logged in
+            if (userObj == null) {
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
-                return@setOnClickListener
+            } else {
+
+                // when Publish button is clicked
+                binding.btnPublish.setOnClickListener {
+                    publishBtnClicked()
+                }
             }
-            val gson = Gson()
-            val user = gson.fromJson(userJson, User::class.java)
-
-            // get myListings list from sharedPreference
-            val myListingsListJson = sharedPreferences.getString(user.userId, "")
-            if (myListingsListJson != ""){
-                val typeToken = object : TypeToken<List<Property>>() {}.type
-                propertiesList = gson.fromJson<List<Property>>(myListingsListJson, typeToken).toMutableList()
-            }
-
-            // add property to the list
-            val propertyType = PropertyType.fromDisplayName(selectedPropertyTypeName)
-            val propertyToAdd = Property(
-                propertyType, user, numOfBedrooms, numOfKitchens, numOfBathrooms, area,
-                description, address, rent, isAvailable
-            )
-            propertiesList.add(propertyToAdd)
-            Log.d("propertiesList", "onCreate: propertiesList: $propertiesList\n" +
-                    "propertiesList size: ${propertiesList.size}")
-
-            // convert list back to string, using user ID as KEY to store a list of listings
-            val propertiesListJson = gson.toJson(propertiesList)
-            editor.putString(user.userId, propertiesListJson)
-            editor.apply()
-            val intent = Intent(this, MyListingsActivity::class.java)
-            intent.putExtra("extra_userObj", user)
-            startActivity(intent)
 
         }
     }
 
+    private fun publishBtnClicked(){
+        // Get data from UI
+        val selectedPropertyTypeName = binding.propertyTypeSpinner.selectedItem.toString()
+        val numOfBedrooms = binding.etNumOfBedroom.text.toString().toIntOrNull() ?: 0
+        val numOfKitchens = binding.etNumOfKitchen.text.toString().toIntOrNull() ?: 0
+        val numOfBathrooms = binding.etNumOfBathroom.text.toString().toIntOrNull() ?: 0
+        val area = binding.etArea.text.toString().toDoubleOrNull() ?: 0.0
+        val description = binding.etDescription.text.toString()
+        val address = binding.etAddress.text.toString()
+        val rent = binding.etRent.text.toString().toDoubleOrNull() ?: 0.0
+        val isAvailable = binding.isAvailable.isChecked
+
+        // Error handling
+        if (
+            numOfBedrooms <= 0 || numOfKitchens <= 0 || numOfBathrooms <= 0 || area <= 0.0 ||
+            description.isEmpty() || address.isEmpty() || rent <= 0.0
+        ) {
+            Snackbar.make(
+                binding.root,
+                "Please fill out all the fields.",
+                Snackbar.LENGTH_LONG
+            ).show()
+            return
+        }
+
+        // get user object from shared preference
+//            val userJson = sharedPreferences.getString(email, "")
+//            if (userJson == ""){
+//                // if user not logged in
+//                Snackbar.make(binding.root, "Please login first.", Snackbar.LENGTH_LONG).show()
+//                val intent = Intent(this, LoginActivity::class.java)
+//                startActivity(intent)
+//                return@setOnClickListener
+//            }
+//
+//            userObj = gson.fromJson(userJson, User::class.java)
+
+        // get myListings list from sharedPreference
+        val myListingsListJson = sharedPreferences.getString(userObj!!.userId, "")
+        if (myListingsListJson != "") {
+            val typeToken = object : TypeToken<List<Property>>() {}.type
+            propertiesList =
+                gson.fromJson<List<Property>>(myListingsListJson, typeToken).toMutableList()
+        }
+
+        // add property to the list
+        val propertyType = PropertyType.fromDisplayName(selectedPropertyTypeName)
+        val propertyToAdd = Property(
+            propertyType, userObj!!, numOfBedrooms, numOfKitchens, numOfBathrooms, area,
+            description, address, rent, isAvailable
+        )
+        propertiesList.add(propertyToAdd)
+        Log.d(
+            "propertiesList", "onCreate: propertiesList: $propertiesList\n" +
+                    "propertiesList size: ${propertiesList.size}"
+        )
+
+        // convert list back to string, using user ID as KEY to store a list of listings
+        val propertiesListJson = gson.toJson(propertiesList)
+        editor.putString(userObj!!.userId, propertiesListJson)
+        editor.apply()
+
+        val intent = Intent(this, MyListingsActivity::class.java)
+        intent.putExtra("extra_userObj", userObj)
+        startActivity(intent)
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_menu_options, menu)
-
-
-        // checks user is logged in or not
-        val userJson = intent.getStringExtra("user")
-        if (userJson != null) {
-            val gson = Gson()
-            val user = gson.fromJson(userJson, User::class.java)
-
-            if (user.role == "Tenant") {
-                menuInflater.inflate(R.menu.tenant_profile_options, menu)
-            } else if (user.role == "Landlord") {
-                menuInflater.inflate(R.menu.landlord_profile_options, menu)
-            }
-
-        } else {
-            menuInflater.inflate(R.menu.guest_menu_options, menu)
-        }
+        menuInflater.inflate(R.menu.landlord_profile_options, menu)
 
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
+        return when (item.itemId) {
             R.id.menu_item_home -> {
                 Log.d("TAG", "onOptionsItemSelected: Post Rental option is selected")
 
@@ -147,40 +159,40 @@ class RentalFormActivity : AppCompatActivity() {
 
                 return true
             }
+
             R.id.menu_item_blog -> {
                 Log.d("TAG", "onOptionsItemSelected: Blog option is selected")
 
                 // navigate to 2nd screen
-               val sidebarIntent = Intent(this@RentalFormActivity, BlogListActivity::class.java)
-               startActivity(sidebarIntent)
+                val sidebarIntent =
+                    Intent(this@RentalFormActivity, BlogListActivity::class.java)
+                startActivity(sidebarIntent)
 
                 return true
             }
 
             R.id.mi_post_rental -> {
-                val intent = Intent(this@RentalFormActivity, RentalFormActivity::class.java)
-                // get the user info from login page
-                val userJson = intent.getStringExtra("user")
-                // pass this info to next page, which is tenant profile info page
-                intent.putExtra("user", userJson)
+                // pass through the user object
+                val intent = Intent(this, RentalFormActivity::class.java)
+                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
+
             R.id.mi_my_account -> {
-                val intent = Intent(this@RentalFormActivity, ProfileActivity::class.java)
-                // get the user info from login page
-                val userJson = intent.getStringExtra("user")
-                // pass this info to next page, which is tenant profile info page
-                intent.putExtra("user", userJson)
+
+                // pass through the user object
+                val intent = Intent(this, ProfileActivity::class.java)
+                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
+
             R.id.mi_my_listings -> {
-                val intent = Intent(this@RentalFormActivity, MyListingsActivity::class.java)
-                // get the user info from login page
-                val userJson = intent.getStringExtra("user")
-                // pass this info to next page, which is tenant profile info page
-                intent.putExtra("user", userJson)
+
+                // pass through the user object
+                val intent = Intent(this, MyListingsActivity::class.java)
+                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
@@ -193,8 +205,8 @@ class RentalFormActivity : AppCompatActivity() {
 
                 return true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 }
