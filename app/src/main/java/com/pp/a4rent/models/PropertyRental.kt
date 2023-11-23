@@ -13,6 +13,7 @@ class PropertyRental(
     var area: Double,
     var description: String,
     var propertyAddress: String,
+    var postalCode: String,
     var rent: Double,
     var available: Boolean,
     var imageFilename:String,
@@ -38,6 +39,7 @@ class PropertyRental(
                 "Area=$area\n" +
                 "Description=$description\n" +
                 "PropertyAddress=$propertyAddress\n" +
+                "PostalCode=$postalCode\n" +
                 "Rent=$rent\n" +
                 "Available=$available\n" +
                 "ImageFileName=$imageFilename\n" +

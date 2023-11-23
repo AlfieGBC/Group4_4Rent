@@ -34,28 +34,28 @@ class RentalsPostListActivity : AppCompatActivity() {
 
     // made this mutable because we know that later on, we have to add fruits to it
     private var rentalDatasource:MutableList<PropertyRental> = mutableListOf<PropertyRental>(
-        PropertyRental(1,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Toronto", 2500.0, true, "peter",false),
-        PropertyRental(2, "condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","Winnipeg", 2500.0, true, "amy",false ),
-        PropertyRental(3,"condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "vancouver", 2500.0, true, "alex",false),
-        PropertyRental(4,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", 2500.0, true, "jane",false),
-        PropertyRental(5,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Vancouver", 2500.0, true, "peter",false),
-        PropertyRental(6,"condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","North York", 2500.0, true, "amy",false),
-        PropertyRental(7, "condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "vancouver", 2500.0, true, "alex",false),
-        PropertyRental(8,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", 2500.0, true, "jane",false),
-        PropertyRental(9,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "toronto", 2500.0, true, "peter",false),
-        PropertyRental(10,"condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","north york", 2500.0, true, "amy",false),
-        PropertyRental(11,"condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "Toronto", 2500.0, true, "alex",false),
-        PropertyRental(12,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", 2500.0, true, "jane",false),
+        PropertyRental(1,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Toronto", "N2M 8C9", 2500.0, true, "peter",false),
+        PropertyRental(2, "condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","Winnipeg", "S2M 3C9",2500.0, true, "amy",false ),
+        PropertyRental(3,"condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "vancouver", "B2D 5N6", 2700.0, true, "alex",false),
+        PropertyRental(4,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", "B2D 5N6",2300.0, true, "jane",false),
+        PropertyRental(5,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Vancouver", "N4M 8C9",2500.0, true, "peter",false),
+        PropertyRental(6,"condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","North York", "N2M 8C9",2500.0, true, "amy",false),
+        PropertyRental(7, "condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "vancouver", "C2M 8C9",2500.0, true, "alex",false),
+        PropertyRental(8,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", "N2B 8C9",2500.0, true, "jane",false),
+        PropertyRental(9,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "toronto", "N2W 6C6",2500.0, true, "peter",false),
+        PropertyRental(10,"condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","north york", "N2M 5C6",2500.0, true, "amy",false),
+        PropertyRental(11,"condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "Toronto", "N2MH 4C9",2500.0, true, "alex",false),
+        PropertyRental(12,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", "I2O 8C3",2500.0, true, "jane",false),
     )
 
     var searchedRentalsList: MutableList<PropertyRental> = mutableListOf()
 
 
-    // TODO: Shared Preferences variables
+    // Shared Preferences variables
     lateinit var sharedPreferences: SharedPreferences
     lateinit var prefEditor: SharedPreferences.Editor
 
-    // TODO: Get the current fruit data source
+    // Get the current fruit data source
     var favouriteRentalPostsList:MutableList<PropertyRental> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,7 +132,7 @@ class RentalsPostListActivity : AppCompatActivity() {
             // get the data from the array
             for (rental in rentalDatasource) {
                 for (fav in favouriteRentalPostsList) {
-                    Log.d("TAG", "REntal found ${rental.rentalID}")
+                    Log.d("TAG", "Rental found ${rental.rentalID}")
                     if (rental.rentalID == fav.rentalID) {
                         Log.d("TAG", "Favourite found ${rental.rentalID}")
                         rental.favourite = true
@@ -141,8 +141,10 @@ class RentalsPostListActivity : AppCompatActivity() {
                 // check condition
                 if (rental.propertyType.toLowerCase() == receiveSearchInput.toLowerCase() ||
                     rental.propertyAddress.toLowerCase() == receiveSearchInput.toLowerCase() ||
-                    rental.propertyType.contains(receiveSearchInput.toLowerCase()) ||
-                    rental.propertyAddress.toLowerCase().contains(receiveSearchInput.toLowerCase()) ) {
+                    rental.postalCode.toLowerCase() == receiveSearchInput.toLowerCase() ||
+                    rental.propertyType.toLowerCase().contains(receiveSearchInput.toLowerCase()) ||
+                    rental.propertyAddress.toLowerCase().contains(receiveSearchInput.toLowerCase()) ||
+                    rental.postalCode.toLowerCase().contains(receiveSearchInput.toString().toLowerCase())) {
 
                     Log.d("TAG", "PAss")
                     found = true
@@ -159,6 +161,7 @@ class RentalsPostListActivity : AppCompatActivity() {
                         rental.area,
                         rental.description,
                         rental.propertyAddress,
+                        rental.postalCode,
                         rental.rent,
                         rental.available,
                         rental.imageFilename,
