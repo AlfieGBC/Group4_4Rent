@@ -35,22 +35,27 @@ class RegisterActivity : AppCompatActivity() {
             val password = binding.password.text.toString()
             val role = binding.role.findViewById<RadioButton>(binding.role.checkedRadioButtonId).text.toString()
 
+            val minLength = 8
+            val maxLength = 20
+
             if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            } else if (isEmailRegistered(email)) {
+                Toast.makeText(this, "Email is already registered", Toast.LENGTH_SHORT).show()
+            } else if (!email.contains("@")) {
+                Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show()
+            } else if (password.length < minLength || password.length > maxLength) {
+                    Toast.makeText(this, "Password must be between $minLength and $maxLength characters long", Toast.LENGTH_SHORT).show()
             } else {
-                if (isEmailRegistered(email)) {
-                    Toast.makeText(this, "Email is already registered", Toast.LENGTH_SHORT).show()
-                } else {
-                    val user = User(UUID.randomUUID().toString(), firstName, lastName, email, password, "", role.toString())
-                    val gson = Gson()
-                    val userJson = gson.toJson(user)
-                    editor.putString(email, userJson)
-                    editor.apply()
+                val user = User(UUID.randomUUID().toString(), firstName, lastName, email, password, "", role.toString())
+                val gson = Gson()
+                val userJson = gson.toJson(user)
+                editor.putString(email, userJson)
+                editor.apply()
 
-                    Toast.makeText(this, "Registered successfully", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                }
+                Toast.makeText(this, "Registered successfully", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
             }
         }
 
