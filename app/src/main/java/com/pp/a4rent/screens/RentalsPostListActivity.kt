@@ -94,15 +94,21 @@ class RentalsPostListActivity : AppCompatActivity() {
         // Get existing rental list from SharedPreferences
         this.prefEditor = this.sharedPreferences.edit()
 
-        val savedRentalsFromSP = sharedPreferences.getString("KEY_RENTALS_DATASOURCE", "")
+        val gson = Gson()
+        val userJson = intent.getStringExtra("user")
+        Log.d("TAG", "check ${userJson}")
+        var savedRentalsFromSP: String? = null
+        if(userJson != null) {
+            val user = gson.fromJson(userJson, User::class.java)
+            savedRentalsFromSP = sharedPreferences.getString("KEY_RENTALS_DATASOURCE"+user.userId, "")
+        }
 
         // get favourite rentals on activity create
-        if (savedRentalsFromSP == "") {
+        if (savedRentalsFromSP == null || savedRentalsFromSP == "") {
             // - if no, we should create a brand new list of fruits
             // do nothing!
         } else {
             // if yes, convert the string back to list of rentals
-            val gson = Gson()
             val typeToken = object : TypeToken<List<PropertyRental>>() {}.type
             // convert the string back to a list
             val rentalsList = gson.fromJson<List<PropertyRental>>(savedRentalsFromSP, typeToken)
@@ -295,7 +301,8 @@ class RentalsPostListActivity : AppCompatActivity() {
 
         val gson = Gson()
         val listAsString = gson.toJson(favouriteRentalPostsList)
-        this.prefEditor.putString("KEY_RENTALS_DATASOURCE", listAsString)
+        val user = gson.fromJson(userJson, User::class.java)
+        this.prefEditor.putString("KEY_RENTALS_DATASOURCE"+user.userId, listAsString)
 
         // commit the changes
         this.prefEditor.apply()
