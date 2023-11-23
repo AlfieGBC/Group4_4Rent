@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -24,7 +23,7 @@ class RentalFormActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRentalFormBinding
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
-    var propertiesList = mutableListOf<Property>()
+    private var propertiesList = mutableListOf<Property>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +38,7 @@ class RentalFormActivity : AppCompatActivity() {
         setSupportActionBar(this.binding.menu)
 
         // set up spinner
-        val propertyTypeAdapter = ArrayAdapter<String>(this, R.layout.spinner_item_property_types, PropertyType.displayNames)
+        val propertyTypeAdapter = ArrayAdapter(this, R.layout.spinner_item_property_types, PropertyType.displayNames)
         binding.propertyTypeSpinner.adapter = propertyTypeAdapter
 
         // when Publish button is clicked
@@ -49,8 +48,8 @@ class RentalFormActivity : AppCompatActivity() {
             val email = binding.tvEmail.text.toString()
             val selectedPropertyTypeName = binding.propertyTypeSpinner.selectedItem.toString()
             val numOfBedrooms = binding.etNumOfBedroom.text.toString().toIntOrNull()?:0
-            val numOfkitchens = binding.etNumOfKitchen.text.toString().toIntOrNull()?:0
-            val numOfbathrooms = binding.etNumOfBathroom.text.toString().toIntOrNull()?:0
+            val numOfKitchens = binding.etNumOfKitchen.text.toString().toIntOrNull()?:0
+            val numOfBathrooms = binding.etNumOfBathroom.text.toString().toIntOrNull()?:0
             val area = binding.etArea.text.toString().toDoubleOrNull()?:0.0
             val description = binding.etDescription.text.toString()
             val address = binding.etAddress.text.toString()
@@ -59,7 +58,7 @@ class RentalFormActivity : AppCompatActivity() {
 
             // Error handling
             if (
-                numOfBedrooms <= 0 || numOfkitchens <= 0 || numOfbathrooms <= 0 || area <= 0.0 ||
+                numOfBedrooms <= 0 || numOfKitchens <= 0 || numOfBathrooms <= 0 || area <= 0.0 ||
                 email.isEmpty() || description.isEmpty() || address.isEmpty() || rent <= 0.0
             ) {
                 Snackbar.make(binding.root, "Please fill out all the fields.", Snackbar.LENGTH_LONG).show()
@@ -80,7 +79,7 @@ class RentalFormActivity : AppCompatActivity() {
 
             // get myListings list from sharedPreference
             val myListingsListJson = sharedPreferences.getString(user.userId, "")
-            if (myListingsListJson == ""){}else{
+            if (myListingsListJson != ""){
                 val typeToken = object : TypeToken<List<Property>>() {}.type
                 propertiesList = gson.fromJson<List<Property>>(myListingsListJson, typeToken).toMutableList()
             }
@@ -88,7 +87,7 @@ class RentalFormActivity : AppCompatActivity() {
             // add property to the list
             val propertyType = PropertyType.fromDisplayName(selectedPropertyTypeName)
             val propertyToAdd = Property(
-                propertyType, user, numOfBedrooms, numOfkitchens, numOfbathrooms, area,
+                propertyType, user, numOfBedrooms, numOfKitchens, numOfBathrooms, area,
                 description, address, rent, isAvailable
             )
             propertiesList.add(propertyToAdd)
@@ -195,4 +194,5 @@ class RentalFormActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }
