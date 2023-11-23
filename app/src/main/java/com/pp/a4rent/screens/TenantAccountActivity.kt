@@ -87,9 +87,9 @@ class TenantAccountActivity : AppCompatActivity() {
             val rentalsList = gson.fromJson<List<PropertyRental>>(resultsFromSP, typeToken)
 
             // replace this screen's savedRentals variable with whatever came from the sp
-//            favRentalPostsList = rentalsList.toMutableList()
+
             favRentalPostsList.addAll(rentalsList.toMutableList())
-//            adapter.notifyDataSetChanged()
+
 
             Log.d("TAG", "Finally ${favRentalPostsList}")
         }
@@ -199,7 +199,7 @@ class TenantAccountActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.menu_item_home -> {
-                Log.d("TAG", "onOptionsItemSelected: Post Rental option is selected")
+                Log.d("TAG", "onOptionsItemSelected: Home option is selected")
 
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this, MainActivity::class.java)
@@ -223,7 +223,7 @@ class TenantAccountActivity : AppCompatActivity() {
 
 
             R.id.mi_tenant_favourite -> {
-                Log.d("TAG", "onOptionsItemSelected: Blog option is selected")
+                Log.d("TAG", "onOptionsItemSelected: Favourite option is selected")
 
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this@TenantAccountActivity, TenantAccountActivity::class.java)

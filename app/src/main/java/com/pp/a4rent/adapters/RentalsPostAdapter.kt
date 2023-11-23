@@ -45,7 +45,7 @@ class RentalsPostAdapter(
         var currRentalPost:PropertyRental = rentalsList.get(position)
 
         // Populate the UI with the rental post details
-        // Get the tvRent
+        // Get the tvTitle = tv rent
         val tvTitle = holder.itemView.findViewById<TextView>(R.id.tvTitle)
         tvTitle.setText("$${currRentalPost.rent}\n")
 

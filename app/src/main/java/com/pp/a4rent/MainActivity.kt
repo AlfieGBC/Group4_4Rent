@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity() {
 
         return when(item.itemId) {
             R.id.menu_item_home -> {
-                Log.d(TAG, "onOptionsItemSelected: Post Rental option is selected")
+                Log.d(TAG, "onOptionsItemSelected: Home option is selected")
 
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this@MainActivity, MainActivity::class.java)
@@ -212,7 +212,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.mi_tenant_favourite -> {
-                Log.d("TAG", "onOptionsItemSelected: Blog option is selected")
+                Log.d("TAG", "onOptionsItemSelected: Favourite option is selected")
 
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this, TenantAccountActivity::class.java)

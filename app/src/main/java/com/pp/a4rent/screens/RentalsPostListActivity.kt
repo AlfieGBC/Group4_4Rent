@@ -133,7 +133,7 @@ class RentalsPostListActivity : AppCompatActivity() {
             }
         }
 
-        // TODO: Search System
+        // Search System
         // get intent data from main activity
         // receive the search input data
         val receiveSearchInput = intent.getStringExtra("FILTER_DATA_EXTRA")
@@ -274,7 +274,6 @@ class RentalsPostListActivity : AppCompatActivity() {
         val snackbar = Snackbar.make(binding.root, "Added to Favourite List", Snackbar.LENGTH_LONG)
         snackbar.show()
 
-//        rentalsToAdd.favourite = !rentalsToAdd.favourite
 
         rentalsToAdd.favourite = true
         // if rentalsToAdd already exists in favouriteRentalPostsList then ignore
@@ -339,7 +338,7 @@ class RentalsPostListActivity : AppCompatActivity() {
 
         return when(item.itemId) {
             R.id.menu_item_home -> {
-                Log.d("TAG", "onOptionsItemSelected: Post Rental option is selected")
+                Log.d("TAG", "onOptionsItemSelected: Home option is selected")
 
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this, MainActivity::class.java)
@@ -381,7 +380,7 @@ class RentalsPostListActivity : AppCompatActivity() {
             }
 
             R.id.mi_tenant_favourite -> {
-                Log.d("TAG", "onOptionsItemSelected: Blog option is selected")
+                Log.d("TAG", "onOptionsItemSelected: Favourite option is selected")
 
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this, TenantAccountActivity::class.java)
