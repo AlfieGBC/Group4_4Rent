@@ -1,5 +1,6 @@
 package com.pp.a4rent.screens
 
+import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,19 +37,19 @@ class RentalsPostListActivity : AppCompatActivity() {
     private lateinit var adapter: RentalsPostAdapter
 
     // made this mutable because we know that later on, we have to add fruits to it
-    private var rentalDatasource:MutableList<PropertyRental> = mutableListOf<PropertyRental>(
-        PropertyRental(1,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Toronto", "N2M 8C9", 2500.0, true, "peter",false),
-        PropertyRental(2, "condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","Winnipeg", "S2M 3C9",2500.0, true, "amy",false ),
-        PropertyRental(3,"condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "vancouver", "B2D 5N6", 2700.0, true, "alex",false),
-        PropertyRental(4,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", "B2D 5N6",2300.0, true, "jane",false),
-        PropertyRental(5,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Vancouver", "N4M 8C9",2500.0, true, "peter",false),
-        PropertyRental(6,"condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","North York", "N2M 8C9",2500.0, true, "amy",false),
-        PropertyRental(7, "condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "vancouver", "C2M 8C9",2500.0, true, "alex",false),
-        PropertyRental(8,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", "N2B 8C9",2500.0, true, "jane",false),
-        PropertyRental(9,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "toronto", "N2W 6C6",2500.0, true, "peter",false),
-        PropertyRental(10,"condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","north york", "N2M 5C6",2500.0, true, "amy",false),
-        PropertyRental(11,"condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "Toronto", "N2MH 4C9",2500.0, true, "alex",false),
-        PropertyRental(12,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", "I2O 8C3",2500.0, true, "jane",false),
+       private var rentalDatasource:MutableList<PropertyRental> = mutableListOf<PropertyRental>(
+        PropertyRental(1,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Humber Line 123 Street, NY","Toronto", "N2M 8C9", 2500.0, true, "peter",false),
+        PropertyRental(2, "condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","Bloor St , NY","North York", "S2M 3C9",2500.0, true, "amy",false ),
+        PropertyRental(3,"condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", " Line 123 Street, Victoria, Vancouver","vancouver", "B2D 5N6", 2700.0, true, "alex",false),
+        PropertyRental(4,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "12 vi Street, Van","Vancouver", "B2D 5N6",2300.0, true, "jane",false),
+        PropertyRental(5,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "123 st abc, winnipeg", "Winnipeg","N4M 8C9",2500.0, true, "peter",false),
+        PropertyRental(6,"condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","12 Keele Street, NY","North York", "N2M 8C9",2500.0, true, "amy",false),
+        PropertyRental(7, "condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "16 victoria st, BC","vancouver", "C2M 8C9",2500.0, true, "alex",false),
+        PropertyRental(8,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "879 Islington av, Etobicoke", "toronto", "N2B 8C9",2500.0, true, "jane",false),
+        PropertyRental(9,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "456 abc st, winnipeg","winnipeg", "N2W 6C6",2500.0, true, "peter",false),
+        PropertyRental(10,"condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","78 jane st, north york","north york", "N2M 5C6",2500.0, true, "amy",false),
+        PropertyRental(11,"condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "45 dupont st, toronto","Toronto", "N2MH 4C9",2500.0, true, "alex",false),
+        PropertyRental(12,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo","46 dufferin st, toronto", "toronto", "I2O 8C3",2500.0, true, "jane",false),
     )
 
     var searchedRentalsList: MutableList<PropertyRental> = mutableListOf()
@@ -69,7 +71,10 @@ class RentalsPostListActivity : AppCompatActivity() {
         // display menu bar on the screen
         setSupportActionBar(this.binding.menuToolbar)
         // Change the title
-        supportActionBar?.title = "4Rent"
+        supportActionBar?.apply {
+            title = "4Rent"
+            setDisplayHomeAsUpEnabled(true)
+        }
 
         // For changing the color of overflow icon
         // Get the drawable for the overflow icon
@@ -146,11 +151,15 @@ class RentalsPostListActivity : AppCompatActivity() {
                     rental.postalCode.toLowerCase() == receiveSearchInput.toLowerCase() ||
                     rental.propertyType.toLowerCase().contains(receiveSearchInput.toLowerCase()) ||
                     rental.propertyAddress.toLowerCase().contains(receiveSearchInput.toLowerCase()) ||
-                    rental.postalCode.toLowerCase().contains(receiveSearchInput.toString().toLowerCase())) {
+                    rental.postalCode.toLowerCase().contains(receiveSearchInput.toString().toLowerCase()) ||
+                    rental.city.toLowerCase() == receiveSearchInput.toLowerCase() ||
+                    rental.city.toLowerCase().contains(receiveSearchInput.toLowerCase())
+                    ) {
 
                     Log.d("TAG", "PAss")
                     found = true
-//                    binding.tvRentalErrorMsg.setText("")
+
+
 
                     // - if yes, then store that into a variable
                     val rentalToAdd = PropertyRental(
@@ -164,6 +173,7 @@ class RentalsPostListActivity : AppCompatActivity() {
                         rental.description,
                         rental.propertyAddress,
                         rental.postalCode,
+                        rental.city,
                         rental.rent,
                         rental.available,
                         rental.imageFilename,
@@ -201,7 +211,6 @@ class RentalsPostListActivity : AppCompatActivity() {
             }
 
         }
-
 
 
     }
@@ -244,18 +253,20 @@ class RentalsPostListActivity : AppCompatActivity() {
     // rv: Favorite button click handler
     fun favButtonClicked(position:Int) {
 
+        var rentalsToAdd = searchedRentalsList.get(position)
+
         // checks user is logged in or not,
         // - if yes, navigate user to short-listed rentals page (favourite page)
         val userJson = intent.getStringExtra("user")
         if (userJson == null) {
+            rentalsToAdd.favourite = false
+            this.adapter.notifyDataSetChanged()
             val userIntent = Intent(this@RentalsPostListActivity, LoginActivity::class.java)
             startActivity(userIntent)
-        }
+        } else {
 
         val snackbar = Snackbar.make(binding.root, "Added to Favourite List", Snackbar.LENGTH_LONG)
         snackbar.show()
-
-        var rentalsToAdd = searchedRentalsList.get(position)
 
 //        rentalsToAdd.favourite = !rentalsToAdd.favourite
 
@@ -264,7 +275,7 @@ class RentalsPostListActivity : AppCompatActivity() {
 
 
         var rentalExists = false
-        var favRentalIndex : Int? = null
+        var favRentalIndex: Int? = null
         for (index in favouriteRentalPostsList.indices) {
             if (favouriteRentalPostsList[index].rentalID == rentalsToAdd.rentalID) {
                 Log.d("TAG", "Rental already exist in the favourite list")
@@ -275,7 +286,7 @@ class RentalsPostListActivity : AppCompatActivity() {
         }
 
 
-        if(!rentalExists) {
+        if (!rentalExists) {
             rentalsToAdd.favourite = true
             favouriteRentalPostsList.add(rentalsToAdd)
         } else {
@@ -290,11 +301,9 @@ class RentalsPostListActivity : AppCompatActivity() {
         this.prefEditor.apply()
 
         Log.d("TAG", "testing this list: ${listAsString}")
-
     }
 
-
-
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_menu_options, menu)

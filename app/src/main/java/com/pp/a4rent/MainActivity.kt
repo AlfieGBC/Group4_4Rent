@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
 
         this.binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
@@ -51,18 +50,23 @@ class MainActivity : AppCompatActivity() {
             binding.menuToolbar.overflowIcon = wrappedDrawable
         }
 
-        binding.btnSearchToronto.setOnClickListener {
-            this.goToTorontoRentals()
-        }
-
+        // For search button
         binding.btnSearch.setOnClickListener {
             this.goToRentalsPostList()
         }
 
+        // For searching based on location
+        // Toronto
+        binding.btnSearchToronto.setOnClickListener {
+            this.goToTorontoRentals()
+        }
+
+        // Vancouver
         binding.btnSearchVancouver.setOnClickListener {
             this.goToVancouverRentals()
         }
 
+        // Winnipeg
         binding.btnSearchWinnipeg.setOnClickListener {
             this.goToWinnipegRentals()
         }
@@ -235,7 +239,6 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.mi_logout -> {
                 // navigate to 2nd screen
-//                sharedPreferences.edit().clear().apply()
                 val sidebarIntent = Intent(this@MainActivity, MainActivity::class.java)
                 startActivity(sidebarIntent)
 

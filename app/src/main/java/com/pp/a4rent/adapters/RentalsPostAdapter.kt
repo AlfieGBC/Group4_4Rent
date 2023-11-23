@@ -45,13 +45,31 @@ class RentalsPostAdapter(
         var currRentalPost:PropertyRental = rentalsList.get(position)
 
         // Populate the UI with the rental post details
-        // Get the tvTitle
+        // Get the tvRent
         val tvTitle = holder.itemView.findViewById<TextView>(R.id.tvTitle)
-        tvTitle.setText("${currRentalPost.rent}\n")
+        tvTitle.setText("$${currRentalPost.rent}\n")
 
-        // Populate the tvDetail
+        // No. of bedrooms and bathrooms
+        val tvBedrooms = holder.itemView.findViewById<TextView>(R.id.tvBeds)
+        tvBedrooms.setText("${currRentalPost.numberOfBedroom} Beds |")
+        val tvBathrooms = holder.itemView.findViewById<TextView>(R.id.tvBaths)
+        tvBathrooms.setText("${currRentalPost.numberOfBathroom} Baths |")
+
+        // Area
+        val tvArea = holder.itemView.findViewById<TextView>(R.id.tvArea)
+        tvArea.setText("${currRentalPost.area} sq. ft.")
+
+        // Populate the tv Property type
         val tvDetail = holder.itemView.findViewById<TextView>(R.id.tvDetail)
         tvDetail.setText("${currRentalPost.propertyType}")
+
+        // address
+        val tvAddress = holder.itemView.findViewById<TextView>(R.id.tvAddress)
+        tvAddress.setText("${currRentalPost.propertyAddress}")
+
+        // city
+        val tvCity = holder.itemView.findViewById<TextView>(R.id.tvCity)
+        tvCity.setText("${currRentalPost.city}")
 
         // Populate the image
         // - getting a context variable
@@ -60,7 +78,7 @@ class RentalsPostAdapter(
         // - use the context to update the image
         val res = context.resources.getIdentifier(currRentalPost.imageFilename, "drawable", context.packageName)
 
-        val rentalPost = holder.itemView.findViewById<ImageView>(R.id.rentalPost)
+        val rentalPost = holder.itemView.findViewById<ImageView>(R.id.ivRentalPostImage)
         rentalPost.setImageResource(res)
 
 
@@ -71,6 +89,9 @@ class RentalsPostAdapter(
         // current rental post's favourite is true then, color the star
         if (currRentalPost.favourite) {
             btnFav.setChecked(true)
+        } else {
+            btnFav.setChecked(false)
         }
     }
+
 }
