@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 import com.google.gson.Gson
 import com.pp.a4rent.ProfileActivity
+import com.pp.a4rent.MainActivity
 import com.pp.a4rent.databinding.ActivityLoginBinding
 import com.pp.a4rent.models.User
 
@@ -55,6 +56,14 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.signUpLink.setOnClickListener{
+            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+        }
+
+        binding.returnBack.setOnClickListener{
+            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
         }
     }
 }

@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".screens.RentalPostDetailActivity">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/menu_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#502900"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:titleTextColor="@color/white" />
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_post_detail_header"
@@ -27,20 +15,14 @@ xmlns:android="http://schemas.android.com/apk/res/android">
             android:layout_height="wrap_content"
             android:text="Post Rental Detail"
             android:textAlignment="center"
-            android:textSize="40sp"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/menu_toolbar"
-            />
+            android:textSize="40sp"
+            android:textStyle="bold" />
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_post_detail_header">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvRentalAddress"
@@ -52,7 +34,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
                 android:textStyle="bold" />
 
 
-<!--            android:src="@drawable/ic_launcher_background"-->
+            <!--            android:src="@drawable/ic_launcher_background"-->
             <ImageView
                 android:id="@+id/ivRentalPost"
                 android:layout_width="match_parent"
@@ -65,8 +47,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvRentalBeds"
@@ -94,17 +75,15 @@ xmlns:android="http://schemas.android.com/apk/res/android">
                     android:text="Rental Kitchens"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvRentalArea"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:text="Rental Area"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
             </LinearLayout>
+            <TextView
+                android:id="@+id/tvRentalArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Rental Area"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvRentalPropertyType"
@@ -159,5 +138,5 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </ScrollView>

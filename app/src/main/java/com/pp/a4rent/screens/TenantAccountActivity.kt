@@ -153,8 +153,9 @@ class TenantAccountActivity : AppCompatActivity() {
         snackbar.show()
 
         favRentalPostsList.removeAt(position)
-        adapter.notifyDataSetChanged()
-
+        adapter.notifyItemRemoved(position)
+        prefEditor.putString("KEY_RENTALS_DATASOURCE", Gson().toJson(favRentalPostsList))
+        prefEditor.apply()
     }
 
 
@@ -212,6 +213,7 @@ class TenantAccountActivity : AppCompatActivity() {
 
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this@TenantAccountActivity, TenantAccountActivity::class.java)
+
                 // get the user info from login page
                 val userJson = intent.getStringExtra("user")
                 // pass this info to next page, which is tenant profile info page
@@ -236,7 +238,6 @@ class TenantAccountActivity : AppCompatActivity() {
             }
             R.id.mi_logout -> {
                 // navigate to 2nd screen
-//                sharedPreferences.edit().clear().apply()
                 val sidebarIntent = Intent(this, MainActivity::class.java)
                 startActivity(sidebarIntent)
 
