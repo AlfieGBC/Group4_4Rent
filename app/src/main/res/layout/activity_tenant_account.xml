@@ -20,6 +20,7 @@
             android:background="#502900" />
 
         <TextView
+            android:id="@+id/tv_tenant_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -28,6 +29,31 @@
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/tenant_menu_toolbar"
             tools:ignore="UnknownId" />
+
+        <TextView
+            android:id="@+id/tv_tenant_subheading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Tenant Favourite List"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/tv_tenant_header"
+            tools:ignore="UnknownId" />
+
+        <Button
+            android:id="@+id/btnDeleteAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete all"
+            app:layout_constraintTop_toBottomOf="@+id/tv_tenant_subheading"
+            tools:ignore="MissingConstraints" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFavItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/btnDeleteAll"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
