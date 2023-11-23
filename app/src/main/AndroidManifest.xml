@@ -28,6 +28,12 @@
             android:name=".screens.AccountActivity"
             android:exported="false" />
         <activity
+            android:name=".screens.BlogListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.BlogDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".MyListingsActivity"
             android:exported="false" />
         <activity
