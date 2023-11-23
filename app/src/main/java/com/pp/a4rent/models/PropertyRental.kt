@@ -4,6 +4,7 @@ import java.io.Serializable
 
 //PropertyRental must be Serializable interface or protocol
 class PropertyRental(
+    var rentalID : Int,
     var propertyType: String,
     var ownerInfo: Owner,
     var numberOfBedroom:Int,
@@ -14,7 +15,8 @@ class PropertyRental(
     var propertyAddress: String,
     var rent: Double,
     var available: Boolean,
-    var imageFilename:String
+    var imageFilename:String,
+    var favourite: Boolean
     ) : Serializable {
 
 //    Property type (condo, house, apartment, basement, etc.).
@@ -38,6 +40,7 @@ class PropertyRental(
                 "PropertyAddress=$propertyAddress\n" +
                 "Rent=$rent\n" +
                 "Available=$available\n" +
-                "ImageFileName=$imageFilename\n"
+                "ImageFileName=$imageFilename\n" +
+                "Favourite:$favourite\n"
     }
 }

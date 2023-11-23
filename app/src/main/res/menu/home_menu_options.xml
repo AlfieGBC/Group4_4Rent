@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_item_yellow"
+        android:id="@+id/menu_item_search"
         android:icon="@android:drawable/ic_menu_search"
         android:iconTint="@color/white"
         android:title="Search"
@@ -11,8 +11,8 @@
         />
 
     <item
-        android:id="@+id/menu_item_post_rental"
-        android:title="Post Rental"
+        android:id="@+id/menu_item_home"
+        android:title="Home"
         />
 
     <item
@@ -20,14 +20,6 @@
         android:title="Blog"
         />
 
-    <item
-        android:id="@+id/menu_item_signup"
-        android:title="Sign Up"
-        />
 
-    <item
-        android:id="@+id/menu_item_login"
-        android:title="Log In"
-        />
 
 </menu>

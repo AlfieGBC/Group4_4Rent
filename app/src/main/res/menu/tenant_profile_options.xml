@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/mi_tenant_favourite"
+        android:title="Favourite Rentals"
+        />
+
+    <item
         android:id="@+id/mi_tenant_profile"
         android:title="Profile info"
         />
 
     <item
-        android:id="@+id/mi_tenant_blog"
-        android:title="Blog"
-        />
-
-    <item
-        android:id="@+id/mi_tenant_logout"
+        android:id="@+id/mi_logout"
         android:title="Logout"
         />
 

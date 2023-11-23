@@ -1,6 +1,7 @@
 package com.pp.a4rent.screens
 
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,12 +12,16 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.pp.a4rent.MainActivity
 import com.pp.a4rent.ProfileActivity
 import com.pp.a4rent.R
 import com.pp.a4rent.adapters.RentalsPostAdapter
 import com.pp.a4rent.databinding.ActivityRentalsPostListBinding
 import com.pp.a4rent.models.Owner
 import com.pp.a4rent.models.PropertyRental
+import com.pp.a4rent.models.User
 
 class RentalsPostListActivity : AppCompatActivity() {
 
@@ -29,24 +34,32 @@ class RentalsPostListActivity : AppCompatActivity() {
 
     // made this mutable because we know that later on, we have to add fruits to it
     private var rentalDatasource:MutableList<PropertyRental> = mutableListOf<PropertyRental>(
-        PropertyRental("condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Toronto", 2500.0, true, "peter"),
-        PropertyRental("condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","Winnipeg", 2500.0, true, "amy"),
-        PropertyRental("condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "vancouver", 2500.0, true, "alex"),
-        PropertyRental("basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", 2500.0, true, "jane"),
-        PropertyRental("condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Vancouver", 2500.0, true, "peter"),
-        PropertyRental("condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","North York", 2500.0, true, "amy"),
-        PropertyRental("condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "vancouver", 2500.0, true, "alex"),
-        PropertyRental("basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", 2500.0, true, "jane"),
-        PropertyRental("condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "toronto", 2500.0, true, "peter"),
-        PropertyRental("condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","north york", 2500.0, true, "amy"),
-        PropertyRental("condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "Toronto", 2500.0, true, "alex"),
-        PropertyRental("basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", 2500.0, true, "jane"),
+        PropertyRental(1,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Toronto", 2500.0, true, "peter",false),
+        PropertyRental(2, "condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","Winnipeg", 2500.0, true, "amy",false ),
+        PropertyRental(3,"condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "vancouver", 2500.0, true, "alex",false),
+        PropertyRental(4,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", 2500.0, true, "jane",false),
+        PropertyRental(5,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Vancouver", 2500.0, true, "peter",false),
+        PropertyRental(6,"condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","North York", 2500.0, true, "amy",false),
+        PropertyRental(7, "condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "vancouver", 2500.0, true, "alex",false),
+        PropertyRental(8,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", 2500.0, true, "jane",false),
+        PropertyRental(9,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "toronto", 2500.0, true, "peter",false),
+        PropertyRental(10,"condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","north york", 2500.0, true, "amy",false),
+        PropertyRental(11,"condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "Toronto", 2500.0, true, "alex",false),
+        PropertyRental(12,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "toronto", 2500.0, true, "jane",false),
     )
 
     var searchedRentalsList: MutableList<PropertyRental> = mutableListOf()
+
+
+    // TODO: Shared Preferences variables
+    lateinit var sharedPreferences: SharedPreferences
+    lateinit var prefEditor: SharedPreferences.Editor
+
+    // TODO: Get the current fruit data source
+    var favouriteRentalPostsList:MutableList<PropertyRental> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_toronto_rentals)
 
         this.binding = ActivityRentalsPostListBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
@@ -68,6 +81,45 @@ class RentalsPostListActivity : AppCompatActivity() {
         }
 
 
+        // Initialize SharedPreference and Editor instance
+        this.sharedPreferences = getSharedPreferences("MY_APP_PREFS", MODE_PRIVATE)
+
+        // Get existing rental list from SharedPreferences
+        this.prefEditor = this.sharedPreferences.edit()
+
+        val savedRentalsFromSP = sharedPreferences.getString("KEY_RENTALS_DATASOURCE", "")
+
+        // get favourite rentals on activity create
+        if (savedRentalsFromSP == "") {
+            // - if no, we should create a brand new list of fruits
+            // do nothing!
+        } else {
+            // if yes, convert the string back to list of rentals
+            val gson = Gson()
+            val typeToken = object : TypeToken<List<PropertyRental>>() {}.type
+            // convert the string back to a list
+            val rentalsList = gson.fromJson<List<PropertyRental>>(savedRentalsFromSP, typeToken)
+
+            Log.d("TAG", "checkinggggg hai ${favouriteRentalPostsList}")
+
+            // replace this screen's savedRentals variable with whatever came from the sp
+            favouriteRentalPostsList = rentalsList.toMutableList()
+
+            Log.d("TAG", "heram hai ${favouriteRentalPostsList}")
+        }
+
+        /// list loop in each item -> check if it exists in favourite or not
+        // if exists then set isFavourite = true
+        for (rental in rentalDatasource) {
+            for (fav in favouriteRentalPostsList) {
+                Log.d("TAG", "REntal found ${rental.rentalID}")
+                if (rental.rentalID == fav.rentalID) {
+                    Log.d("TAG", "Favourite found ${rental.rentalID}")
+                    rental.favourite = true
+                }
+            }
+        }
+
         // TODO: Search System
         // get intent data from main activity
         // receive the search input data
@@ -79,7 +131,13 @@ class RentalsPostListActivity : AppCompatActivity() {
             var found = false;
             // get the data from the array
             for (rental in rentalDatasource) {
-
+                for (fav in favouriteRentalPostsList) {
+                    Log.d("TAG", "REntal found ${rental.rentalID}")
+                    if (rental.rentalID == fav.rentalID) {
+                        Log.d("TAG", "Favourite found ${rental.rentalID}")
+                        rental.favourite = true
+                    }
+                }
                 // check condition
                 if (rental.propertyType.toLowerCase() == receiveSearchInput.toLowerCase() ||
                     rental.propertyAddress.toLowerCase() == receiveSearchInput.toLowerCase() ||
@@ -92,6 +150,7 @@ class RentalsPostListActivity : AppCompatActivity() {
 
                     // - if yes, then store that into a variable
                     val rentalToAdd = PropertyRental(
+                        rental.rentalID,
                         rental.propertyType,
                         rental.ownerInfo,
                         rental.numberOfBedroom,
@@ -102,7 +161,8 @@ class RentalsPostListActivity : AppCompatActivity() {
                         rental.propertyAddress,
                         rental.rent,
                         rental.available,
-                        rental.imageFilename)
+                        rental.imageFilename,
+                        rental.favourite)
 
                     // and add that into the empty list
                     searchedRentalsList.add(rentalToAdd)
@@ -145,36 +205,111 @@ class RentalsPostListActivity : AppCompatActivity() {
     // rv:  Row click handler
     fun rowClicked(rowPosition: Int){
 
-        var selectedRental: PropertyRental = searchedRentalsList.get(rowPosition)
-        // snackbar
-        val snackbar = Snackbar.make(binding.root, "${selectedRental.toString()}, for row${rowPosition}", Snackbar.LENGTH_LONG)
-        snackbar.show()
+        // checks user is logged in or not
+        val userJson = intent.getStringExtra("user")
+        if (userJson == null) {
+            val userIntent = Intent(this@RentalsPostListActivity, LoginActivity::class.java)
+            startActivity(userIntent)
+        } else {
+            var selectedRental: PropertyRental = searchedRentalsList.get(rowPosition)
 
-        // navigate to rental details page
-        val intent = Intent(this, RentalPostDetailActivity::class.java)
-        intent.putExtra("ROW_RENTAL_POST_DETAIL_POSITION", rowPosition)
+            // snackbar
+            val snackbar = Snackbar.make(binding.root, "${selectedRental.toString()}, for row${rowPosition}", Snackbar.LENGTH_LONG)
+            snackbar.show()
 
-        // send the details of the rental post to next screen
-        // rentalDatasource -> PropertyRental class must be Serializable interface or protocol
-        intent.putExtra("ROW_RENTAL_POST_DETAIL",   searchedRentalsList.get(rowPosition))
+            // navigate to rental details page
+            val intent = Intent(this, RentalPostDetailActivity::class.java)
+            intent.putExtra("ROW_RENTAL_POST_DETAIL_POSITION", rowPosition)
+
+            // send the details of the rental post to next screen
+            // rentalDatasource -> PropertyRental class must be Serializable interface or protocol
+            intent.putExtra("ROW_RENTAL_POST_DETAIL",   searchedRentalsList.get(rowPosition))
+            // pass this info to next page, which is tenant profile info page
+            intent.putExtra("user", userJson)
+
+            Log.d("TAG", "${searchedRentalsList.get(rowPosition)}")
 
 
-        Log.d("TAG", "${searchedRentalsList.get(rowPosition)}")
+            startActivity(intent)
+        }
 
-
-        startActivity(intent)
 
     }
 
     // rv: Favorite button click handler
     fun favButtonClicked(position:Int) {
-        val snackbar = Snackbar.make(binding.root, "Favorite ${position}", Snackbar.LENGTH_LONG)
+
+        // checks user is logged in or not,
+        // - if yes, navigate user to short-listed rentals page (favourite page)
+        val userJson = intent.getStringExtra("user")
+        if (userJson == null) {
+            val userIntent = Intent(this@RentalsPostListActivity, LoginActivity::class.java)
+            startActivity(userIntent)
+        }
+
+        val snackbar = Snackbar.make(binding.root, "Added to Favourite List", Snackbar.LENGTH_LONG)
         snackbar.show()
+
+        var rentalsToAdd = searchedRentalsList.get(position)
+
+//        rentalsToAdd.favourite = !rentalsToAdd.favourite
+
+        rentalsToAdd.favourite = true
+        // if rentalsToAdd already exists in favouriteRentalPostsList then ignore
+
+
+        var rentalExists = false
+        var favRentalIndex : Int? = null
+        for (index in favouriteRentalPostsList.indices) {
+            if (favouriteRentalPostsList[index].rentalID == rentalsToAdd.rentalID) {
+                Log.d("TAG", "Rental already exist in the favourite list")
+                rentalExists = true
+                favRentalIndex = index
+                break
+            }
+        }
+
+
+        if(!rentalExists) {
+            rentalsToAdd.favourite = true
+            favouriteRentalPostsList.add(rentalsToAdd)
+        } else {
+            favouriteRentalPostsList.removeAt(favRentalIndex!!)
+        }
+
+        val gson = Gson()
+        val listAsString = gson.toJson(favouriteRentalPostsList)
+        this.prefEditor.putString("KEY_RENTALS_DATASOURCE", listAsString)
+
+        // commit the changes
+        this.prefEditor.apply()
+
+        Log.d("TAG", "testing this list: ${listAsString}")
+
     }
+
+
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_menu_options, menu)
+
+
+        // checks user is logged in or not
+        val userJson = intent.getStringExtra("user")
+        if (userJson != null) {
+            val gson = Gson()
+            val user = gson.fromJson(userJson, User::class.java)
+
+            if (user.role == "Tenant") {
+                menuInflater.inflate(R.menu.tenant_profile_options, menu)
+            } else if (user.role == "Landlord") {
+                menuInflater.inflate(R.menu.landlord_profile_options, menu)
+            }
+
+        } else {
+            menuInflater.inflate(R.menu.guest_menu_options, menu)
+        }
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -182,11 +317,16 @@ class RentalsPostListActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when(item.itemId) {
-            R.id.menu_item_post_rental -> {
-                Log.d(TAG, "onOptionsItemSelected: Post Rental option is selected")
+            R.id.menu_item_home -> {
+                Log.d("TAG", "onOptionsItemSelected: Post Rental option is selected")
 
                 // navigate to 2nd screen
-                val sidebarIntent = Intent(this@RentalsPostListActivity, ProfileActivity::class.java)
+                val sidebarIntent = Intent(this, MainActivity::class.java)
+
+                // get the user info from login page
+                val userJson = intent.getStringExtra("user")
+                // pass this info to next page, which is tenant profile info page
+                sidebarIntent.putExtra("user", userJson)
                 startActivity(sidebarIntent)
 
                 return true
@@ -204,8 +344,8 @@ class RentalsPostListActivity : AppCompatActivity() {
                 Log.d(TAG, "onOptionsItemSelected: Sign Up option is selected")
 
                 // navigate to 2nd screen
-//                val sidebarIntent = Intent(this@MainActivity, AccountActivity::class.java)
-//                startActivity(sidebarIntent)
+                val sidebarIntent = Intent(this@RentalsPostListActivity, RegisterActivity::class.java)
+                startActivity(sidebarIntent)
 
                 return true
             }
@@ -213,11 +353,50 @@ class RentalsPostListActivity : AppCompatActivity() {
                 Log.d(TAG, "onOptionsItemSelected: Log In option is selected")
 
                 // navigate to 2nd screen
-//                val sidebarIntent = Intent(this@MainActivity, AccountActivity::class.java)
-//                startActivity(sidebarIntent)
+                val sidebarIntent = Intent(this@RentalsPostListActivity, LoginActivity::class.java)
+                startActivity(sidebarIntent)
 
                 return true
             }
+
+            R.id.mi_tenant_favourite -> {
+                Log.d("TAG", "onOptionsItemSelected: Blog option is selected")
+
+                // navigate to 2nd screen
+                val sidebarIntent = Intent(this, TenantAccountActivity::class.java)
+                // get the user info from login page
+                val userJson = intent.getStringExtra("user")
+                // pass this info to next page, which is tenant profile info page
+                sidebarIntent.putExtra("user", userJson)
+
+                startActivity(sidebarIntent)
+
+                return true
+            }
+
+            R.id.mi_tenant_profile -> {
+                Log.d("TAG", "onOptionsItemSelected: Tenant Profile option is selected")
+
+                // navigate to 2nd screen
+                val sidebarTenantIntent = Intent(this, TenantProfileInfoActivity::class.java)
+                // get the user info from login page
+                val userJson = intent.getStringExtra("user")
+                // pass this info to next page, which is tenant profile info page
+                sidebarTenantIntent.putExtra("user", userJson)
+                startActivity(sidebarTenantIntent)
+
+                return true
+            }
+
+            R.id.mi_logout -> {
+                // navigate to 2nd screen
+//                sharedPreferences.edit().clear().apply()
+                val sidebarIntent = Intent(this, MainActivity::class.java)
+                startActivity(sidebarIntent)
+
+                return true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

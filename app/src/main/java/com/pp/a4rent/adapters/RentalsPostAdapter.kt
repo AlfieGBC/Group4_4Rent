@@ -1,9 +1,11 @@
 package com.pp.a4rent.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -60,5 +62,15 @@ class RentalsPostAdapter(
 
         val rentalPost = holder.itemView.findViewById<ImageView>(R.id.rentalPost)
         rentalPost.setImageResource(res)
+
+
+        val btnFav = holder.itemView.findViewById<CheckBox>(R.id.btnFavorite)
+
+        Log.d("TAG", " currRentalPost.favourite   ${currRentalPost.favourite}")
+
+        // current rental post's favourite is true then, color the star
+        if (currRentalPost.favourite) {
+            btnFav.setChecked(true)
+        }
     }
 }
