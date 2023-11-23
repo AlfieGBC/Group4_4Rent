@@ -51,7 +51,7 @@
             app:layout_constraintTop_toBottomOf="@+id/menu_toolbar"
             />
 
-<!--        Search by using edit text-->
+<!--     For Error msg-->
         <TextView
             android:id="@+id/tv_error_msg"
             android:layout_width="match_parent"
@@ -65,6 +65,7 @@
             android:layout_marginTop="10dp"
             />
 
+        <!--  Search by entering input into edit text-->
         <LinearLayout
             android:id="@+id/ll_et_search_button"
             android:layout_width="match_parent"
@@ -94,7 +95,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Search"
-                android:backgroundTint="#9C27B0"
+                android:backgroundTint="#03A9F4"
                 android:layout_marginTop="9dp"
                 app:layout_constraintTop_toBottomOf="@+id/tv_header"
                 app:layout_constraintStart_toEndOf="@+id/et_search"
@@ -129,7 +130,7 @@
             android:paddingRight="30dp"
             />
 
-<!--        Finding the better details section : Search by click buttons-->
+<!--     Search by location using click buttons-->
         <LinearLayout
             android:id="@+id/ll_search_buttons"
             android:layout_width="match_parent"
@@ -157,111 +158,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Winnipeg"
-                android:backgroundTint="#2196F3" />
-
-<!--            <Button-->
-<!--                android:id="@+id/btnPressMe4"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Press Me 1"/>-->
-<!--            <Button-->
-<!--                android:id="@+id/btnPressMe5"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Press Me 2"/>-->
-<!--            <Button-->
-<!--                android:id="@+id/btnPressMe6"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Press Me 3"/>-->
-
-
+                android:backgroundTint="#2196F3"
+                />
         </LinearLayout>
 
-
-
-
-
-<!--        Footer section-->
-        <LinearLayout
-            android:id="@+id/ll_footer"
+        <TextView
+            android:id="@+id/tv_other_cities"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:orientation="vertical"
-            android:background="#1E436C"
+            android:layout_height="wrap_content"
+            android:text="and othe cities"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#716B6B"
+            android:textAlignment="center"
             app:layout_constraintTop_toBottomOf="@+id/ll_search_buttons"
-            android:layout_marginTop="40dp">
-
-            <TextView
-                android:id="@+id/footer_heading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="4Rent.ca"
-                android:textSize="40sp"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:layout_marginTop="40dp"
-                />
-
-            <TextView
-                android:id="@+id/footer_body_copyright"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="\u00A9 Media Classified Corporation."
-                android:textSize="20sp"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:layout_marginTop="20dp"
-                />
-
-            <TextView
-                android:id="@+id/footer_body_rights"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="All rights reserved."
-                android:textSize="20sp"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                />
-
-<!--            Social media links-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="30dp"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/fb"
-                    android:paddingRight="20dp"
-                    />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ig"
-                    android:paddingRight="20dp"
-                    />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/twitter"
-                    android:paddingRight="20dp"
-                    />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/youtube"
-                    />
-
-            </LinearLayout>
-
-        </LinearLayout>
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

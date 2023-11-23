@@ -236,7 +236,6 @@ class TenantAccountActivity : AppCompatActivity() {
             }
             R.id.mi_logout -> {
                 // navigate to 2nd screen
-//                sharedPreferences.edit().clear().apply()
                 val sidebarIntent = Intent(this, MainActivity::class.java)
                 startActivity(sidebarIntent)
 
