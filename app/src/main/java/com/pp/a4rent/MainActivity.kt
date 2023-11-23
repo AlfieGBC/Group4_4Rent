@@ -16,6 +16,8 @@ import com.pp.a4rent.screens.RentalsPostListActivity
 
 import com.pp.a4rent.screens.LoginActivity
 import com.pp.a4rent.screens.RegisterActivity
+
+import com.pp.a4rent.screens.BlogListActivity
 import com.pp.a4rent.screens.TenantAccountActivity
 import com.pp.a4rent.screens.TenantProfileInfoActivity
 
@@ -178,8 +180,8 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "onOptionsItemSelected: Blog option is selected")
 
                 // navigate to 2nd screen
-//                val sidebarIntent = Intent(this@MainActivity, AccountActivity::class.java)
-//                startActivity(sidebarIntent)
+                val sidebarIntent = Intent(this@MainActivity, BlogListActivity::class.java)
+                startActivity(sidebarIntent)
 
                 return true
             }
