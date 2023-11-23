@@ -9,7 +9,6 @@ import com.pp.a4rent.databinding.ActivityBlogListBinding
 import com.pp.a4rent.models.Blog
 import android.util.Log
 
-// BlogListActivity.kt
 class BlogListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBlogListBinding
 

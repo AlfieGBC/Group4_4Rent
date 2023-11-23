@@ -7,7 +7,6 @@ import com.pp.a4rent.adapters.BlogAdapter
 import com.pp.a4rent.databinding.ActivityBlogDetailBinding
 import com.pp.a4rent.models.Blog
 
-// BlogDetailActivity.kt
 class BlogDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBlogDetailBinding
 

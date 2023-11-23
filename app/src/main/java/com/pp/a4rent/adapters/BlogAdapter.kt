@@ -13,7 +13,6 @@ import com.pp.a4rent.models.Blog
 
 import android.util.Log
 
-// BlogAdapter.kt
 class BlogAdapter(
     private val blogsList: MutableList<Blog>,
     private val rowClickHandler: (Int) -> Unit
