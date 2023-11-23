@@ -1,6 +1,7 @@
 package com.pp.a4rent.screens
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -91,6 +92,10 @@ class MyListingDetailsActivity : AppCompatActivity() {
                     }
 
                 }
+            } else {
+                // if no user object passed through, redirect user to Login page
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
             }
         }
 
