@@ -23,6 +23,8 @@ import com.pp.a4rent.databinding.ActivityTenantAccountBinding
 import com.pp.a4rent.models.PropertyRental
 import com.pp.a4rent.models.User
 
+import com.pp.a4rent.screens.BlogListActivity
+
 class TenantAccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTenantAccountBinding
 
@@ -198,8 +200,8 @@ class TenantAccountActivity : AppCompatActivity() {
                 Log.d("TAG", "onOptionsItemSelected: Blog option is selected")
 
                 // navigate to 2nd screen
-//                val sidebarIntent = Intent(this@MainActivity, AccountActivity::class.java)
-//                startActivity(sidebarIntent)
+               val sidebarIntent = Intent(this@TenantAccountActivity, BlogListActivity::class.java)
+               startActivity(sidebarIntent)
 
                 return true
             }
