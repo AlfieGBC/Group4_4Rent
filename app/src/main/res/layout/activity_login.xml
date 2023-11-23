@@ -26,7 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:hint="Password" />
+        android:hint="Password"
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/loginButton"
@@ -34,4 +35,43 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="Login" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/noAccountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="8dp"
+            android:text="Don't have any account? "
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/signUpLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toEndOf="@id/noAccountText"
+            android:text="SignUp"
+            android:textSize="16sp"
+            android:textStyle="bold|italic" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/returnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="8dp"
+        android:text="Return 4Rent"
+        android:textSize="16sp"
+        android:textStyle="bold|italic" />
+
 </LinearLayout>

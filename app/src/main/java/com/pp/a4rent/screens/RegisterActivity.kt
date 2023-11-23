@@ -4,16 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
-
 import androidx.appcompat.app.AppCompatActivity
-
 import com.google.gson.Gson
+import com.pp.a4rent.MainActivity
 import com.pp.a4rent.databinding.ActivityRegisterBinding
 import com.pp.a4rent.models.User
-
 import java.util.UUID
+
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -52,6 +52,14 @@ class RegisterActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
+        }
+
+        binding.loginLink.setOnClickListener{
+            startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+        }
+
+        binding.returnBack.setOnClickListener{
+            startActivity(Intent(this@RegisterActivity, MainActivity::class.java))
         }
     }
 
