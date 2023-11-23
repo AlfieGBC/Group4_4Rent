@@ -120,8 +120,10 @@ class MainActivity : AppCompatActivity() {
             val rentalPostListIntent = Intent(this@MainActivity, RentalsPostListActivity::class.java)
             rentalPostListIntent.putExtra("FILTER_DATA_EXTRA", etSearchKeyword)
 
-//            val check = rentalPostListIntent.getStringExtra("SEARCH_KEYWORD_FROM_ET")
-//            Log.d("TAG", "$check")
+            val userJson = intent.getStringExtra("user")
+            // pass this info to next page, which is tenant profile info page
+            rentalPostListIntent.putExtra("user", userJson)
+            
 
             startActivity(rentalPostListIntent)
         }
