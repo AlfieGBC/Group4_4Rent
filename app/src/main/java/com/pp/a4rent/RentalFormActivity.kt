@@ -137,7 +137,4 @@ class RentalFormActivity : AppCompatActivity() {
         }
     }
 
-    fun btnPublishClicked(){
-
-    }
 }
