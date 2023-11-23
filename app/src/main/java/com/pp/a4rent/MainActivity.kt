@@ -20,7 +20,6 @@ import com.pp.a4rent.screens.TenantAccountActivity
 import com.pp.a4rent.screens.TenantProfileInfoActivity
 
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
