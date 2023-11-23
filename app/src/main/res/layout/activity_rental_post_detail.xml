@@ -52,17 +52,17 @@ xmlns:android="http://schemas.android.com/apk/res/android">
                 android:textStyle="bold" />
 
 
+<!--            android:src="@drawable/ic_launcher_background"-->
             <ImageView
                 android:id="@+id/ivRentalPost"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:layout_margin="8dp"
-                android:src="@drawable/ic_launcher_background"
                 android:contentDescription="Fruit Image Goes Here" />
 
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:orientation="horizontal"
@@ -87,6 +87,15 @@ xmlns:android="http://schemas.android.com/apk/res/android">
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvRentalKitchens"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="Rental Kitchens"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:id="@+id/tvRentalArea"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -94,14 +103,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
                     android:text="Rental Area"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-
-                <CheckBox
-                    android:id="@+id/btnFavorite"
-                    style="?android:attr/starStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    />
 
             </LinearLayout>
 
@@ -119,7 +120,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Rental Discription"
+                android:text="Rental Description"
                 android:textSize="18sp" />
 
             <TextView

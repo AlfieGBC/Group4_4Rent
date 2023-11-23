@@ -64,19 +64,31 @@ class RentalPostDetailActivity : AppCompatActivity() {
             }
 
             // populate the rental post text
-            binding.tvRentalAddress.text = singleRentalPostDetail.propertyAddress
-//            binding.ivRentalPost = singleRentalPostDetail.imageFilename
-            binding.tvRentalBeds.text = singleRentalPostDetail.numberOfBedroom.toString()
-            binding.tvRentalBaths.text = singleRentalPostDetail.numberOfBathroom.toString()
-            binding.tvRentalArea.text = singleRentalPostDetail.area.toString()
-            binding.tvRentalPropertyType.text = singleRentalPostDetail.propertyType
-            binding.tvRentalDescription.text = singleRentalPostDetail.description
-            binding.tvRentalAvailable.text = singleRentalPostDetail.available.toString()
-            binding.tvRentalRent.text = singleRentalPostDetail.rent.toString()
+            binding.tvRentalAddress.setText("${singleRentalPostDetail.propertyAddress}")
+            binding.tvRentalBeds.setText("${singleRentalPostDetail.numberOfBedroom.toString()}bedrooms")
+            binding.tvRentalBaths.setText("${singleRentalPostDetail.numberOfBathroom.toString()}bathrooms")
+            binding.tvRentalKitchens.setText("${singleRentalPostDetail.numberOKitchen.toString()}kitchens")
+            binding.tvRentalArea.setText("${singleRentalPostDetail.area.toString()} sq. feet")
+            binding.tvRentalPropertyType.setText("${singleRentalPostDetail.propertyType}")
+            binding.tvRentalDescription.setText("${singleRentalPostDetail.description}")
+            binding.tvRentalRent.setText("$${singleRentalPostDetail.rent.toString()}")
+
+            // owner info
             binding.tvOwnerInfo.setText("Owner Name: ${singleRentalPostDetail.ownerInfo.name}\n" +
                     "Owner email: ${singleRentalPostDetail.ownerInfo.email}\n" +
                     "Owner Phone number: ${singleRentalPostDetail.ownerInfo.phoneNumber}")
 
+            // update image
+            val imagename = singleRentalPostDetail.imageFilename
+            val res = resources.getIdentifier(imagename, "drawable", this.packageName)
+            this.binding.ivRentalPost.setImageResource(res)
+
+            // availability
+            if (singleRentalPostDetail.available) {
+                binding.tvRentalAvailable.text = "Availability: YES"
+            } else {
+                binding.tvRentalAvailable.text = "Availability: NO"
+            }
 
         }
     }
