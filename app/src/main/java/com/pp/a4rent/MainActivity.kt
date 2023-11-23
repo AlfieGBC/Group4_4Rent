@@ -19,6 +19,8 @@ import com.pp.a4rent.screens.RegisterActivity
 import com.pp.a4rent.screens.TenantAccountActivity
 import com.pp.a4rent.screens.TenantProfileInfoActivity
 
+import com.pp.a4rent.screens.BlogListActivity
+
 
 class MainActivity : AppCompatActivity() {
 
