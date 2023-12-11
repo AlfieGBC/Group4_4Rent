@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "948398827680",
+    "project_id": "rent-g4",
+    "storage_bucket": "rent-g4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948398827680:android:20518c97a3b63c42f881c5",
+        "android_client_info": {
+          "package_name": "com.pp.a4rent"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWHtNwnVetvuruR9BgMOcYyKUEzbFwx0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
