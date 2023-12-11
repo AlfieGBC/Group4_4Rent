@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,6 +29,7 @@ import com.pp.a4rent.models.User
 
 import com.pp.a4rent.screens.LoginActivity
 import com.pp.a4rent.screens.BlogListActivity
+import java.util.Locale
 
 
 class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
@@ -113,17 +116,13 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v){
             binding.btnGetPosition -> {
-                getPositionBtnClicked()
+                // Check for permissions & do resulting actions
+                multiplePermissionsResultLauncher.launch(APP_PERMISSIONS_LIST)
             }
             binding.btnPublish -> {
                 publishBtnClicked()
             }
         }
-    }
-
-    private fun getPositionBtnClicked(){
-        // Check for permissions & do resulting actions
-        multiplePermissionsResultLauncher.launch(APP_PERMISSIONS_LIST)
     }
 
     private fun publishBtnClicked(){
@@ -289,6 +288,39 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
                 val message = "The device is located at: ${location.latitude}, ${location.longitude}"
                 Log.d(TAG, message)
                 Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+
+                // get user address from the geo code
+                val geocoder = Geocoder(applicationContext, Locale.getDefault())
+                try {
+                    val searchResults:MutableList<Address>? = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                    if (searchResults == null) {
+                        Log.e(TAG, "getting Street Address: searchResults is NULL ")
+                        return@addOnSuccessListener
+                    }
+
+                    if (searchResults.size == 0) {
+                        Log.d(TAG, "No search results for location (${location.latitude}, ${location.longitude}).")
+                    } else {
+
+                        val matchingAddress: Address = searchResults[0]
+                        Log.d(TAG, "Search results found.")
+                        Log.d(TAG, "Country: " + matchingAddress.countryName)
+                        Log.d(TAG, "City: " + matchingAddress.locality)
+                        Log.d(TAG, "Street: " + matchingAddress.thoroughfare)
+                        Log.d(TAG, "Street number: " + matchingAddress.subThoroughfare)
+
+                        // prefill the UI elements for address
+                        binding.apply {
+                            etAddress.setText("${matchingAddress.subThoroughfare} ${matchingAddress.thoroughfare}")
+                            etAddressCity.setText(matchingAddress.locality)
+                            etAddressProvince.setText(matchingAddress.adminArea)
+                            etAddressCountry.setText(matchingAddress.countryName)
+                        }
+                    }
+                } catch(ex:Exception) {
+                    Log.e(TAG, "Error encountered while getting coordinate location.")
+                    Log.e(TAG, ex.toString())
+                }
             }
     }
 
