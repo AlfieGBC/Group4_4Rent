@@ -1,14 +1,24 @@
 package com.pp.a4rent
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ArrayAdapter
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -19,9 +29,11 @@ import com.pp.a4rent.models.User
 
 import com.pp.a4rent.screens.LoginActivity
 import com.pp.a4rent.screens.BlogListActivity
+import java.util.Locale
 
 
-class RentalFormActivity : AppCompatActivity() {
+class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
+    private var TAG = this@RentalFormActivity.toString()
     private lateinit var binding: ActivityRentalFormBinding
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
@@ -29,11 +41,45 @@ class RentalFormActivity : AppCompatActivity() {
     private var userObj: User? = null
     private val gson = Gson()
 
+    // Device location
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    // permissions array
+    private val APP_PERMISSIONS_LIST = arrayOf(
+        android.Manifest.permission.ACCESS_COARSE_LOCATION,
+        android.Manifest.permission.ACCESS_FINE_LOCATION
+    )
+
+    // showing the permissions dialog box & its result
+    private val multiplePermissionsResultLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()) { resultsList ->
+        Log.d(TAG, resultsList.toString())
+
+        var allPermissionsGrantedTracker = true
+        for (item in resultsList.entries) {
+            if (item.key in APP_PERMISSIONS_LIST && item.value == false) {
+                allPermissionsGrantedTracker = false
+            }
+        }
+
+        if (allPermissionsGrantedTracker == true) {
+            Snackbar.make(binding.root, "All permissions granted", Snackbar.LENGTH_LONG).show()
+            getDeviceLocation()
+
+        } else {
+            Snackbar.make(binding.root, "Some permissions NOT granted", Snackbar.LENGTH_LONG).show()
+            //handlePermissionDenied()
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRentalFormBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // instantiate the fusedLocationProvider
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // initiate shared preference
         sharedPreferences = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
@@ -60,12 +106,22 @@ class RentalFormActivity : AppCompatActivity() {
                 startActivity(intent)
             } else {
 
-                // when Publish button is clicked
-                binding.btnPublish.setOnClickListener {
-                    publishBtnClicked()
-                }
+                // when buttons clicked
+                binding.btnPublish.setOnClickListener(this)
+                binding.btnGetPosition.setOnClickListener(this)
             }
+        }
+    }
 
+    override fun onClick(v: View?) {
+        when(v){
+            binding.btnGetPosition -> {
+                // Check for permissions & do resulting actions
+                multiplePermissionsResultLauncher.launch(APP_PERMISSIONS_LIST)
+            }
+            binding.btnPublish -> {
+                publishBtnClicked()
+            }
         }
     }
 
@@ -209,4 +265,70 @@ class RentalFormActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    private fun getDeviceLocation() {
+        // CHECK permission for FINE_LOCATION and COARSE_LOCATION
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // ask again for permission
+            multiplePermissionsResultLauncher.launch(APP_PERMISSIONS_LIST)
+            return
+        }
+
+        // if all permission granted
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location : Location? ->
+                if (location === null) {
+                    Log.d(TAG, "Location is null")
+                    return@addOnSuccessListener
+                }
+                // Output the location
+                val message = "The device is located at: ${location.latitude}, ${location.longitude}"
+                Log.d(TAG, message)
+                Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+
+                // get user address from the geo code
+                val geocoder = Geocoder(applicationContext, Locale.getDefault())
+                try {
+                    val searchResults:MutableList<Address>? = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                    if (searchResults == null) {
+                        Log.e(TAG, "getting Street Address: searchResults is NULL ")
+                        return@addOnSuccessListener
+                    }
+
+                    if (searchResults.size == 0) {
+                        Log.d(TAG, "No search results for location (${location.latitude}, ${location.longitude}).")
+                    } else {
+
+                        val matchingAddress: Address = searchResults[0]
+                        Log.d(TAG, "Search results found.")
+                        Log.d(TAG, "Country: " + matchingAddress.countryName)
+                        Log.d(TAG, "City: " + matchingAddress.locality)
+                        Log.d(TAG, "Street: " + matchingAddress.thoroughfare)
+                        Log.d(TAG, "Street number: " + matchingAddress.subThoroughfare)
+
+                        // prefill the UI elements for address
+                        binding.apply {
+                            etAddress.setText("${matchingAddress.subThoroughfare} ${matchingAddress.thoroughfare}")
+                            etAddressCity.setText(matchingAddress.locality)
+                            etAddressProvince.setText(matchingAddress.adminArea)
+                            etAddressCountry.setText(matchingAddress.countryName)
+                        }
+                    }
+                } catch(ex:Exception) {
+                    Log.e(TAG, "Error encountered while getting coordinate location.")
+                    Log.e(TAG, ex.toString())
+                }
+            }
+    }
+
+    private fun handlePermissionDenied() {
+        binding.apply {
+            etAddress.setText("Please grant permission for location access.")
+            btnGetPosition.isEnabled = false
+        }
+    }
+
 }

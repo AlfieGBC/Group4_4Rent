@@ -167,9 +167,9 @@
             android:id="@+id/et_description"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:layout_margin="8dp"
             android:hint="Unit description"
             android:inputType="text|textMultiLine"
-            android:layout_margin="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_area" />
 
@@ -178,9 +178,47 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:hint="Address"
+            android:hint="Street"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_description" />
+
+        <EditText
+            android:id="@+id/et_address_city"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="City"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_address" />
+
+        <EditText
+            android:id="@+id/et_address_province"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Province"
+            app:layout_constraintStart_toEndOf="@+id/et_address_city"
+            app:layout_constraintTop_toBottomOf="@+id/et_address" />
+
+        <EditText
+            android:id="@+id/et_address_country"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Country"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_address_city" />
+
+        <Button
+            android:id="@+id/btn_get_position"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:backgroundTint="#008ba6"
+            android:text="Use My Current Location"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_address_country" />
 
         <EditText
             android:id="@+id/et_rent"
@@ -188,9 +226,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="Monthly rent: $0.00"
+            android:textAlignment="center"
+            android:textSize="24sp"
             android:inputType="numberDecimal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_address" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_get_position" />
 
         <CheckBox
             android:id="@+id/is_available"
