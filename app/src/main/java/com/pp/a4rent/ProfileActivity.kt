@@ -39,33 +39,33 @@ class ProfileActivity : AppCompatActivity() {
         editor = sharedPreferences.edit()
 
         // get the user object from intent
-        if (intent != null) {
-            userObj = if (intent.hasExtra("extra_userObj")) {
-                intent.getSerializableExtra("extra_userObj") as User
-            } else {null}
-
-            // if userObj does exist, the uer is NOT logged in
-            if (userObj == null){
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-            } else {
-
-                // prefill the profile page
-                binding.apply {
-                    etFirstName.setText(userObj!!.firstName)
-                    etLastName.setText(userObj!!.lastName)
-                    etEmail.setText(userObj!!.email)
-                    etPhoneNumber.setText(userObj!!.phoneNumber)
-                    etPassword.setText(userObj!!.password)
-                }
-
-                // when update button is clicked
-                binding.btnUpdateProfile.setOnClickListener {
-                    updateBtnClicked()
-                }
-            }
-
-        }
+//        if (intent != null) {
+//            userObj = if (intent.hasExtra("extra_userObj")) {
+//                intent.getSerializableExtra("extra_userObj") as User
+//            } else {null}
+//
+//            // if userObj does exist, the uer is NOT logged in
+//            if (userObj == null){
+//                val intent = Intent(this, LoginActivity::class.java)
+//                startActivity(intent)
+//            } else {
+//
+//                // prefill the profile page
+//                binding.apply {
+//                    etFirstName.setText(userObj!!.firstName)
+//                    etLastName.setText(userObj!!.lastName)
+//                    etEmail.setText(userObj!!.email)
+//                    etPhoneNumber.setText(userObj!!.phoneNumber)
+//                    etPassword.setText(userObj!!.password)
+//                }
+//
+//                // when update button is clicked
+//                binding.btnUpdateProfile.setOnClickListener {
+//                    updateBtnClicked()
+//                }
+//            }
+//
+//        }
 
     }
 
