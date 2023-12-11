@@ -1,21 +1,16 @@
 package com.pp.a4rent.models
 
-import java.io.Serializable
+import java.util.UUID
 
-class User(
-    var userId: String,
+data class User(
+    var userId: String = UUID.randomUUID().toString(),
     var firstName: String,
     var lastName: String,
     var email: String,
     var password: String,
     var phoneNumber: String,
-    var role: String
-) : Serializable {
-    override fun toString(): String {
-        return "User(userId='$userId', role='$role', " +
-                "firstName='$firstName', lastName='$lastName'\n" +
-                "email='$email'\n" +
-                "phoneNumber='$phoneNumber'\n" +
-                "password='$password'\n)"
-    }
+    var role: String,
+    var favList: MutableList<PropertyRental>? = null,
+    var propertyList: MutableList<PropertyRental>? = null
+) {
 }

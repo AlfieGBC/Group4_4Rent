@@ -11,7 +11,7 @@ import java.io.Serializable
 //PropertyRental must be Serializable interface or protocol
 class PropertyRental(
     var rentalID : Int,
-    var propertyType: String,
+    var propertyType: PropertyType,
     var ownerInfo: Owner,
     var numberOfBedroom:Int,
     var numberOKitchen: Int,

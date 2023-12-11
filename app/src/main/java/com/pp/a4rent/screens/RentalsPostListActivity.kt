@@ -23,6 +23,7 @@ import com.pp.a4rent.adapters.RentalsPostAdapter
 import com.pp.a4rent.databinding.ActivityRentalsPostListBinding
 import com.pp.a4rent.models.Owner
 import com.pp.a4rent.models.PropertyRental
+import com.pp.a4rent.models.PropertyType
 import com.pp.a4rent.models.User
 
 import com.pp.a4rent.screens.BlogListActivity
@@ -38,18 +39,18 @@ class RentalsPostListActivity : AppCompatActivity() {
 
     // made this mutable because we know that later on, we have to add fruits to it
        private var rentalDatasource:MutableList<PropertyRental> = mutableListOf<PropertyRental>(
-        PropertyRental(1,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Humber Line 123 Street, NY","Toronto", "N2M 8C9", 2500.0, true, "peter",false),
-        PropertyRental(2, "condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","Bloor St , NY","North York", "S2M 3C9",2500.0, true, "amy",false ),
-        PropertyRental(3,"condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", " Line 123 Street, Victoria, Vancouver","vancouver", "B2D 5N6", 2700.0, true, "alex",false),
-        PropertyRental(4,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "12 vi Street, Van","Vancouver", "B2D 5N6",2300.0, true, "jane",false),
-        PropertyRental(5,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "123 st abc, winnipeg", "Winnipeg","N4M 8C9",2500.0, true, "peter",false),
-        PropertyRental(6,"condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","12 Keele Street, NY","North York", "N2M 8C9",2500.0, true, "amy",false),
-        PropertyRental(7, "condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "16 victoria st, BC","vancouver", "C2M 8C9",2500.0, true, "alex",false),
-        PropertyRental(8,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "879 Islington av, Etobicoke", "toronto", "N2B 8C9",2500.0, true, "jane",false),
-        PropertyRental(9,"condo", Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "456 abc st, winnipeg","winnipeg", "N2W 6C6",2500.0, true, "peter",false),
-        PropertyRental(10,"condo", Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","78 jane st, north york","north york", "N2M 5C6",2500.0, true, "amy",false),
-        PropertyRental(11,"condo", Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "45 dupont st, toronto","Toronto", "N2MH 4C9",2500.0, true, "alex",false),
-        PropertyRental(12,"basement", Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo","46 dufferin st, toronto", "toronto", "I2O 8C3",2500.0, true, "jane",false),
+        PropertyRental(1,PropertyType.APARTMENT, Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Humber Line 123 Street, NY","Toronto", "N2M 8C9", 2500.0, true, "peter",false),
+        PropertyRental(2, PropertyType.CONDO, Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","Bloor St , NY","North York", "S2M 3C9",2500.0, true, "amy",false ),
+        PropertyRental(3,PropertyType.CONDO, Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", " Line 123 Street, Victoria, Vancouver","vancouver", "B2D 5N6", 2700.0, true, "alex",false),
+        PropertyRental(4,PropertyType.BASEMENT, Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "12 vi Street, Van","Vancouver", "B2D 5N6",2300.0, true, "jane",false),
+        PropertyRental(5,PropertyType.CONDO, Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "123 st abc, winnipeg", "Winnipeg","N4M 8C9",2500.0, true, "peter",false),
+        PropertyRental(6,PropertyType.APARTMENT, Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","12 Keele Street, NY","North York", "N2M 8C9",2500.0, true, "amy",false),
+        PropertyRental(7, PropertyType.APARTMENT, Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "16 victoria st, BC","vancouver", "C2M 8C9",2500.0, true, "alex",false),
+        PropertyRental(8,PropertyType.HOUSE, Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "879 Islington av, Etobicoke", "toronto", "N2B 8C9",2500.0, true, "jane",false),
+        PropertyRental(9,PropertyType.CONDO, Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "456 abc st, winnipeg","winnipeg", "N2W 6C6",2500.0, true, "peter",false),
+        PropertyRental(10,PropertyType.CONDO, Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","78 jane st, north york","north york", "N2M 5C6",2500.0, true, "amy",false),
+        PropertyRental(11,PropertyType.BASEMENT, Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "45 dupont st, toronto","Toronto", "N2MH 4C9",2500.0, true, "alex",false),
+        PropertyRental(12,PropertyType.HOUSE, Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo","46 dufferin st, toronto", "toronto", "I2O 8C3",2500.0, true, "jane",false),
     )
 
     var searchedRentalsList: MutableList<PropertyRental> = mutableListOf()
@@ -73,7 +74,6 @@ class RentalsPostListActivity : AppCompatActivity() {
         // Change the title
         supportActionBar?.apply {
             title = "4Rent"
-            setDisplayHomeAsUpEnabled(true)
         }
 
         // For changing the color of overflow icon
@@ -152,10 +152,10 @@ class RentalsPostListActivity : AppCompatActivity() {
                     }
                 }
                 // check condition
-                if (rental.propertyType.toLowerCase() == receiveSearchInput.toLowerCase() ||
+                if (rental.propertyType.displayName.toLowerCase() == receiveSearchInput.toLowerCase() ||
                     rental.propertyAddress.toLowerCase() == receiveSearchInput.toLowerCase() ||
                     rental.postalCode.toLowerCase() == receiveSearchInput.toLowerCase() ||
-                    rental.propertyType.toLowerCase().contains(receiveSearchInput.toLowerCase()) ||
+                    rental.propertyType.displayName.toLowerCase().contains(receiveSearchInput.toLowerCase()) ||
                     rental.propertyAddress.toLowerCase().contains(receiveSearchInput.toLowerCase()) ||
                     rental.postalCode.toLowerCase().contains(receiveSearchInput.toString().toLowerCase()) ||
                     rental.city.toLowerCase() == receiveSearchInput.toLowerCase() ||

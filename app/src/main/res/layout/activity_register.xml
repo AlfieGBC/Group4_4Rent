@@ -23,32 +23,48 @@
         android:textSize="18sp" />
 
     <EditText
-        android:id="@+id/firstName"
+        android:id="@+id/et_firstName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="First Name" />
 
     <EditText
-        android:id="@+id/lastName"
+        android:id="@+id/et_lastName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="Last Name" />
 
     <EditText
-        android:id="@+id/email"
+        android:id="@+id/et_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="Email" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/et_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:hint="Password" />
+        android:hint="Password"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:id="@+id/et_confirm_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:id="@+id/et_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="Phone Number"/>
 
 
     <TextView
@@ -61,32 +77,34 @@
         android:textSize="18sp" />
 
     <RadioGroup
-        android:id="@+id/role"
+        android:id="@+id/rg_role"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp">
 
         <RadioButton
-            android:id="@+id/tenant"
+            android:id="@+id/rb_tenant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tenant" />
 
         <RadioButton
-            android:id="@+id/landlord"
+            android:id="@+id/rb_landlord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Landlord" />
 
-        <RadioButton
-            android:id="@+id/propertyOwner"
+        <TextView
+            android:id="@+id/tv_role_err_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Property Owner" />
+            android:textColor="#E11D0E"
+            android:textSize="10sp"/>
+
     </RadioGroup>
 
     <Button
-        android:id="@+id/registerButton"
+        android:id="@+id/btn_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -97,7 +115,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/alreadyHaveAccountText"
+            android:id="@+id/tv_alreadyHaveAccountText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
@@ -106,21 +124,21 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/loginLink"
+            android:id="@+id/tv_login_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_toEndOf="@id/alreadyHaveAccountText"
+            android:layout_toEndOf="@+id/tv_alreadyHaveAccountText"
             android:text="Log In"
             android:textSize="16sp"
             android:textStyle="bold|italic" />
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/returnBack"
+        android:id="@+id/tv_return_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"
