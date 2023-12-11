@@ -124,7 +124,7 @@ class ProfileActivity : AppCompatActivity() {
             R.id.mi_post_rental -> {
                 // pass through the user object
                 val intent = Intent(this, RentalFormActivity::class.java)
-                intent.putExtra("extra_userObj", userObj)
+//                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
@@ -132,7 +132,7 @@ class ProfileActivity : AppCompatActivity() {
 
                 // pass through the user object
                 val intent = Intent(this, ProfileActivity::class.java)
-                intent.putExtra("extra_userObj", userObj)
+//                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
@@ -140,7 +140,7 @@ class ProfileActivity : AppCompatActivity() {
 
                 // pass through the user object
                 val intent = Intent(this, MyListingsActivity::class.java)
-                intent.putExtra("extra_userObj", userObj)
+//                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }

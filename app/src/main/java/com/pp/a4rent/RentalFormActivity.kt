@@ -188,7 +188,7 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
         editor.apply()
 
         val intent = Intent(this, MyListingsActivity::class.java)
-        intent.putExtra("extra_userObj", userObj)
+//        intent.putExtra("extra_userObj", userObj)
         startActivity(intent)
     }
 
@@ -230,7 +230,7 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
             R.id.mi_post_rental -> {
                 // pass through the user object
                 val intent = Intent(this, RentalFormActivity::class.java)
-                intent.putExtra("extra_userObj", userObj)
+//                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
@@ -239,7 +239,7 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
 
                 // pass through the user object
                 val intent = Intent(this, ProfileActivity::class.java)
-                intent.putExtra("extra_userObj", userObj)
+//                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
@@ -248,7 +248,7 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
 
                 // pass through the user object
                 val intent = Intent(this, MyListingsActivity::class.java)
-                intent.putExtra("extra_userObj", userObj)
+//                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
