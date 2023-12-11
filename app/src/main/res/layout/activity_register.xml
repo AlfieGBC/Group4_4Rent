@@ -105,10 +105,16 @@
 
     <Button
         android:id="@+id/btn_register"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Register" />
+        android:text="Register"
+        android:layout_gravity="center"
+        android:paddingEnd="40dp"
+        android:paddingStart="40dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:backgroundTint="#523A28"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

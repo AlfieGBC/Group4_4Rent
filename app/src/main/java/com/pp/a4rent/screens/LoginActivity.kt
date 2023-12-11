@@ -1,25 +1,18 @@
 package com.pp.a4rent.screens
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-
-import com.google.gson.Gson
 import com.pp.a4rent.ProfileActivity
 import com.pp.a4rent.MainActivity
 import com.pp.a4rent.R
 import com.pp.a4rent.databinding.ActivityLoginBinding
-import com.pp.a4rent.models.User
-import com.pp.a4rent.repositories.UserRepository
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
