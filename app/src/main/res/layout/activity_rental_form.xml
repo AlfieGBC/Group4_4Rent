@@ -167,9 +167,9 @@
             android:id="@+id/et_description"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:layout_margin="8dp"
             android:hint="Unit description"
             android:inputType="text|textMultiLine"
-            android:layout_margin="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_area" />
 
@@ -182,6 +182,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_description" />
 
+
+        <Button
+            android:id="@+id/btn_get_position"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:backgroundTint="#008ba6"
+            android:text="Use My Current Location"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_address" />
+
         <EditText
             android:id="@+id/et_rent"
             android:layout_width="match_parent"
@@ -190,7 +202,7 @@
             android:hint="Monthly rent: $0.00"
             android:inputType="numberDecimal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_address" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_get_position" />
 
         <CheckBox
             android:id="@+id/is_available"

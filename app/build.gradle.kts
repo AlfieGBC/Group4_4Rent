@@ -62,4 +62,7 @@ dependencies {
 
     implementation("com.google.firebase:firebase-auth")
 
+    // Use the FusedLocationProviderClient class to get the location
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
 }
