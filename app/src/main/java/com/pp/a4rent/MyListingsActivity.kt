@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.pp.a4rent.adapters.MyListingsAdapter
@@ -18,6 +19,7 @@ import com.pp.a4rent.models.Property
 import com.pp.a4rent.models.User
 import com.pp.a4rent.screens.LoginActivity
 import com.pp.a4rent.screens.MyListingDetailsActivity
+import com.pp.a4rent.screens.UserProfileInfoActivity
 import java.io.Serializable
 
 class MyListingsActivity : AppCompatActivity() {
@@ -132,7 +134,7 @@ class MyListingsActivity : AppCompatActivity() {
             R.id.mi_my_account -> {
 
                 // pass through the user object
-                val intent = Intent(this, ProfileActivity::class.java)
+                val intent = Intent(this, UserProfileInfoActivity::class.java)
 //                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
@@ -149,10 +151,12 @@ class MyListingsActivity : AppCompatActivity() {
 
             R.id.mi_logout -> {
                 // navigate to 2nd screen
-//                sharedPreferences.edit().clear().apply()
-                val sidebarIntent = Intent(this, MainActivity::class.java)
-                startActivity(sidebarIntent)
+//                val sidebarIntent = Intent(this, MainActivity::class.java)
+//                startActivity(sidebarIntent)
 
+                Log.d("TAG", "onOptionsItemSelected: Sign Out option is selected")
+                FirebaseAuth.getInstance().signOut()
+                this@MyListingsActivity.finish()
                 return true
             }
 

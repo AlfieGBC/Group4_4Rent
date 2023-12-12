@@ -12,6 +12,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.pp.a4rent.MainActivity
@@ -32,7 +33,7 @@ class RentalsPostListActivity : AppCompatActivity() {
     // Made the adapter global
     private lateinit var adapter: RentalsPostAdapter
 
-    // made this mutable because we know that later on, we have to add fruits to it
+    // made this mutable because we know that later on, we have to add rentals to it
        private var rentalDatasource:MutableList<PropertyRental> = mutableListOf<PropertyRental>(
         PropertyRental(1,PropertyType.APARTMENT, Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Humber Line 123 Street, NY","Toronto", "N2M 8C9", 2500.0, true, "peter",false),
         PropertyRental(2, PropertyType.CONDO, Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","Bloor St , NY","North York", "S2M 3C9",2500.0, true, "amy",false ),
@@ -405,10 +406,12 @@ class RentalsPostListActivity : AppCompatActivity() {
 
             R.id.mi_logout -> {
                 // navigate to 2nd screen
-//                sharedPreferences.edit().clear().apply()
-                val sidebarIntent = Intent(this, MainActivity::class.java)
-                startActivity(sidebarIntent)
+//                val sidebarIntent = Intent(this, MainActivity::class.java)
+//                startActivity(sidebarIntent)
 
+                Log.d(TAG, "onOptionsItemSelected: Sign Out option is selected")
+                FirebaseAuth.getInstance().signOut()
+                this@RentalsPostListActivity.finish()
                 return true
             }
 

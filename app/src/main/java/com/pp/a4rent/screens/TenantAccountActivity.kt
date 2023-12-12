@@ -13,27 +13,31 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.pp.a4rent.MainActivity
 
 import com.pp.a4rent.R
 import com.pp.a4rent.adapters.RentalsPostAdapter
 import com.pp.a4rent.databinding.ActivityTenantAccountBinding
+import com.pp.a4rent.models.Property
 import com.pp.a4rent.models.PropertyRental
 import com.pp.a4rent.models.User
+import com.pp.a4rent.repositories.PropertyRepository
 
 class TenantAccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTenantAccountBinding
-
-    lateinit var adapter: RentalsPostAdapter
+    private var TAG = "Tenant_Account"
+    private lateinit var rentalPropertyAdapter: RentalsPostAdapter
+    private lateinit var favRentalPropertyArrayList : ArrayList<Property>
+    private lateinit var propertyRepository: PropertyRepository
 
     // TODO: Shared Preferences variables
     lateinit var sharedPreferences: SharedPreferences
     lateinit var prefEditor: SharedPreferences.Editor
 
     // TODO: Get the current fruit data source
-    var favRentalPostsList:MutableList<PropertyRental> = mutableListOf()
+//    var favRentalPostsList:MutableList<PropertyRental> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,52 +60,56 @@ class TenantAccountActivity : AppCompatActivity() {
             binding.tenantMenuToolbar.overflowIcon = wrappedDrawable
         }
 
-        // Initialize SharedPreference and Editor instance
-        this.sharedPreferences = getSharedPreferences("MY_APP_PREFS", MODE_PRIVATE)
-
-        // Get existing rental list from SharedPreferences
-        this.prefEditor = this.sharedPreferences.edit()
-
-        val gson = Gson()
-        val userJson = intent.getStringExtra("user")
-        Log.d("TAG", "user ${userJson}")
-        var resultsFromSP: String? = null
-        var user: User? = null
-        if(userJson != null) {
-            user = gson.fromJson(userJson, User::class.java)
-            resultsFromSP = sharedPreferences.getString("KEY_RENTALS_DATASOURCE"+user.userId, "")
-            Log.d("TAG", "Incoming result ${"KEY_RENTALS_DATASOURCE"+user.userId}")
-            Log.d("TAG", "Incoming result2 ${resultsFromSP}")
-        }
 
 
-        if (resultsFromSP == null || resultsFromSP == "" ) {
-            // - if no, we should create a brand new list of fruits
-            // do nothing!
-        } else {
-            // if yes, convert the string back to list of rentals
-            val typeToken = object : TypeToken<List<PropertyRental>>() {}.type
-            // convert the string back to a list
-            val rentalsList = gson.fromJson<List<PropertyRental>>(resultsFromSP, typeToken)
+//        // Initialize SharedPreference and Editor instance
+//        this.sharedPreferences = getSharedPreferences("MY_APP_PREFS", MODE_PRIVATE)
+//
+//        // Get existing rental list from SharedPreferences
+//        this.prefEditor = this.sharedPreferences.edit()
 
-            // replace this screen's savedRentals variable with whatever came from the sp
-
-            favRentalPostsList.addAll(rentalsList.toMutableList())
-
-
-            Log.d("TAG", "Finally ${favRentalPostsList}")
-        }
+//        val gson = Gson()
+//        val userJson = intent.getStringExtra("user")
+//        Log.d("TAG", "user ${userJson}")
+//        var resultsFromSP: String? = null
+//        var user: User? = null
+//        if(userJson != null) {
+//            user = gson.fromJson(userJson, User::class.java)
+//            resultsFromSP = sharedPreferences.getString("KEY_RENTALS_DATASOURCE"+user.userId, "")
+//            Log.d("TAG", "Incoming result ${"KEY_RENTALS_DATASOURCE"+user.userId}")
+//            Log.d("TAG", "Incoming result2 ${resultsFromSP}")
+//        }
+//
+//
+//        if (resultsFromSP == null || resultsFromSP == "" ) {
+//            // - if no, we should create a brand new list of fruits
+//            // do nothing!
+//        } else {
+//            // if yes, convert the string back to list of rentals
+//            val typeToken = object : TypeToken<List<PropertyRental>>() {}.type
+//            // convert the string back to a list
+//            val rentalsList = gson.fromJson<List<PropertyRental>>(resultsFromSP, typeToken)
+//
+//            // replace this screen's savedRentals variable with whatever came from the sp
+//
+//            favRentalPostsList.addAll(rentalsList.toMutableList())
+//
+//
+//            Log.d("TAG", "Finally ${favRentalPostsList}")
+//        }
 
         // setup adapter
-        adapter = RentalsPostAdapter(
-            favRentalPostsList,
-            {pos -> rowClicked(pos) },
-            {pos -> favButtonClicked(pos)}
 
-        )
+        favRentalPropertyArrayList = ArrayList()
+        rentalPropertyAdapter = RentalsPostAdapter(
+            this,
+            favRentalPropertyArrayList,
+            {pos -> rowClicked(pos) }
+
+        ) { pos -> favButtonClicked(pos) }
 
         // setup rv
-        binding.rvFavItems.adapter = adapter
+        binding.rvFavItems.adapter = rentalPropertyAdapter
         binding.rvFavItems.layoutManager = LinearLayoutManager(this)
         binding.rvFavItems.addItemDecoration(
             DividerItemDecoration(
@@ -110,30 +118,46 @@ class TenantAccountActivity : AppCompatActivity() {
             )
         )
 
-        Log.d("TAG", "test: $favRentalPostsList")
+        Log.d("TAG", "test: $favRentalPropertyArrayList")
+
+        propertyRepository = PropertyRepository(applicationContext)
 
 
-        binding.btnDeleteAll.setOnClickListener {
-            if(user != null) {
-                prefEditor.remove("KEY_RENTALS_DATASOURCE"+user.userId)
+//        binding.btnDeleteAll.setOnClickListener {
+//            if(user != null) {
+//                prefEditor.remove("KEY_RENTALS_DATASOURCE"+user.userId)
+//
+//                // commit our changes
+//                prefEditor.apply()
+//
+//                // update the RV to show that there are no more items
+//                favRentalPostsList.clear()
+//                adapter.notifyDataSetChanged()
+//            }
+//
+//        }
 
-                // commit our changes
-                prefEditor.apply()
+    }
 
-                // update the RV to show that there are no more items
-                favRentalPostsList.clear()
-                adapter.notifyDataSetChanged()
+    override fun onResume() {
+        super.onResume()
+
+        propertyRepository.getAllPropertiesFromFavList()
+
+        propertyRepository.allPropertiesInFavList.observe(this) { rentalsList ->
+            if (rentalsList != null) {
+                favRentalPropertyArrayList.clear()
+                favRentalPropertyArrayList.addAll(rentalsList)
+                rentalPropertyAdapter.notifyDataSetChanged()
+
             }
-
         }
-
-
     }
 
     // rv:  Row click handler
     fun rowClicked(rowPosition: Int){
 
-        var selectedRental: PropertyRental = favRentalPostsList.get(rowPosition)
+        var selectedRental: Property = favRentalPropertyArrayList.get(rowPosition)
         // snackbar
         val snackbar = Snackbar.make(binding.root, "${selectedRental.toString()}, for row${rowPosition}", Snackbar.LENGTH_LONG)
         snackbar.show()
@@ -144,10 +168,10 @@ class TenantAccountActivity : AppCompatActivity() {
 
         // send the details of the rental post to next screen
         // rentalDatasource -> PropertyRental class must be Serializable interface or protocol
-        intent.putExtra("ROW_RENTAL_POST_DETAIL",   favRentalPostsList.get(rowPosition))
+        intent.putExtra("ROW_RENTAL_POST_DETAIL",   favRentalPropertyArrayList.get(rowPosition))
 
 
-        Log.d("TAG", "${favRentalPostsList.get(rowPosition)}")
+        Log.d("TAG", "${favRentalPropertyArrayList.get(rowPosition)}")
 
 
         startActivity(intent)
@@ -163,9 +187,9 @@ class TenantAccountActivity : AppCompatActivity() {
         val userJson = intent.getStringExtra("user")
         if(userJson != null) {
             val user = gson.fromJson(userJson, User::class.java)
-            favRentalPostsList.removeAt(position)
-            adapter.notifyItemRemoved(position)
-            prefEditor.putString("KEY_RENTALS_DATASOURCE"+user.userId, Gson().toJson(favRentalPostsList))
+            favRentalPropertyArrayList.removeAt(position)
+            rentalPropertyAdapter.notifyItemRemoved(position)
+            prefEditor.putString("KEY_RENTALS_DATASOURCE"+user.userId, Gson().toJson(favRentalPropertyArrayList))
             prefEditor.apply()
         }
     }
@@ -250,13 +274,17 @@ class TenantAccountActivity : AppCompatActivity() {
             }
             R.id.mi_logout -> {
                 // navigate to 2nd screen
-                val sidebarIntent = Intent(this, MainActivity::class.java)
-                startActivity(sidebarIntent)
+//                val sidebarIntent = Intent(this, MainActivity::class.java)
+//                startActivity(sidebarIntent)
 
+                Log.d("TAG", "onOptionsItemSelected: Sign Out option is selected")
+                FirebaseAuth.getInstance().signOut()
+                this@TenantAccountActivity.finish()
                 return true
             }
             else -> super.onOptionsItemSelected(item)
         }
 
     }
+
 }
