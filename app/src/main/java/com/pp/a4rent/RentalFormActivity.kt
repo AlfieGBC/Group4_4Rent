@@ -23,13 +23,16 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.pp.a4rent.databinding.ActivityRentalFormBinding
+import com.pp.a4rent.models.Geo
 import com.pp.a4rent.models.Property
 import com.pp.a4rent.models.PropertyType
 import com.pp.a4rent.models.User
+import com.pp.a4rent.repositories.PropertyRepository
 
 import com.pp.a4rent.screens.LoginActivity
 import com.pp.a4rent.screens.BlogListActivity
 import java.util.Locale
+import java.util.UUID
 
 
 class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
@@ -37,9 +40,13 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityRentalFormBinding
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
-    private var propertiesList = mutableListOf<Property>()
-    private var userObj: User? = null
-    private val gson = Gson()
+//    private var propertiesList = mutableListOf<Property>()
+//    private var userObj: User? = null
+//    private val gson = Gson()
+    private var latitude = 0.0
+    private var longitude = 0.0
+
+    private lateinit var propertyRepository: PropertyRepository
 
     // Device location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -78,11 +85,14 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityRentalFormBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // initiate repository
+        this.propertyRepository = PropertyRepository(applicationContext)
+
         // instantiate the fusedLocationProvider
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // initiate shared preference
-        sharedPreferences = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(packageName, Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
 
         // set up menu
@@ -93,24 +103,25 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
             ArrayAdapter(this, R.layout.spinner_item_property_types, PropertyType.displayNames)
         binding.propertyTypeSpinner.adapter = propertyTypeAdapter
 
-        if (intent != null) {
+        // when buttons clicked
+        binding.btnPublish.setOnClickListener(this)
+        binding.btnGetPosition.setOnClickListener(this)
 
-            // get the user object from intent
-            userObj = if (intent.hasExtra("extra_userObj")) {
-                intent.getSerializableExtra("extra_userObj") as User
-            } else {null}
-
-            // if userObj doesn't exist, the uer is NOT logged in
-            if (userObj == null) {
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-            } else {
-
-                // when buttons clicked
-                binding.btnPublish.setOnClickListener(this)
-                binding.btnGetPosition.setOnClickListener(this)
-            }
-        }
+//        if (intent != null) {
+//            // get the user object from intent
+//            userObj = if (intent.hasExtra("extra_userObj")) {
+//                intent.getSerializableExtra("extra_userObj") as User
+//            } else {null}
+//            // if userObj doesn't exist, the uer is NOT logged in
+//            if (userObj == null) {
+//                val intent = Intent(this, LoginActivity::class.java)
+//                startActivity(intent)
+//            } else {
+//                // when buttons clicked
+//                binding.btnPublish.setOnClickListener(this)
+//                binding.btnGetPosition.setOnClickListener(this)
+//            }
+//        }
     }
 
     override fun onClick(v: View?) {
@@ -133,14 +144,21 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
         val numOfBathrooms = binding.etNumOfBathroom.text.toString().toIntOrNull() ?: 0
         val area = binding.etArea.text.toString().toDoubleOrNull() ?: 0.0
         val description = binding.etDescription.text.toString()
-        val address = binding.etAddress.text.toString()
+
+        val street = binding.etAddress.text.toString()
+        val city = binding.etAddressCity.text.toString()
+        val province = binding.etAddressProvince.text.toString()
+        val country = binding.etAddressCountry.text.toString()
+        val address = com.pp.a4rent.models.Address(street, city, province, country)
+
         val rent = binding.etRent.text.toString().toDoubleOrNull() ?: 0.0
         val isAvailable = binding.isAvailable.isChecked
+        val geo = Geo(latitude, longitude)
 
         // Error handling
         if (
-            numOfBedrooms <= 0 || numOfKitchens <= 0 || numOfBathrooms <= 0 || area <= 0.0 ||
-            description.isEmpty() || address.isEmpty() || rent <= 0.0
+            numOfBedrooms <= 0 || numOfKitchens <= 0 || numOfBathrooms <= 0 || area <= 0.0 || rent <= 0.0 ||
+            description.isEmpty() || street.isEmpty() || city.isEmpty() || province.isEmpty() || country.isEmpty()
         ) {
             Snackbar.make(
                 binding.root,
@@ -150,46 +168,41 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
             return
         }
 
-        // get user object from shared preference
-//            val userJson = sharedPreferences.getString(email, "")
-//            if (userJson == ""){
-//                // if user not logged in
-//                Snackbar.make(binding.root, "Please login first.", Snackbar.LENGTH_LONG).show()
-//                val intent = Intent(this, LoginActivity::class.java)
-//                startActivity(intent)
-//                return@setOnClickListener
-//            }
-//
-//            userObj = gson.fromJson(userJson, User::class.java)
+//        // get myListings list from sharedPreference
+//        val myListingsListJson = sharedPreferences.getString(userObj!!.userId, "")
+//        if (myListingsListJson != "") {
+//            val typeToken = object : TypeToken<List<Property>>() {}.type
+//            propertiesList =
+//                gson.fromJson<List<Property>>(myListingsListJson, typeToken).toMutableList()
+//        }
 
-        // get myListings list from sharedPreference
-        val myListingsListJson = sharedPreferences.getString(userObj!!.userId, "")
-        if (myListingsListJson != "") {
-            val typeToken = object : TypeToken<List<Property>>() {}.type
-            propertiesList =
-                gson.fromJson<List<Property>>(myListingsListJson, typeToken).toMutableList()
-        }
-
-        // add property to the list
+        // get property instance
+        val userEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
         val propertyType = PropertyType.fromDisplayName(selectedPropertyTypeName)
         val propertyToAdd = Property(
-            propertyType, userObj!!, numOfBedrooms, numOfKitchens, numOfBathrooms, area,
-            description, address, rent, isAvailable
+            propertyType, userEmail, numOfBedrooms, numOfKitchens, numOfBathrooms,
+            area, description, address, rent, isAvailable, geo,
         )
-        propertiesList.add(propertyToAdd)
-        Log.d(
-            "propertiesList", "onCreate: propertiesList: $propertiesList\n" +
-                    "propertiesList size: ${propertiesList.size}"
-        )
+        Log.d(TAG, "publishBtnClicked: propertyToAdd: $propertyToAdd")
 
-        // convert list back to string, using user ID as KEY to store a list of listings
-        val propertiesListJson = gson.toJson(propertiesList)
-        editor.putString(userObj!!.userId, propertiesListJson)
-        editor.apply()
+        // add property to the database
+        this.propertyRepository.addProperty(propertyToAdd)
+        this.propertyRepository.addPropertyToPropertyList(propertyToAdd)
 
+        // redirect to MyListing page
         val intent = Intent(this, MyListingsActivity::class.java)
-//        intent.putExtra("extra_userObj", userObj)
         startActivity(intent)
+
+//        propertiesList.add(propertyToAdd)
+//        Log.d(
+//            "propertiesList", "onCreate: propertiesList: $propertiesList\n" +
+//                    "propertiesList size: ${propertiesList.size}"
+//        )
+//
+//        // convert list back to string, using user ID as KEY to store a list of listings
+//        val propertiesListJson = gson.toJson(propertiesList)
+//        editor.putString(userObj!!.userId, propertiesListJson)
+//        editor.apply()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -202,9 +215,6 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_home -> {
-                Log.d("TAG", "onOptionsItemSelected: Post Rental option is selected")
-
-                // navigate to 2nd screen
                 val sidebarIntent = Intent(this, MainActivity::class.java)
 
                 // get the user info from login page
@@ -228,27 +238,22 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.mi_post_rental -> {
-                // pass through the user object
+
                 val intent = Intent(this, RentalFormActivity::class.java)
-//                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
 
             R.id.mi_my_account -> {
 
-                // pass through the user object
                 val intent = Intent(this, ProfileActivity::class.java)
-//                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
 
             R.id.mi_my_listings -> {
 
-                // pass through the user object
                 val intent = Intent(this, MyListingsActivity::class.java)
-//                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
@@ -289,6 +294,9 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
                 Log.d(TAG, message)
                 Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
 
+                latitude = location.latitude
+                longitude = location.longitude
+
                 // get user address from the geo code
                 val geocoder = Geocoder(applicationContext, Locale.getDefault())
                 try {
@@ -316,6 +324,7 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
                             etAddressProvince.setText(matchingAddress.adminArea)
                             etAddressCountry.setText(matchingAddress.countryName)
                         }
+
                     }
                 } catch(ex:Exception) {
                     Log.e(TAG, "Error encountered while getting coordinate location.")

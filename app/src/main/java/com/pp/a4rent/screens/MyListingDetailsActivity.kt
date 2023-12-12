@@ -74,7 +74,7 @@ class MyListingDetailsActivity : AppCompatActivity() {
                         etNumOfBathroomListingDetails.setText(currListingObj.numberOfBathroom.toString())
                         etAreaListingDetails.setText(currListingObj.area.toString())
                         etDescriptionListingDetails.setText(currListingObj.description)
-                        etAddressListingDetails.setText(currListingObj.propertyAddress)
+//                        etAddressListingDetails.setText(currListingObj.propertyAddress)
                         etRentListingDetails.setText(currListingObj.rent.toString())
                         isAvailableListingDetails.isChecked = currListingObj.available
                     }
@@ -140,13 +140,13 @@ class MyListingDetailsActivity : AppCompatActivity() {
         // update current listing object
         currListingObj.apply {
             propertyType = PropertyType.fromDisplayName(selectedPropertyTypeName)
-            ownerInfo = userObj as User
+//            ownerInfo = userObj as User
             numberOfBedroom = numOfBedrooms
             numberOKitchen = numOfKitchens
             numberOfBathroom = numOfBathrooms
             area = areaFromUI
             description = descriptionFromUI
-            propertyAddress = address
+//            propertyAddress = address
             rent = rentFromUI
             available = isAvailable
         }
