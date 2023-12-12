@@ -1,6 +1,5 @@
 package com.pp.a4rent.screens
 
-import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +8,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +15,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.pp.a4rent.MainActivity
-import com.pp.a4rent.ProfileActivity
 import com.pp.a4rent.R
 import com.pp.a4rent.adapters.RentalsPostAdapter
 import com.pp.a4rent.databinding.ActivityRentalsPostListBinding
@@ -25,8 +22,6 @@ import com.pp.a4rent.models.Owner
 import com.pp.a4rent.models.PropertyRental
 import com.pp.a4rent.models.PropertyType
 import com.pp.a4rent.models.User
-
-import com.pp.a4rent.screens.BlogListActivity
 
 class RentalsPostListActivity : AppCompatActivity() {
 
@@ -398,7 +393,7 @@ class RentalsPostListActivity : AppCompatActivity() {
                 Log.d("TAG", "onOptionsItemSelected: Tenant Profile option is selected")
 
                 // navigate to 2nd screen
-                val sidebarTenantIntent = Intent(this, TenantProfileInfoActivity::class.java)
+                val sidebarTenantIntent = Intent(this, UserProfileInfoActivity::class.java)
                 // get the user info from login page
                 val userJson = intent.getStringExtra("user")
                 // pass this info to next page, which is tenant profile info page

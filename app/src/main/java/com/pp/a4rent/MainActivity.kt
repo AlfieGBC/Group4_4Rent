@@ -19,7 +19,7 @@ import com.pp.a4rent.screens.RegisterActivity
 
 import com.pp.a4rent.screens.BlogListActivity
 import com.pp.a4rent.screens.TenantAccountActivity
-import com.pp.a4rent.screens.TenantProfileInfoActivity
+import com.pp.a4rent.screens.UserProfileInfoActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -230,7 +230,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d("TAG", "onOptionsItemSelected: Tenant Profile option is selected")
 
                 // navigate to 2nd screen
-                val sidebarTenantIntent = Intent(this, TenantProfileInfoActivity::class.java)
+                val sidebarTenantIntent = Intent(this, UserProfileInfoActivity::class.java)
                 // get the user info from login page
                 val userJson = intent.getStringExtra("user")
                 // pass this info to next page, which is tenant profile info page

@@ -23,8 +23,6 @@ import com.pp.a4rent.databinding.ActivityTenantAccountBinding
 import com.pp.a4rent.models.PropertyRental
 import com.pp.a4rent.models.User
 
-import com.pp.a4rent.screens.BlogListActivity
-
 class TenantAccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTenantAccountBinding
 
@@ -241,7 +239,7 @@ class TenantAccountActivity : AppCompatActivity() {
                 Log.d("TAG", "onOptionsItemSelected: Tenant Profile option is selected")
 
                 // navigate to 2nd screen
-                val sidebarTenantIntent = Intent(this@TenantAccountActivity, TenantProfileInfoActivity::class.java)
+                val sidebarTenantIntent = Intent(this@TenantAccountActivity, UserProfileInfoActivity::class.java)
                 // get the user info from login page
                 val userJson = intent.getStringExtra("user")
                 // pass this info to next page, which is tenant profile info page
