@@ -41,39 +41,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             binding.etPassword.setText(this.prefs.getString("USER_PASSWORD", ""))
         }
 
-//        binding.loginButton.setOnClickListener {
-//            val email = binding.email.text.toString()
-//            val password = binding.password.text.toString()
-//
-//            val userJson = sharedPreferences.getString(email, "")
-//            if (userJson != "") {
-//                val gson = Gson()
-//                val user = gson.fromJson(userJson, User::class.java)
-//                if (user.password == password) {
-//                    Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show()
-//
-//                    // Redirect users to different profile pages based on their role
-//                    if (user.role == "Landlord"){
-//
-//                        // If a user is Landlord
-//                        val intent = Intent(this, ProfileActivity::class.java)
-//                        intent.putExtra("extra_userObj", user)
-//                        startActivity(intent)
-//                    } else {
-//
-//                        // If a user is Tenant
-//                        val intent = Intent(this, TenantAccountActivity::class.java)
-//                        intent.putExtra("user", userJson)
-//                        startActivity(intent)
-//                    }
-//                } else {
-//                    Toast.makeText(this, "Incorrect password", Toast.LENGTH_SHORT).show()
-//                }
-//            } else {
-//                Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-
         binding.tvSignUpLink.setOnClickListener(this)
 
         binding.returnBack.setOnClickListener(this)

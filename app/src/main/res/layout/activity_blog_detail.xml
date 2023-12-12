@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-black"
         android:layout_margin="8dp"
-        android:textSize="18sp"
+        android:textSize="25sp"
         android:textColor="#000000" />
 
     <ImageView
@@ -23,8 +23,19 @@
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:layout_margin="8dp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:justificationMode="inter_word"/>
+
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_gravity="center"
+        android:backgroundTint="#008ba6"/>
 
 </LinearLayout>

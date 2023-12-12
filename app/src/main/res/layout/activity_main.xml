@@ -95,7 +95,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Search"
-                android:backgroundTint="#03A9F4"
+                android:backgroundTint="#008ba6"
                 android:layout_marginTop="9dp"
                 app:layout_constraintTop_toBottomOf="@+id/tv_header"
                 app:layout_constraintStart_toEndOf="@+id/et_search"
@@ -109,7 +109,7 @@
             android:layout_height="wrap_content"
             android:text="The Hottest Rental Cities"
             android:textSize="20sp"
-            android:textColor="#03A9F4"
+            android:textColor="#008ba6"
             android:textStyle="bold"
             android:textAlignment="center"
             app:layout_constraintTop_toBottomOf="@+id/homepage_header_img"
@@ -144,21 +144,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Toronto"
-                android:backgroundTint="#2196F3"
+                android:backgroundTint="#008ba6"
                 android:layout_marginRight="20dp"/>
             <Button
                 android:id="@+id/btnSearchVancouver"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Vancouver"
-                android:backgroundTint="#2196F3"
+                android:backgroundTint="#008ba6"
                 android:layout_marginRight="20dp"/>
             <Button
                 android:id="@+id/btnSearchWinnipeg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Winnipeg"
-                android:backgroundTint="#2196F3"
+                android:backgroundTint="#008ba6"
                 />
         </LinearLayout>
 
