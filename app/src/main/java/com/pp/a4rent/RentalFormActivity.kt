@@ -40,12 +40,8 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityRentalFormBinding
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
-//    private var propertiesList = mutableListOf<Property>()
-//    private var userObj: User? = null
-//    private val gson = Gson()
-    private var latitude = 0.0
-    private var longitude = 0.0
-
+    private var latitude : Double? = null
+    private var longitude : Double? = null
     private lateinit var propertyRepository: PropertyRepository
 
     // Device location
@@ -106,22 +102,6 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
         // when buttons clicked
         binding.btnPublish.setOnClickListener(this)
         binding.btnGetPosition.setOnClickListener(this)
-
-//        if (intent != null) {
-//            // get the user object from intent
-//            userObj = if (intent.hasExtra("extra_userObj")) {
-//                intent.getSerializableExtra("extra_userObj") as User
-//            } else {null}
-//            // if userObj doesn't exist, the uer is NOT logged in
-//            if (userObj == null) {
-//                val intent = Intent(this, LoginActivity::class.java)
-//                startActivity(intent)
-//            } else {
-//                // when buttons clicked
-//                binding.btnPublish.setOnClickListener(this)
-//                binding.btnGetPosition.setOnClickListener(this)
-//            }
-//        }
     }
 
     override fun onClick(v: View?) {
@@ -153,7 +133,6 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
 
         val rent = binding.etRent.text.toString().toDoubleOrNull() ?: 0.0
         val isAvailable = binding.isAvailable.isChecked
-        val geo = Geo(latitude, longitude)
 
         // Error handling
         if (
@@ -168,18 +147,40 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
             return
         }
 
-//        // get myListings list from sharedPreference
-//        val myListingsListJson = sharedPreferences.getString(userObj!!.userId, "")
-//        if (myListingsListJson != "") {
-//            val typeToken = object : TypeToken<List<Property>>() {}.type
-//            propertiesList =
-//                gson.fromJson<List<Property>>(myListingsListJson, typeToken).toMutableList()
-//        }
+        // if lat & lng == null, calculate
+        if (latitude == null || longitude == null){
+            val geocoder:Geocoder = Geocoder(applicationContext, Locale.getDefault())
+            val addressToConvert = "$street $city $province $country"
+            try {
+                val searchResults:MutableList<Address>? = geocoder.getFromLocationName(addressToConvert, 1)
+                if (searchResults == null) {
+                    Log.e(TAG, "searchResults variable is null")
+                    return
+                }
+
+                if (searchResults.size == 0) {
+                    Log.d(TAG, "publishBtnClicked: Search results are empty.")
+                    return
+                } else {
+                    val foundLocation:Address = searchResults.get(0)
+                    latitude = foundLocation.latitude
+                    longitude = foundLocation.longitude
+                    var message = "Coordinates are: ${foundLocation.latitude}, ${foundLocation.longitude}"
+                    Log.d(TAG, message)
+                }
+            } catch(ex:Exception) {
+                Log.e(TAG, "Error encountered while getting coordinate location.")
+                return
+            }
+        }
+        Log.d(TAG, "publishBtnClicked: latitude: $latitude, longitude: $longitude")
+        val geo = Geo(latitude!!, longitude!!)
 
         // get property instance
         val userEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
         val propertyType = PropertyType.fromDisplayName(selectedPropertyTypeName)
         val propertyToAdd = Property(
+            UUID.randomUUID().toString(),
             propertyType, userEmail, numOfBedrooms, numOfKitchens, numOfBathrooms,
             area, description, address, rent, isAvailable, geo,
         )
@@ -193,16 +194,6 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
         val intent = Intent(this, MyListingsActivity::class.java)
         startActivity(intent)
 
-//        propertiesList.add(propertyToAdd)
-//        Log.d(
-//            "propertiesList", "onCreate: propertiesList: $propertiesList\n" +
-//                    "propertiesList size: ${propertiesList.size}"
-//        )
-//
-//        // convert list back to string, using user ID as KEY to store a list of listings
-//        val propertiesListJson = gson.toJson(propertiesList)
-//        editor.putString(userObj!!.userId, propertiesListJson)
-//        editor.apply()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

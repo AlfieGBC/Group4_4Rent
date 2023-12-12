@@ -16,29 +16,45 @@ import com.pp.a4rent.adapters.MyListingsAdapter
 import com.pp.a4rent.databinding.ActivityMyListingsBinding
 import com.pp.a4rent.models.Property
 import com.pp.a4rent.models.User
+import com.pp.a4rent.repositories.PropertyRepository
 import com.pp.a4rent.screens.LoginActivity
 import com.pp.a4rent.screens.MyListingDetailsActivity
 import java.io.Serializable
 
 class MyListingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMyListingsBinding
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var editor: SharedPreferences.Editor
+//    private lateinit var sharedPreferences: SharedPreferences
+//    private lateinit var editor: SharedPreferences.Editor
     private var myListingsList = mutableListOf<Property>()
-    private var userObj: User? = null
-    private val gson = Gson()
     private lateinit var adapter: MyListingsAdapter
+    private lateinit var propertyRepository: PropertyRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyListingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        this.propertyRepository = PropertyRepository(applicationContext)
+
         // set up menu
         setSupportActionBar(this.binding.menu)
 
         // initiate shared preference
-        sharedPreferences = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
-        editor = sharedPreferences.edit()
+//        sharedPreferences = getSharedPreferences(packageName, Context.MODE_PRIVATE)
+//        editor = sharedPreferences.edit()
+
+
+        // set up the adapter
+        this.adapter = MyListingsAdapter(myListingsList) { pos -> listingRowClicked(pos) }
+        binding.rvMyListings.adapter = adapter
+        binding.rvMyListings.layoutManager = LinearLayoutManager(this)
+        binding.rvMyListings.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                LinearLayoutManager.VERTICAL
+            )
+        )
+        Log.d("myListingsList", "onCreate: myListingsList: $myListingsList\n" +
+                "myListingsList size: ${myListingsList.size}")
 
         // get user object from intent
 //        val currIntent = this@MyListingsActivity.intent
@@ -56,19 +72,7 @@ class MyListingsActivity : AppCompatActivity() {
 //                    myListingsList = gson.fromJson<List<Property>>(myListingsListJson, typeToken).toMutableList()
 //                }
 //
-//                // set up the adapter
-//                this.adapter = MyListingsAdapter(myListingsList) { pos -> listingRowClicked(pos) }
-//                binding.rvMyListings.adapter = adapter
-//                binding.rvMyListings.layoutManager = LinearLayoutManager(this)
-//                binding.rvMyListings.addItemDecoration(
-//                    DividerItemDecoration(
-//                        this,
-//                        LinearLayoutManager.VERTICAL
-//                    )
-//                )
 //
-//                Log.d("myListingsList", "onCreate: myListingsList: $myListingsList\n" +
-//                        "myListingsList size: ${myListingsList.size}")
 //
 //            } else {
 //                // if no user object passed through, redirect user to Login page
@@ -79,12 +83,10 @@ class MyListingsActivity : AppCompatActivity() {
 
     }
 
-    private fun listingRowClicked(position:Int){
 
-        // pass through user object
+    private fun listingRowClicked(position:Int){
         val intent = Intent(this@MyListingsActivity, MyListingDetailsActivity::class.java)
-//        intent.putExtra("extra_userObj", userObj)
-//        intent.putExtra("extra_position", position)
+        intent.putExtra("extra_property_id", myListingsList[position].propertyId)
         startActivity(intent)
     }
 
@@ -149,7 +151,6 @@ class MyListingsActivity : AppCompatActivity() {
 
             R.id.mi_logout -> {
                 // navigate to 2nd screen
-//                sharedPreferences.edit().clear().apply()
                 val sidebarIntent = Intent(this, MainActivity::class.java)
                 startActivity(sidebarIntent)
 
@@ -164,17 +165,15 @@ class MyListingsActivity : AppCompatActivity() {
         super.onResume()
         Log.d("onResume:MyListingsActivity", "onResume: user returned to MyListingsActivity.kt")
 
-        // get the updated myListings list from sharePreference
-        val updatedListJson = sharedPreferences.getString(userObj!!.userId, "")
-        if (updatedListJson != ""){
-            val typeToken = object : TypeToken<List<Property>>() {}.type
-            val updatedList = gson.fromJson<List<Property>>(updatedListJson, typeToken).toMutableList()
-
-            // clear the the original myListings list, and add the updated list
-            myListingsList.clear()
-            myListingsList.addAll(updatedList)
-            adapter.notifyDataSetChanged()
-        }
-
+        // get myListingsList from database
+        propertyRepository.getAllPropertiesFromPropertyList()
+        propertyRepository.allPropertiesInPropertyList
+            .observe(this, androidx.lifecycle.Observer { propertyList ->
+            if (propertyList != null){
+                myListingsList.clear()
+                myListingsList.addAll(propertyList)
+                adapter.notifyDataSetChanged()
+            }
+        })
     }
 }

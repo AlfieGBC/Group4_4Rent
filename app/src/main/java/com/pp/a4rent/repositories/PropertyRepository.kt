@@ -3,7 +3,9 @@ package com.pp.a4rent.repositories
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
@@ -40,6 +42,7 @@ class PropertyRepository(private val context : Context) {
     private val FIELD_geo = "geo";
     private val FIELD_imageFilename = "imageFilename";
 
+    val property: MutableLiveData<Property> = MutableLiveData<Property>()
     var allProperties : MutableLiveData<List<Property>> = MutableLiveData<List<Property>>()
     var allPropertiesInFavList: MutableLiveData<List<Property>> = MutableLiveData<List<Property>>()
     var allPropertiesInPropertyList: MutableLiveData<List<Property>> = MutableLiveData<List<Property>>()
@@ -48,6 +51,22 @@ class PropertyRepository(private val context : Context) {
         sharedPrefs = context.getSharedPreferences("com.pp.a4rent", Context.MODE_PRIVATE)
         if (sharedPrefs.contains("USER_EMAIL")){
             loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
+        }
+    }
+
+    fun getSinglePropertyById(propertyId: String){
+        try {
+            db.collection(COLLECTION_PROPERTIES)
+                .document(propertyId)
+                .get()
+                .addOnSuccessListener {
+                    Log.d(TAG, "getSinglePropertyById: Successfully get User: $it")
+                    val propertyObj = it.toObject(Property::class.java)
+                    Log.d(TAG, "getSinglePropertyById: propertyObj: $propertyObj")
+                    property.postValue(propertyObj)
+                }
+        }catch (ex: Exception){
+            Log.e(TAG, "getSinglePropertyById: Failed to get the property object by id: $propertyId", ex)
         }
     }
 
@@ -239,13 +258,57 @@ class PropertyRepository(private val context : Context) {
         }
     }
 
-    fun updateProperty(){}
+    fun updateProperty(propertyToUpdate: Property){
+        val data: MutableMap<String, Any> = HashMap()
+        Log.d(TAG, "updateProperty: propertyToUpdate: $propertyToUpdate")
+
+        data[FIELD_propertyType] = propertyToUpdate.propertyType
+        data[FIELD_ownerInfo] = propertyToUpdate.ownerInfo
+        data[FIELD_numberOfBedroom] = propertyToUpdate.numberOfBedroom
+        data[FIELD_numberOKitchen] = propertyToUpdate.numberOKitchen
+        data[FIELD_numberOfBathroom] = propertyToUpdate.numberOfBathroom
+        data[FIELD_area] = propertyToUpdate.area
+        data[FIELD_description] = propertyToUpdate.description
+        data[FIELD_propertyAddress] = propertyToUpdate.propertyAddress
+        data[FIELD_rent] = propertyToUpdate.rent
+        data[FIELD_available] = propertyToUpdate.available
+        data[FIELD_geo] = propertyToUpdate.geo
+        data[FIELD_imageFilename] = propertyToUpdate.imageFilename?:""
+
+        try {
+            db.collection(COLLECTION_PROPERTIES)
+                .document(propertyToUpdate.propertyId)
+                .update(data)
+                .addOnSuccessListener {
+                    Log.d(TAG, "updateProperty: Updated successfully!")
+                }
+                .addOnFailureListener {
+                    Log.e(TAG, "updateProperty: Failed to update property: $propertyToUpdate", it)
+                }
+        }catch (ex: Exception){
+            Log.e(TAG, "updateProperty: Failed to update property: $propertyToUpdate", ex)
+        }
+    }
 
     fun updatePropertyInFavList(){}
 
     fun updatePropertyInPropertyList(){}
 
-    fun deleteProperty(){}
+    fun deleteProperty(propertyToDelete: Property){
+        try {
+            db.collection(COLLECTION_PROPERTIES)
+                .document(propertyToDelete.propertyId)
+                .delete()
+                .addOnSuccessListener {
+                    Log.d(TAG, "deleteProperty: Property deleted successfully! Property: $propertyToDelete")
+                }
+                .addOnFailureListener {
+                    Log.e(TAG, "deleteProperty: Failed to delete property: $propertyToDelete", it)
+                }
+        }catch (ex: Exception){
+            Log.e(TAG, "deleteProperty: Failed to delete property: $propertyToDelete due to exception.", ex)
+        }
+    }
 
     fun deletePropertyFromFavList(){}
 
