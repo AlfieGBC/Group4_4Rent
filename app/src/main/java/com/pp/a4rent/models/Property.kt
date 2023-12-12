@@ -4,7 +4,7 @@ import java.io.Serializable
 import java.util.UUID
 
 data class Property(
-//    var propertyId: String = UUID.randomUUID().toString(),
+    var propertyId: String = UUID.randomUUID().toString(),
     var propertyType: PropertyType,
     var ownerInfo: String,
     var numberOfBedroom:Int,

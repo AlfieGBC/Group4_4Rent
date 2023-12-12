@@ -149,14 +149,43 @@
             app:layout_constraintTop_toBottomOf="@+id/et_description_listing_details" />
 
         <EditText
+            android:id="@+id/et_address_city_listing_details"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="City"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_address_listing_details" />
+
+        <EditText
+            android:id="@+id/et_address_province_listing_details"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Province"
+            app:layout_constraintStart_toEndOf="@+id/et_address_city_listing_details"
+            app:layout_constraintTop_toBottomOf="@+id/et_address_listing_details" />
+
+        <EditText
+            android:id="@+id/et_address_country_listing_details"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Country"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_address_city_listing_details" />
+
+        <EditText
             android:id="@+id/et_rent_listing_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="Monthly rent: $0.00"
+            android:textSize="24sp"
+            android:textAlignment="center"
             android:inputType="numberDecimal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_address_listing_details" />
+            app:layout_constraintTop_toBottomOf="@+id/et_address_country_listing_details" />
 
         <CheckBox
             android:id="@+id/is_available_listing_details"
