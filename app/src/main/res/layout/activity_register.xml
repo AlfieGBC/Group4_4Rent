@@ -110,11 +110,12 @@
         android:layout_margin="8dp"
         android:text="Register"
         android:layout_gravity="center"
+        android:textSize="20sp"
         android:paddingEnd="40dp"
         android:paddingStart="40dp"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:backgroundTint="#523A28"/>
+        android:backgroundTint="#008ba6"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
