@@ -1,50 +1,50 @@
 package com.pp.a4rent.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.ImageView
-
-import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
-import com.pp.a4rent.R
+import com.pp.a4rent.databinding.RowBlogItemBinding
 import com.pp.a4rent.models.Blog
-
-import android.util.Log
+import com.pp.a4rent.clickListeners.OnBlogClickListener
 
 class BlogAdapter(
-    private val blogsList: MutableList<Blog>,
-    private val rowClickHandler: (Int) -> Unit
-) : RecyclerView.Adapter<BlogAdapter.BlogViewHolder>() {
-
-    inner class BlogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        init {
-            itemView.findViewById<Button>(R.id.readMoreButton).setOnClickListener {
-                rowClickHandler(adapterPosition)
-            }
-        }
-    }
+    private val context: Context,
+    private var blogsList: ArrayList<Blog>,
+    private val readMoreBtnClickListener: OnBlogClickListener,
+) :
+    RecyclerView.Adapter<BlogAdapter.BlogViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlogViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.row_blog_item, parent, false)
-        return BlogViewHolder(view)
+        return BlogViewHolder( RowBlogItemBinding.inflate( LayoutInflater.from(context), parent, false))
+    }
+
+    override fun onBindViewHolder(holder: BlogViewHolder, position: Int) {
+        holder.bind(blogsList[position], readMoreBtnClickListener)
     }
 
     override fun getItemCount(): Int {
         return blogsList.size
     }
 
-    override fun onBindViewHolder(holder: BlogViewHolder, position: Int) {
-        val tvTitle = holder.itemView.findViewById<TextView>(R.id.tvTitle)
-        tvTitle.text = blogsList[position].title
+    class BlogViewHolder(var binding: RowBlogItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        val tvDetail = holder.itemView.findViewById<TextView>(R.id.tvDetail)
-        tvDetail.text = blogsList[position].description
+        fun bind(blog: Blog, readMoreBtnClickListener: OnBlogClickListener) {
 
-        val imageView = holder.itemView.findViewById<ImageView>(R.id.image)
-        val imageName = blogsList[position].image
-        val imageResId = holder.itemView.context.resources.getIdentifier(imageName, "drawable", holder.itemView.context.packageName)
-        imageView.setImageResource(imageResId)
+            binding.tvTitle.setText(blog.title.toString())
+            binding.tvDetail.setText(blog.description.toString())
+
+            val imageName = blog.image
+            val imageResId = itemView.context.resources.getIdentifier(
+                imageName,
+                "drawable",
+                itemView.context.packageName
+            )
+            binding.image.setImageResource(imageResId)
+
+            binding.readMoreButton.setOnClickListener {
+                readMoreBtnClickListener.onBlogSelected(blog)
+            }
+        }
     }
 }

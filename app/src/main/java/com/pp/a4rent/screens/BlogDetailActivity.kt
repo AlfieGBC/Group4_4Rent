@@ -15,13 +15,17 @@ class BlogDetailActivity : AppCompatActivity() {
         binding = ActivityBlogDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val blog = intent.getSerializableExtra("blog") as Blog
+        val blog = intent.getSerializableExtra("CURRENT_BLOG") as Blog
 
         binding.title.text = blog.title
         binding.description.text = blog.description
         val imageName = blog.image
         val imageResId = resources.getIdentifier(imageName, "drawable", packageName)
         binding.image.setImageResource(imageResId)
+
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
 
     }
 }
