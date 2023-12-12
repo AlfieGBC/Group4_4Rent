@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.pp.a4rent.databinding.ActivityMainBinding
 import com.pp.a4rent.models.User
@@ -241,9 +242,12 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.mi_logout -> {
                 // navigate to 2nd screen
-                val sidebarIntent = Intent(this@MainActivity, MainActivity::class.java)
-                startActivity(sidebarIntent)
+//                val sidebarIntent = Intent(this@MainActivity, MainActivity::class.java)
+//                startActivity(sidebarIntent)
 
+                Log.d(TAG, "onOptionsItemSelected: Sign Out option is selected")
+                FirebaseAuth.getInstance().signOut()
+                this@MainActivity.finish()
                 return true
             }
 
@@ -257,7 +261,7 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.mi_my_account -> {
-                val intent = Intent(this, ProfileActivity::class.java)
+                val intent = Intent(this, UserProfileInfoActivity::class.java)
                 // get the user info from login page
                 val userJson = intent.getStringExtra("user")
                 // pass this info to next page, which is tenant profile info page

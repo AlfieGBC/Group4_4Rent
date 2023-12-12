@@ -17,6 +17,7 @@ data class Property(
     var available: Boolean,
     var geo: Geo,
     var imageFilename: String? = null,
+    var favourite: Boolean? = null,
 ) : Serializable {
     override fun toString(): String {
         return "Property(propertyType=$propertyType, ownerInfo='$ownerInfo', numberOfBedroom=$numberOfBedroom, numberOKitchen=$numberOKitchen, numberOfBathroom=$numberOfBathroom, area=$area, description='$description', propertyAddress=$propertyAddress, rent=$rent, available=$available, geo=$geo, imageFilename=$imageFilename)"

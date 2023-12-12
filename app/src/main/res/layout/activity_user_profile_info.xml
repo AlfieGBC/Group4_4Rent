@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tenant_menu_toolbar"
+        android:id="@+id/menu_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#502900"
@@ -27,7 +27,7 @@
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tenant_menu_toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/menu_toolbar" />
 
     <TextView
         android:id="@+id/tv_profile_subheading"
@@ -58,7 +58,7 @@ You can edit and manage your account information here."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="User role"
+        android:text="User"
         android:textSize="25sp"
         android:textColor="#008ba6"
         android:paddingLeft="10dp"
