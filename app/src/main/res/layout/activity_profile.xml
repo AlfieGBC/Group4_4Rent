@@ -22,7 +22,7 @@
             app:titleTextColor="@color/white" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/tv_manage_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -33,7 +33,7 @@
             app:layout_constraintTop_toBottomOf="@id/menu" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/tv_profile_subheading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -41,7 +41,34 @@
 You can edit and manage your account information here."
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_manage_profile" />
+
+        <TextView
+            android:id="@+id/tv_role"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:text="Role:"
+            android:textSize="25sp"
+            android:textColor="@android:color/black"
+            app:layout_constraintTop_toBottomOf="@+id/tv_profile_subheading"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/tv_role_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="User role"
+            android:textSize="25sp"
+            android:textColor="#008ba6"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            app:layout_constraintStart_toEndOf="@id/tv_role"
+            app:layout_constraintTop_toBottomOf="@+id/tv_profile_subheading"
+            />
 
 
         <EditText
@@ -52,7 +79,7 @@ You can edit and manage your account information here."
             android:hint="First Name"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_role" />
 
         <EditText
             android:id="@+id/et_last_name"

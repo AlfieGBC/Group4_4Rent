@@ -19,7 +19,7 @@
             android:name=".screens.MyListingDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".screens.TenantProfileInfoActivity"
+            android:name=".screens.UserProfileInfoActivity"
             android:exported="false" />
         <activity
             android:name=".RentalFormActivity"

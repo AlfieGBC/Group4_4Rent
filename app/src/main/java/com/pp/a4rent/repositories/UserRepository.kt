@@ -49,6 +49,33 @@ class UserRepository(private val context: Context) {
         }
     }
 
+    fun updateUserProfile(userToUpdate : User){
+        try{
+            val data : MutableMap<String, Any> = HashMap()
+
+            data[FIELD_FIRST_NAME] = userToUpdate.firstName
+            data[FIELD_LAST_NAME] = userToUpdate.lastName
+            data[FIELD_EMAIL] = userToUpdate.email
+            data[FIELD_PASSWORD] = userToUpdate.password
+            data[FIELD_PHONE] = userToUpdate.phoneNumber
+
+            Log.d(TAG, "data $data")
+
+            db.collection(COLLECTION_USERS)
+                .document(userToUpdate.email)
+                .update(data)
+                .addOnSuccessListener { docRef ->
+                    Log.d(TAG, "updateUserProfile: User document successfully updated $docRef")
+                }
+                .addOnFailureListener { ex ->
+                    Log.e(TAG, "updateUserProfile: Unable to update user document due to exception : $ex", )
+                }
+
+        }catch (ex : Exception){
+            Log.e(TAG, "updateUserProfile: Couldn't update user document $ex", )
+        }
+    }
+
     fun getUser(email: String) {
         try {
             db.collection(COLLECTION_USERS).document(email).get()
