@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.pp.a4rent.databinding.ActivityRentalFormBinding
@@ -31,6 +32,7 @@ import com.pp.a4rent.repositories.PropertyRepository
 
 import com.pp.a4rent.screens.LoginActivity
 import com.pp.a4rent.screens.BlogListActivity
+import com.pp.a4rent.screens.UserProfileInfoActivity
 import java.util.Locale
 import java.util.UUID
 
@@ -237,7 +239,7 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
 
             R.id.mi_my_account -> {
 
-                val intent = Intent(this, ProfileActivity::class.java)
+                val intent = Intent(this, UserProfileInfoActivity::class.java)
                 startActivity(intent)
                 return true
             }
@@ -251,10 +253,12 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
 
             R.id.mi_logout -> {
                 // navigate to 2nd screen
-//                sharedPreferences.edit().clear().apply()
-                val sidebarIntent = Intent(this, MainActivity::class.java)
-                startActivity(sidebarIntent)
+//                val sidebarIntent = Intent(this, MainActivity::class.java)
+//                startActivity(sidebarIntent)
 
+                Log.d(TAG, "onOptionsItemSelected: Sign Out option is selected")
+                FirebaseAuth.getInstance().signOut()
+                this@RentalFormActivity.finish()
                 return true
             }
 

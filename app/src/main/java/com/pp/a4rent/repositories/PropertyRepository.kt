@@ -21,7 +21,7 @@ import java.util.UUID
 class PropertyRepository(private val context : Context) {
     private val TAG = this.toString();
     private val db = Firebase.firestore
-    private lateinit var sharedPrefs : SharedPreferences
+    private val sharedPrefs : SharedPreferences = context.getSharedPreferences("com.pp.a4rent", Context.MODE_PRIVATE)
     private var loggedInUserEmail = ""
 
     private val COLLECTION_PROPERTIES = "Property"
@@ -48,7 +48,6 @@ class PropertyRepository(private val context : Context) {
     var allPropertiesInPropertyList: MutableLiveData<List<Property>> = MutableLiveData<List<Property>>()
 
     init {
-        sharedPrefs = context.getSharedPreferences("com.pp.a4rent", Context.MODE_PRIVATE)
         if (sharedPrefs.contains("USER_EMAIL")){
             loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
         }
@@ -99,8 +98,6 @@ class PropertyRepository(private val context : Context) {
             Log.e(TAG, "addProperty: Couldn't perform insert on Property collection due to exception : $ex", )
         }
     }
-
-    fun addPropertyToFavList(newProperty: Property){}
 
     fun addPropertyToPropertyList(newProperty: Property){
         if (loggedInUserEmail.isNotEmpty()){
@@ -176,46 +173,6 @@ class PropertyRepository(private val context : Context) {
         }
     }
 
-    fun getAllPropertiesFromFavList(){
-        if (loggedInUserEmail.isNotEmpty()){
-            try {
-                db.collection(COLLECTION_USERS)
-                    .document(loggedInUserEmail)
-                    .collection(COLLECTION_FAV_LIST)
-                    .addSnapshotListener(EventListener { result, error ->
-                        if (error != null){
-                            Log.e(TAG, "getAllPropertiesFromFavList: Listening for property sub-collection failed due to error", error)
-                        }
-
-                        if (result != null){
-                            Log.d(TAG, "getAllPropertiesFromFavList: Number of documents received: ${result.size()}")
-                            val tempList : MutableList<Property> = ArrayList<Property>()
-
-                            for (docChanges in result.documentChanges){
-                                val currProperty = docChanges.document.toObject(Property::class.java)
-                                Log.d(TAG, "getAllPropertiesFromFavList: currProperty: $currProperty")
-
-                                when(docChanges.type){
-                                    DocumentChange.Type.ADDED -> {
-                                        tempList.add(currProperty)
-                                    }
-                                    DocumentChange.Type.MODIFIED -> {}
-                                    DocumentChange.Type.REMOVED -> {
-                                        tempList.remove(currProperty)
-                                    }
-                                }
-                            }
-                            Log.d(TAG, "getAllPropertiesFromFavList: tempList: $tempList")
-                            allPropertiesInFavList.postValue(tempList)
-                        }
-                    })
-            }catch (ex: Exception){
-                Log.e(TAG, "getAllPropertiesFromFavList: exception", ex)
-            }
-        }else{
-            Log.e(TAG, "getAllPropertiesFromFavList: Cannot retrieve properties without user's email address. You must sign in first.", )
-        }
-    }
 
     fun getAllPropertiesFromPropertyList(){
         if (loggedInUserEmail.isNotEmpty()){
@@ -290,7 +247,7 @@ class PropertyRepository(private val context : Context) {
         }
     }
 
-    fun updatePropertyInFavList(){}
+//    fun updatePropertyInFavList(){}
 
     fun updatePropertyInPropertyList(){}
 
@@ -310,7 +267,116 @@ class PropertyRepository(private val context : Context) {
         }
     }
 
-    fun deletePropertyFromFavList(){}
-
     fun deletePropertyFromPropertyList(){}
+
+
+    fun filterPropertyFromPropertyList() {
+
+    }
+
+    // TODO : For Favourite List
+
+    // For inserting data of rental property post to the db
+    fun addPropertyToFavList(favRentalProperty: Property){
+        if (loggedInUserEmail.isNotEmpty()) {
+            try {
+                val data: MutableMap<String, Any> = HashMap()
+
+                data[FIELD_propertyType] = favRentalProperty.propertyType
+                data[FIELD_ownerInfo] = favRentalProperty.ownerInfo
+                data[FIELD_numberOfBedroom] = favRentalProperty.numberOfBedroom
+                data[FIELD_numberOKitchen] = favRentalProperty.numberOKitchen
+                data[FIELD_numberOfBathroom] = favRentalProperty.numberOfBathroom
+                data[FIELD_area] = favRentalProperty.area
+                data[FIELD_description] = favRentalProperty.description
+                data[FIELD_propertyAddress] = favRentalProperty.propertyAddress
+                data[FIELD_rent] = favRentalProperty.rent
+                data[FIELD_available] = favRentalProperty.available
+                data[FIELD_geo] = favRentalProperty.geo
+                data[FIELD_imageFilename] = favRentalProperty.imageFilename?:""
+
+                db.collection(COLLECTION_USERS)
+                    .document(loggedInUserEmail)
+                    .collection(COLLECTION_FAV_LIST)
+                    .add(data)
+                    .addOnSuccessListener {
+                        Log.d(TAG, "addPropertyToFavList: Successfully added rental property to fav list: ${favRentalProperty.toString()}.")
+                    }
+                    .addOnFailureListener {
+                        Log.e(TAG, "addPropertyToFavList: Failed to add rental property to fav list: ${favRentalProperty.toString()} due to exception: $it", )
+                    }
+
+            } catch (ex : Exception){
+                Log.e(TAG, "addPropertyToFavList: Couldn't perform insert on Property sub-collection due to exception : $ex", )
+            }
+        } else{
+            Log.e(TAG, "addPropertyToFavList: Cannot retrieve properties without user's email address. You must sign in first.", )
+        }
+
+    }
+
+    // Retrieving data of rental property from the db (Fav list collections)
+    fun getAllPropertiesFromFavList(){
+        if (loggedInUserEmail.isNotEmpty()){
+            try {
+                db.collection(COLLECTION_USERS)
+                    .document(loggedInUserEmail)
+                    .collection(COLLECTION_FAV_LIST)
+                    .addSnapshotListener(EventListener { result, error ->
+                        if (error != null){
+                            Log.e(TAG, "getAllPropertiesFromFavList: Listening for property sub-collection failed due to error", error)
+                        }
+
+                        if (result != null){
+                            Log.d(TAG, "getAllPropertiesFromFavList: Number of documents received: ${result.size()}")
+                            val tempList : MutableList<Property> = ArrayList<Property>()
+
+                            for (docChanges in result.documentChanges){
+                                val currProperty = docChanges.document.toObject(Property::class.java)
+                                Log.d(TAG, "getAllPropertiesFromFavList: currProperty: $currProperty")
+
+//                                currProperty.propertyId = docChanges.document.reference.id
+
+                                when(docChanges.type){
+                                    DocumentChange.Type.ADDED -> {
+                                        tempList.add(currProperty)
+                                    }
+                                    DocumentChange.Type.MODIFIED -> {}
+                                    DocumentChange.Type.REMOVED -> {
+                                        tempList.remove(currProperty)
+                                    }
+                                }
+                            }
+                            Log.d(TAG, "getAllPropertiesFromFavList: tempList: $tempList")
+                            allPropertiesInFavList.postValue(tempList)
+                        }
+                    })
+            }catch (ex: Exception){
+                Log.e(TAG, "getAllPropertiesFromFavList: exception", ex)
+            }
+        }else{
+            Log.e(TAG, "getAllPropertiesFromFavList: Cannot retrieve properties without user's email address. You must sign in first.", )
+        }
+    }
+
+    // For removing rental property posts from the favourite list
+//    fun deletePropertyFromFavList(favRentalPropertyToDelete: Property){
+//        try {
+//            db.collection(COLLECTION_USERS)
+//                .document(loggedInUserEmail)
+//                .collection(COLLECTION_FAV_LIST)
+//                .document(favRentalPropertyToDelete.propertyId)
+//                .delete()
+//                .addOnSuccessListener { docRef ->
+//                    Log.d(TAG, "deletePropertyFromFavList: document deleted successfully : $docRef")
+//                }
+//                .addOnFailureListener { ex ->
+//                    Log.e(TAG, "deletePropertyFromFavList: Failed to delete document: $ex")
+//                }
+//        } catch (ex: Exception) {
+//            Log.e(TAG, "deletePropertyFromFavList: Unable to delete rental post from fav list due to exception : $ex")
+//        }
+//
+//    }
+
 }

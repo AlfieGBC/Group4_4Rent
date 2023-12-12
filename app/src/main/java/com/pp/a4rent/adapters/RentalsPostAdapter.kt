@@ -1,5 +1,6 @@
 package com.pp.a4rent.adapters
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +11,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.pp.a4rent.R
+import com.pp.a4rent.models.Property
 import com.pp.a4rent.models.PropertyRental
 
 class RentalsPostAdapter(
-    private val rentalsList:MutableList<PropertyRental>,
+    private val context: Context,
+    private val rentalsList: ArrayList<Property>,
     private val rowClickHandler: (Int) -> Unit,
     private val favBtnClickHandler: (Int) -> Unit
 ) : RecyclerView.Adapter<RentalsPostAdapter.RentalsPostViewHolder>() {
@@ -42,7 +45,7 @@ class RentalsPostAdapter(
 
 
         // Get the current rental post
-        var currRentalPost:PropertyRental = rentalsList.get(position)
+        var currRentalPost: Property = rentalsList.get(position)
 
         // Populate the UI with the rental post details
         // Get the tvTitle = tv rent
@@ -69,7 +72,7 @@ class RentalsPostAdapter(
 
         // city
         val tvCity = holder.itemView.findViewById<TextView>(R.id.tvCity)
-        tvCity.setText("${currRentalPost.city}")
+        tvCity.setText("${currRentalPost.propertyAddress.city}")
 
         // Populate the image
         // - getting a context variable
@@ -87,7 +90,7 @@ class RentalsPostAdapter(
         Log.d("TAG", " currRentalPost.favourite   ${currRentalPost.favourite}")
 
         // current rental post's favourite is true then, color the star
-        if (currRentalPost.favourite) {
+        if (currRentalPost.favourite!!) {
             btnFav.setChecked(true)
         } else {
             btnFav.setChecked(false)
