@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private val TAG : String = "MainActivity"
 
     private lateinit var sharedPreferences: SharedPreferences
+    private var loggedInUserEmail = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -49,6 +50,13 @@ class MainActivity : AppCompatActivity() {
             val wrappedDrawable = DrawableCompat.wrap(drawable).mutate()
             DrawableCompat.setTint(wrappedDrawable, ContextCompat.getColor(this, R.color.white))
             binding.menuToolbar.overflowIcon = wrappedDrawable
+        }
+
+        // Initialize SharedPreference
+        sharedPreferences = getSharedPreferences("MY_APP_PREFS", MODE_PRIVATE)
+
+        if (sharedPreferences.contains("USER_EMAIL")){
+            loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
         }
 
         // For search button
@@ -80,9 +88,6 @@ class MainActivity : AppCompatActivity() {
         // navigate to 2nd screen
         val torontoRentalsIntent = Intent(this@MainActivity, RentalsPostListActivity::class.java)
         torontoRentalsIntent.putExtra("FILTER_DATA_EXTRA", "Toronto")
-        val userJson = intent.getStringExtra("user")
-        // pass this info to next page, which is tenant profile info page
-        torontoRentalsIntent.putExtra("user", userJson)
         startActivity(torontoRentalsIntent)
     }
 
@@ -93,9 +98,7 @@ class MainActivity : AppCompatActivity() {
         // navigate to 2nd screen
         val vancouverRentalsIntent = Intent(this@MainActivity, RentalsPostListActivity::class.java)
         vancouverRentalsIntent.putExtra("FILTER_DATA_EXTRA", "Vancouver")
-        val userJson = intent.getStringExtra("user")
-        // pass this info to next page, which is tenant profile info page
-        vancouverRentalsIntent.putExtra("user", userJson)
+
         startActivity(vancouverRentalsIntent)
     }
 
@@ -106,9 +109,7 @@ class MainActivity : AppCompatActivity() {
         // navigate to 2nd screen
         val winnipegRentalsIntent = Intent(this@MainActivity, RentalsPostListActivity::class.java)
         winnipegRentalsIntent.putExtra("FILTER_DATA_EXTRA", "Winnipeg")
-        val userJson = intent.getStringExtra("user")
-        // pass this info to next page, which is tenant profile info page
-        winnipegRentalsIntent.putExtra("user", userJson)
+
         startActivity(winnipegRentalsIntent)
     }
 
@@ -175,10 +176,10 @@ class MainActivity : AppCompatActivity() {
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this@MainActivity, MainActivity::class.java)
 
-                // get the user info from login page
-                val userJson = intent.getStringExtra("user")
-                // pass this info to next page, which is tenant profile info page
-                sidebarIntent.putExtra("user", userJson)
+//                // get the user info from login page
+//                val userJson = intent.getStringExtra("user")
+//                // pass this info to next page, which is tenant profile info page
+//                sidebarIntent.putExtra("user", userJson)
                 startActivity(sidebarIntent)
 
                 return true

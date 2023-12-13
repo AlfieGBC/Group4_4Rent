@@ -20,5 +20,7 @@ data class Property(
     var favourite: Boolean? = false,
 ) : Serializable {
 
-
+    override fun toString(): String {
+        return "Property(propertyId='$propertyId', propertyType=$propertyType, ownerInfo='$ownerInfo', numberOfBedroom=$numberOfBedroom, numberOKitchen=$numberOKitchen, numberOfBathroom=$numberOfBathroom, area=$area, description='$description', propertyAddress=$propertyAddress, rent=$rent, available=$available, geo=$geo, imageFilename=$imageFilename, favourite=$favourite)"
+    }
 }

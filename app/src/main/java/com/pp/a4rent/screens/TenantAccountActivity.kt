@@ -10,6 +10,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -21,7 +22,6 @@ import com.pp.a4rent.R
 import com.pp.a4rent.adapters.RentalsPostAdapter
 import com.pp.a4rent.databinding.ActivityTenantAccountBinding
 import com.pp.a4rent.models.Property
-import com.pp.a4rent.models.PropertyRental
 import com.pp.a4rent.models.User
 import com.pp.a4rent.repositories.PropertyRepository
 
@@ -31,6 +31,7 @@ class TenantAccountActivity : AppCompatActivity() {
     private lateinit var rentalPropertyAdapter: RentalsPostAdapter
     private lateinit var favRentalPropertyArrayList : ArrayList<Property>
     private lateinit var propertyRepository: PropertyRepository
+    private var loggedInUserEmail = ""
 
     // TODO: Shared Preferences variables
     lateinit var sharedPreferences: SharedPreferences
@@ -60,10 +61,16 @@ class TenantAccountActivity : AppCompatActivity() {
             binding.tenantMenuToolbar.overflowIcon = wrappedDrawable
         }
 
+//      Initialize SharedPreference and Editor instance
+        this.sharedPreferences = getSharedPreferences("MY_APP_PREFS", MODE_PRIVATE)
+
+        if (sharedPreferences.contains("USER_EMAIL")){
+            loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
+        }
 
 
-//        // Initialize SharedPreference and Editor instance
-//        this.sharedPreferences = getSharedPreferences("MY_APP_PREFS", MODE_PRIVATE)
+
+//
 //
 //        // Get existing rental list from SharedPreferences
 //        this.prefEditor = this.sharedPreferences.edit()
@@ -98,8 +105,8 @@ class TenantAccountActivity : AppCompatActivity() {
 //            Log.d("TAG", "Finally ${favRentalPostsList}")
 //        }
 
-        // setup adapter
 
+        // setup adapter
         favRentalPropertyArrayList = ArrayList()
         rentalPropertyAdapter = RentalsPostAdapter(
             this,
@@ -123,19 +130,17 @@ class TenantAccountActivity : AppCompatActivity() {
         propertyRepository = PropertyRepository(applicationContext)
 
 
-//        binding.btnDeleteAll.setOnClickListener {
-//            if(user != null) {
-//                prefEditor.remove("KEY_RENTALS_DATASOURCE"+user.userId)
-//
-//                // commit our changes
-//                prefEditor.apply()
-//
-//                // update the RV to show that there are no more items
-//                favRentalPostsList.clear()
-//                adapter.notifyDataSetChanged()
-//            }
-//
-//        }
+        binding.btnDeleteAll.setOnClickListener {
+
+            propertyRepository.deleteAllPropertyFavList()
+            propertyRepository.allPropertiesInFavList.observe(this) { favList ->
+                if (favList != null) {
+                    favRentalPropertyArrayList.clear()
+                }
+
+            }
+
+        }
 
     }
 
@@ -183,15 +188,20 @@ class TenantAccountActivity : AppCompatActivity() {
         val snackbar = Snackbar.make(binding.root, "Favorite ${position}", Snackbar.LENGTH_LONG)
         snackbar.show()
 
-        val gson = Gson()
-        val userJson = intent.getStringExtra("user")
-        if(userJson != null) {
-            val user = gson.fromJson(userJson, User::class.java)
-            favRentalPropertyArrayList.removeAt(position)
-            rentalPropertyAdapter.notifyItemRemoved(position)
-            prefEditor.putString("KEY_RENTALS_DATASOURCE"+user.userId, Gson().toJson(favRentalPropertyArrayList))
-            prefEditor.apply()
-        }
+
+        val favRentalToDelete = favRentalPropertyArrayList.get(position)
+        favRentalToDelete.favourite = false
+        this.propertyRepository.deletePropertyFromFavList(favRentalToDelete)
+
+//        val gson = Gson()
+//        val userJson = intent.getStringExtra("user")
+//        if(userJson != null) {
+//            val user = gson.fromJson(userJson, User::class.java)
+//            favRentalPropertyArrayList.removeAt(position)
+//            rentalPropertyAdapter.notifyItemRemoved(position)
+//            prefEditor.putString("KEY_RENTALS_DATASOURCE"+user.userId, Gson().toJson(favRentalPropertyArrayList))
+//            prefEditor.apply()
+//        }
     }
 
 

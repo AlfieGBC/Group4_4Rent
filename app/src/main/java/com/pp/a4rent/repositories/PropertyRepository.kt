@@ -3,19 +3,12 @@ package com.pp.a4rent.repositories
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.firestore
-import com.google.firebase.firestore.toObject
-import com.pp.a4rent.models.Address
-import com.pp.a4rent.models.Geo
 import com.pp.a4rent.models.Property
-import com.pp.a4rent.models.PropertyType
-import com.pp.a4rent.models.User
 import java.util.UUID
 
 class PropertyRepository(private val context : Context) {
@@ -41,8 +34,9 @@ class PropertyRepository(private val context : Context) {
     private val FIELD_available = "available";
     private val FIELD_geo = "geo";
     private val FIELD_imageFilename = "imageFilename";
+    private val FIELD_favourite = "favourite"
 
-    val singleProperty: MutableLiveData<Property> = MutableLiveData<Property>()
+    val property: MutableLiveData<Property> = MutableLiveData<Property>()
     var allProperties : MutableLiveData<List<Property>> = MutableLiveData<List<Property>>()
     var allPropertiesInFavList: MutableLiveData<List<Property>> = MutableLiveData<List<Property>>()
     var allPropertiesInPropertyList: MutableLiveData<List<Property>> = MutableLiveData<List<Property>>()
@@ -63,7 +57,7 @@ class PropertyRepository(private val context : Context) {
                     val propertyObj = it.toObject(Property::class.java)
                     Log.d(TAG, "getSinglePropertyById: propertyObj: $propertyObj")
 
-                    singleProperty.postValue(propertyObj)
+                    property.postValue(propertyObj)
                 }
         }catch (ex: Exception){
             Log.e(TAG, "getSinglePropertyById: Failed to get the property object by id: $propertyId", ex)
@@ -295,6 +289,7 @@ class PropertyRepository(private val context : Context) {
                 data[FIELD_available] = favRentalProperty.available
                 data[FIELD_geo] = favRentalProperty.geo
                 data[FIELD_imageFilename] = favRentalProperty.imageFilename?:""
+                data[FIELD_favourite] = favRentalProperty.favourite?:true
 
                 db.collection(COLLECTION_USERS)
                     .document(loggedInUserEmail)
@@ -378,6 +373,46 @@ class PropertyRepository(private val context : Context) {
             Log.e(TAG, "deletePropertyFromFavList: Unable to delete rental post from fav list due to exception : $ex")
         }
 
+    }
+
+    fun deleteAllPropertyFavList() {
+        try {
+            db.collection(COLLECTION_USERS)
+                .document(loggedInUserEmail)
+                .collection(COLLECTION_FAV_LIST)
+                .addSnapshotListener(EventListener{ result, error ->
+                    if (error != null){
+                        Log.e(TAG, "getAllProperties: Listening for property collection failed due to error", error)
+                        return@EventListener
+                    }
+
+                    if (result != null){
+                        Log.d(TAG, "getAllProperties: Number of documents received: ${result.size()}")
+                        val tempList : MutableList<Property> = ArrayList<Property>()
+
+                        for (docChanges in result.documentChanges){
+                            val currProperty = docChanges.document.toObject(Property::class.java)
+                            Log.d(TAG, "getAllProperties: currProperty: $currProperty")
+
+                            when(docChanges.type){
+                                DocumentChange.Type.ADDED -> {
+
+                                }
+
+                                DocumentChange.Type.MODIFIED -> {}
+
+                                DocumentChange.Type.REMOVED -> {
+                                    tempList.remove(currProperty)
+                                }
+                            }
+                        }
+                        Log.d(TAG, "getAllProperties: tempList: $tempList")
+                        allPropertiesInFavList.postValue(tempList)
+                    }
+                })
+        }catch (ex: Exception){
+            Log.d(TAG, "getAllProperties: Can't retrieve all the properties due to exception: $ex")
+        }
     }
 
 }

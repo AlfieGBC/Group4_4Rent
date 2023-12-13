@@ -14,15 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.pp.a4rent.MainActivity
 import com.pp.a4rent.R
 import com.pp.a4rent.adapters.RentalsPostAdapter
 import com.pp.a4rent.databinding.ActivityRentalsPostListBinding
-import com.pp.a4rent.models.Owner
 import com.pp.a4rent.models.Property
-import com.pp.a4rent.models.PropertyRental
-import com.pp.a4rent.models.PropertyType
 import com.pp.a4rent.models.User
 import com.pp.a4rent.repositories.PropertyRepository
 
@@ -36,6 +32,7 @@ class RentalsPostListActivity : AppCompatActivity() {
     private lateinit var rentalPropertyRepository: PropertyRepository
 
     private lateinit var searchedRentalsList: ArrayList<Property>
+    private var loggedInUserEmail = ""
 
 
 
@@ -59,11 +56,11 @@ class RentalsPostListActivity : AppCompatActivity() {
 
 
 //    // Shared Preferences variables
-//    lateinit var sharedPreferences: SharedPreferences
+    private lateinit var sharedPrefs: SharedPreferences
 //    lateinit var prefEditor: SharedPreferences.Editor
 
     // Get the current data source
-    var favouriteRentalPostsList:MutableList<Property> = mutableListOf()
+//    var favouriteRentalPostsList:MutableList<Property> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,11 +91,14 @@ class RentalsPostListActivity : AppCompatActivity() {
 
         rentalPropertyRepository = PropertyRepository(applicationContext)
 
+        // Initialize SharedPreference
+        sharedPrefs = getSharedPreferences("MY_APP_PREFS", MODE_PRIVATE)
 
-//
-//        // Initialize SharedPreference and Editor instance
-//        this.sharedPreferences = getSharedPreferences("MY_APP_PREFS", MODE_PRIVATE)
-//
+        if (sharedPrefs.contains("USER_EMAIL")){
+            loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
+        }
+
+
 //        // Get existing rental list from SharedPreferences
 //        this.prefEditor = this.sharedPreferences.edit()
 //
@@ -131,13 +131,13 @@ class RentalsPostListActivity : AppCompatActivity() {
 
         /// list loop in each item -> check if it exists in favourite or not
         // if exists then set isFavourite = true
-//        for (rental in rentalDatasource) {
-//            for (fav in favouriteRentalPostsList) {
+//        for (rental in searchedRentalsList) {
+////            for (fav in favouriteRentalPostsList) {
 //                Log.d("TAG", "Rental found ${rental.propertyId}")
-//                if (rental.propertyId == fav.propertyId) {
+//                if (rental.favourite == false) {
 //                    Log.d("TAG", "Favourite found ${rental.propertyId}")
 //                    rental.favourite = true
-//                }
+////                }
 //            }
 //        }
 //
@@ -281,52 +281,49 @@ class RentalsPostListActivity : AppCompatActivity() {
 
         var rentalsToAdd = searchedRentalsList.get(position)
 
+
         // checks user is logged in or not,
         // - if yes, navigate user to short-listed rentals page (favourite page)
-        val userJson = intent.getStringExtra("user")
-        if (userJson == null) {
+
+        if (loggedInUserEmail.isNotEmpty()) {
             rentalsToAdd.favourite = false
             this.rentalPropertyAdapter.notifyDataSetChanged()
             val userIntent = Intent(this@RentalsPostListActivity, LoginActivity::class.java)
             startActivity(userIntent)
         } else {
+            val snackbar = Snackbar.make(binding.root, "Added to Favourite List", Snackbar.LENGTH_LONG)
+            snackbar.show()
 
-        val snackbar = Snackbar.make(binding.root, "Added to Favourite List", Snackbar.LENGTH_LONG)
-        snackbar.show()
-
-
-        rentalsToAdd.favourite = true
-        // if rentalsToAdd already exists in favouriteRentalPostsList then ignore
-
-
-        var rentalExists = false
-        var favRentalIndex: Int? = null
-        for (index in favouriteRentalPostsList.indices) {
-            if (favouriteRentalPostsList[index].propertyId == rentalsToAdd.propertyId) {
-                Log.d("TAG", "Rental already exist in the favourite list")
-                rentalExists = true
-                favRentalIndex = index
-                break
-            }
-        }
-
-
-        if (!rentalExists) {
             rentalsToAdd.favourite = true
-            favouriteRentalPostsList.add(rentalsToAdd)
-        } else {
-            favouriteRentalPostsList.removeAt(favRentalIndex!!)
-        }
-//
-//        val gson = Gson()
-//        val listAsString = gson.toJson(favouriteRentalPostsList)
-//        val user = gson.fromJson(userJson, User::class.java)
-//        this.prefEditor.putString("KEY_RENTALS_DATASOURCE"+user.userId, listAsString)
-//
-//        // commit the changes
-//        this.prefEditor.apply()
-    }
+//            rentalPropertyRepository.addPropertyToFavList(rentalsToAdd)
+            // if rentalsToAdd already exists in favouriteRentalPostsList then ignore
 
+
+            var rentalExists = false
+            var rentalToDelete : Property? = null
+            for (list in searchedRentalsList) {
+                if (list.propertyId == rentalsToAdd.propertyId) {
+                    Log.d("TAG", "Rental already exist in the favourite list")
+                    rentalExists = true
+//                    favRentalIndex = index
+                   rentalToDelete = searchedRentalsList.get(position)
+                    break
+                }
+            }
+//
+//
+            if (!rentalExists) {
+                rentalsToAdd.favourite = true
+                rentalPropertyRepository.addPropertyToFavList(rentalsToAdd)
+            } else {
+                if (rentalToDelete != null) {
+                    rentalPropertyRepository.deletePropertyFromFavList(rentalToDelete)
+                    rentalToDelete.favourite = false
+                }
+            }
+
+
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
