@@ -35,6 +35,7 @@ class PropertyRepository(private val context : Context) {
     private val FIELD_geo = "geo";
     private val FIELD_imageFilename = "imageFilename";
     private val FIELD_favourite = "favourite"
+    private val FIELD_ID = "id"
 
     val property: MutableLiveData<Property> = MutableLiveData<Property>()
     var allProperties : MutableLiveData<List<Property>> = MutableLiveData<List<Property>>()
@@ -47,26 +48,12 @@ class PropertyRepository(private val context : Context) {
         }
     }
 
-    fun getSinglePropertyById(propertyId: String){
-        try {
-            db.collection(COLLECTION_PROPERTIES)
-                .document(propertyId)
-                .get()
-                .addOnSuccessListener {
-                    Log.d(TAG, "getSinglePropertyById: Successfully get User: $it")
-                    val propertyObj = it.toObject(Property::class.java)
-                    Log.d(TAG, "getSinglePropertyById: propertyObj: $propertyObj")
-
-                    property.postValue(propertyObj)
-                }
-        }catch (ex: Exception){
-            Log.e(TAG, "getSinglePropertyById: Failed to get the property object by id: $propertyId", ex)
-        }
-    }
 
     fun addProperty(newProperty: Property){
         try {
             val data: MutableMap<String, Any> = HashMap()
+
+            data[FIELD_ID] = newProperty.propertyId
             data[FIELD_propertyType] = newProperty.propertyType
             data[FIELD_ownerInfo] = newProperty.ownerInfo
             data[FIELD_numberOfBedroom] = newProperty.numberOfBedroom
@@ -94,10 +81,13 @@ class PropertyRepository(private val context : Context) {
         }
     }
 
+
     fun addPropertyToPropertyList(newProperty: Property){
         if (loggedInUserEmail.isNotEmpty()){
             try {
                 val data: MutableMap<String, Any> = HashMap()
+
+                data[FIELD_ID] = newProperty.propertyId
                 data[FIELD_propertyType] = newProperty.propertyType
                 data[FIELD_ownerInfo] = newProperty.ownerInfo
                 data[FIELD_numberOfBedroom] = newProperty.numberOfBedroom
@@ -129,6 +119,7 @@ class PropertyRepository(private val context : Context) {
             Log.e(TAG, "addPropertyToPropertyList: Cannot retrieve properties without user's email address. You must sign in first.", )
         }
     }
+
 
     fun getAllProperties(){
         try {
@@ -210,6 +201,7 @@ class PropertyRepository(private val context : Context) {
         }
     }
 
+
     fun updateProperty(propertyToUpdate: Property){
         val data: MutableMap<String, Any> = HashMap()
         Log.d(TAG, "updateProperty: propertyToUpdate: $propertyToUpdate")
@@ -242,9 +234,40 @@ class PropertyRepository(private val context : Context) {
         }
     }
 
-//    fun updatePropertyInFavList(){}
+    fun updatePropertyInPropertyList(propertyToUpdate: Property){
+        val data: MutableMap<String, Any> = HashMap()
+        Log.d(TAG, "updatePropertyInPropertyList: propertyToUpdate: $propertyToUpdate")
 
-    fun updatePropertyInPropertyList(){}
+
+        data[FIELD_propertyType] = propertyToUpdate.propertyType
+        data[FIELD_ownerInfo] = propertyToUpdate.ownerInfo
+        data[FIELD_numberOfBedroom] = propertyToUpdate.numberOfBedroom
+        data[FIELD_numberOKitchen] = propertyToUpdate.numberOKitchen
+        data[FIELD_numberOfBathroom] = propertyToUpdate.numberOfBathroom
+        data[FIELD_area] = propertyToUpdate.area
+        data[FIELD_description] = propertyToUpdate.description
+        data[FIELD_propertyAddress] = propertyToUpdate.propertyAddress
+        data[FIELD_rent] = propertyToUpdate.rent
+        data[FIELD_available] = propertyToUpdate.available
+        data[FIELD_geo] = propertyToUpdate.geo
+        data[FIELD_imageFilename] = propertyToUpdate.imageFilename?:""
+
+        try {
+            db.collection(COLLECTION_USERS)
+                .document(loggedInUserEmail)
+                .collection(COLLECTION_PROPERTIES)
+                .document(propertyToUpdate.propertyId)
+                .update(data)
+                .addOnSuccessListener {
+                    Log.d(TAG, "updatePropertyInPropertyList: Updated successfully!")
+                }
+                .addOnFailureListener {
+                    Log.e(TAG, "updatePropertyInPropertyList: Failed to update property: $propertyToUpdate", it)
+                }
+        }catch (ex: Exception){
+            Log.e(TAG, "updatePropertyInPropertyList: Failed to update property: $propertyToUpdate", ex)
+        }
+    }
 
     fun deleteProperty(propertyToDelete: Property){
         try {
