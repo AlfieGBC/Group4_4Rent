@@ -42,7 +42,7 @@ class PropertyRepository(private val context : Context) {
     private val FIELD_geo = "geo";
     private val FIELD_imageFilename = "imageFilename";
 
-    val property: MutableLiveData<Property> = MutableLiveData<Property>()
+    val singleProperty: MutableLiveData<Property> = MutableLiveData<Property>()
     var allProperties : MutableLiveData<List<Property>> = MutableLiveData<List<Property>>()
     var allPropertiesInFavList: MutableLiveData<List<Property>> = MutableLiveData<List<Property>>()
     var allPropertiesInPropertyList: MutableLiveData<List<Property>> = MutableLiveData<List<Property>>()
@@ -62,7 +62,8 @@ class PropertyRepository(private val context : Context) {
                     Log.d(TAG, "getSinglePropertyById: Successfully get User: $it")
                     val propertyObj = it.toObject(Property::class.java)
                     Log.d(TAG, "getSinglePropertyById: propertyObj: $propertyObj")
-                    property.postValue(propertyObj)
+
+                    singleProperty.postValue(propertyObj)
                 }
         }catch (ex: Exception){
             Log.e(TAG, "getSinglePropertyById: Failed to get the property object by id: $propertyId", ex)
