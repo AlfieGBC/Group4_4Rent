@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pp.a4rent.databinding.RowBlogItemBinding
 import com.pp.a4rent.models.Blog
-import com.pp.a4rent.clickListeners.OnBlogClickListener
+import com.pp.a4rent.listeners.OnBlogClickListener
 
 class BlogAdapter(
     private val context: Context,

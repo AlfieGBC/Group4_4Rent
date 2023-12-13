@@ -7,12 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.pp.a4rent.models.Property
-import java.util.UUID
 
 class PropertyRepository(private val context : Context) {
-    private val TAG = this.toString();
+    private val TAG = "check"
     private val db = Firebase.firestore
     private val sharedPrefs : SharedPreferences = context.getSharedPreferences("com.pp.a4rent", Context.MODE_PRIVATE)
     private var loggedInUserEmail = ""
@@ -47,6 +47,34 @@ class PropertyRepository(private val context : Context) {
         }
     }
 
+
+    // fun to retrieve the user roles from the database
+     fun getUserRoleFromDatabase(email: String, callback: (String) -> Unit) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("Users")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val userRole = document.getString("role")
+                    if (userRole != null) {
+                        // Invoke the callback with the user's role
+                        callback.invoke(userRole)
+                        // Exit the loop once role is found
+                        return@addOnSuccessListener
+                    }
+                }
+                // If no role found, callback with a default role
+                callback.invoke("guest")
+            }
+            .addOnFailureListener { exception ->
+                Log.e(TAG, "Error getting user role", exception)
+                // Invoke the callback with a default role in case of failure
+                callback.invoke("guest")
+            }
+    }
+
     fun getSinglePropertyById(propertyId: String){
         try {
             db.collection(COLLECTION_PROPERTIES)
@@ -67,7 +95,6 @@ class PropertyRepository(private val context : Context) {
     fun addProperty(newProperty: Property){
         try {
             val data: MutableMap<String, Any> = HashMap()
-            data[FIELD_propertyType] = newProperty.propertyType
             data[FIELD_ownerInfo] = newProperty.ownerInfo
             data[FIELD_numberOfBedroom] = newProperty.numberOfBedroom
             data[FIELD_numberOKitchen] = newProperty.numberOKitchen
@@ -311,6 +338,27 @@ class PropertyRepository(private val context : Context) {
 
     }
 
+    fun isPropertyExistInFavList(favRentalProperty: Property, callback: (Boolean) -> Unit) {
+        try {
+            db.collection(COLLECTION_USERS)
+                .document(loggedInUserEmail)
+                .collection(COLLECTION_FAV_LIST)
+                .whereEqualTo(FIELD_propertyAddress, favRentalProperty.propertyAddress)
+                .get()
+                .addOnSuccessListener { documents ->
+                    val exists = !documents.isEmpty
+                    callback(exists)
+                }
+                .addOnFailureListener { exception ->
+                    Log.e(TAG, "Failed to check for rental property existence due to exception: $exception")
+                    callback(false)
+                }
+        } catch (ex: Exception) {
+            Log.e(TAG, "Couldn't perform find on Property sub-collection due to exception : $ex")
+            callback(false)
+        }
+    }
+
     // Retrieving data of rental property from the db (Fav list collections)
     fun getAllPropertiesFromFavList(){
         if (loggedInUserEmail.isNotEmpty()){
@@ -375,43 +423,23 @@ class PropertyRepository(private val context : Context) {
 
     }
 
-    fun deleteAllPropertyFavList() {
+    fun deleteAllPropertyFromFavList() {
         try {
+            // Remove all documents from the "COLLECTION_FAV_LIST" for the logged-in user
             db.collection(COLLECTION_USERS)
                 .document(loggedInUserEmail)
                 .collection(COLLECTION_FAV_LIST)
-                .addSnapshotListener(EventListener{ result, error ->
-                    if (error != null){
-                        Log.e(TAG, "getAllProperties: Listening for property collection failed due to error", error)
-                        return@EventListener
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        document.reference.delete()
                     }
-
-                    if (result != null){
-                        Log.d(TAG, "getAllProperties: Number of documents received: ${result.size()}")
-                        val tempList : MutableList<Property> = ArrayList<Property>()
-
-                        for (docChanges in result.documentChanges){
-                            val currProperty = docChanges.document.toObject(Property::class.java)
-                            Log.d(TAG, "getAllProperties: currProperty: $currProperty")
-
-                            when(docChanges.type){
-                                DocumentChange.Type.ADDED -> {
-
-                                }
-
-                                DocumentChange.Type.MODIFIED -> {}
-
-                                DocumentChange.Type.REMOVED -> {
-                                    tempList.remove(currProperty)
-                                }
-                            }
-                        }
-                        Log.d(TAG, "getAllProperties: tempList: $tempList")
-                        allPropertiesInFavList.postValue(tempList)
-                    }
-                })
-        }catch (ex: Exception){
-            Log.d(TAG, "getAllProperties: Can't retrieve all the properties due to exception: $ex")
+                }
+                .addOnFailureListener { exception ->
+                    Log.e(TAG, "deleteAllPropertyFromFavList: Failed to delete properties", exception)
+                }
+        } catch (ex: Exception) {
+            Log.e(TAG, "deleteAllPropertyFromFavList: Exception occurred: $ex")
         }
     }
 

@@ -111,9 +111,10 @@ class TenantAccountActivity : AppCompatActivity() {
         rentalPropertyAdapter = RentalsPostAdapter(
             this,
             favRentalPropertyArrayList,
-            {pos -> rowClicked(pos) }
-
-        ) { pos -> favButtonClicked(pos) }
+            {pos -> rowClicked(pos) },
+            { pos -> favButtonClicked(pos) },
+            favRentalPropertyArrayList
+        )
 
         // setup rv
         binding.rvFavItems.adapter = rentalPropertyAdapter
@@ -132,13 +133,8 @@ class TenantAccountActivity : AppCompatActivity() {
 
         binding.btnDeleteAll.setOnClickListener {
 
-            propertyRepository.deleteAllPropertyFavList()
-            propertyRepository.allPropertiesInFavList.observe(this) { favList ->
-                if (favList != null) {
-                    favRentalPropertyArrayList.clear()
-                }
-
-            }
+            // it deletes all the properties from the fav list
+            propertyRepository.deleteAllPropertyFromFavList()
 
         }
 
@@ -210,17 +206,19 @@ class TenantAccountActivity : AppCompatActivity() {
 
 
         // checks user is logged in or not
-        val userJson = intent.getStringExtra("user")
-        if (userJson != null) {
-            val gson = Gson()
-            val user = gson.fromJson(userJson, User::class.java)
+        if (loggedInUserEmail.isNotEmpty()) {
+            propertyRepository.getUserRoleFromDatabase(loggedInUserEmail) { userRole ->
+                Log.d(TAG, "user role: $userRole")
 
-            if (user.role == "Tenant") {
-                menuInflater.inflate(R.menu.tenant_profile_options, menu)
-            } else if (user.role == "Landlord") {
-                menuInflater.inflate(R.menu.landlord_profile_options, menu)
+                // Show different menu options to the users based on their role
+
+                if (userRole == "tenant") {
+                    menuInflater.inflate(R.menu.tenant_profile_options, menu)
+                } else if (userRole == "Landlord") {
+                    menuInflater.inflate(R.menu.landlord_profile_options, menu)
+                }
+
             }
-
         } else {
             menuInflater.inflate(R.menu.guest_menu_options, menu)
         }
@@ -235,10 +233,10 @@ class TenantAccountActivity : AppCompatActivity() {
 
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this, MainActivity::class.java)
-                // get the user info from login page
-                val userJson = intent.getStringExtra("user")
+//                // get the user info from login page
+//                val userJson = intent.getStringExtra("user")
                 // pass this info to next page, which is tenant profile info page
-                sidebarIntent.putExtra("user", userJson)
+//                sidebarIntent.putExtra("user", userJson)
                 startActivity(sidebarIntent)
 
                 return true
@@ -260,10 +258,10 @@ class TenantAccountActivity : AppCompatActivity() {
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this@TenantAccountActivity, TenantAccountActivity::class.java)
 
-                // get the user info from login page
-                val userJson = intent.getStringExtra("user")
-                // pass this info to next page, which is tenant profile info page
-                sidebarIntent.putExtra("user", userJson)
+//                // get the user info from login page
+//                val userJson = intent.getStringExtra("user")
+//                // pass this info to next page, which is tenant profile info page
+//                sidebarIntent.putExtra("user", userJson)
                 startActivity(sidebarIntent)
 
                 return true
@@ -274,10 +272,10 @@ class TenantAccountActivity : AppCompatActivity() {
 
                 // navigate to 2nd screen
                 val sidebarTenantIntent = Intent(this@TenantAccountActivity, UserProfileInfoActivity::class.java)
-                // get the user info from login page
-                val userJson = intent.getStringExtra("user")
-                // pass this info to next page, which is tenant profile info page
-                sidebarTenantIntent.putExtra("user", userJson)
+//                // get the user info from login page
+//                val userJson = intent.getStringExtra("user")
+//                // pass this info to next page, which is tenant profile info page
+//                sidebarTenantIntent.putExtra("user", userJson)
                 startActivity(sidebarTenantIntent)
 
                 return true
