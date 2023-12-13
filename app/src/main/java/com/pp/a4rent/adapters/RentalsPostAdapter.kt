@@ -12,7 +12,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.pp.a4rent.R
 import com.pp.a4rent.models.Property
-import com.pp.a4rent.models.PropertyRental
 
 class RentalsPostAdapter(
     private val context: Context,
@@ -50,7 +49,7 @@ class RentalsPostAdapter(
         // Populate the UI with the rental post details
         // Get the tvTitle = tv rent
         val tvTitle = holder.itemView.findViewById<TextView>(R.id.tvTitle)
-        tvTitle.setText("$${currRentalPost.rent}\n")
+        tvTitle.setText("$${currRentalPost.rent}")
 
         // No. of bedrooms and bathrooms
         val tvBedrooms = holder.itemView.findViewById<TextView>(R.id.tvBeds)
@@ -68,7 +67,7 @@ class RentalsPostAdapter(
 
         // address
         val tvAddress = holder.itemView.findViewById<TextView>(R.id.tvAddress)
-        tvAddress.setText("${currRentalPost.propertyAddress}")
+        tvAddress.setText("${currRentalPost.propertyAddress.street}, ${currRentalPost.propertyAddress.city}, ${currRentalPost.propertyAddress.province}, ${currRentalPost.propertyAddress.country}")
 
         // city
         val tvCity = holder.itemView.findViewById<TextView>(R.id.tvCity)

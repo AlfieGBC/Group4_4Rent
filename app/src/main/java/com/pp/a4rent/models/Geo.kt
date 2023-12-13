@@ -1,6 +1,6 @@
 package com.pp.a4rent.models
 
-class Geo(
-    var latitude: Double,
-    var longitude: Double,
+data class Geo(
+    var latitude: Double = 0.0,
+    var longitude: Double = 0.0,
 )

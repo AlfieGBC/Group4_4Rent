@@ -1,6 +1,8 @@
 package com.pp.a4rent.models
 
-enum class PropertyType(val displayName: String) {
+enum class PropertyType(
+    val displayName: String = ""
+) {
     CONDO("Condo"),
     HOUSE("House"),
     APARTMENT("Apartment"),

@@ -168,7 +168,7 @@ class TenantAccountActivity : AppCompatActivity() {
 
         // send the details of the rental post to next screen
         // rentalDatasource -> PropertyRental class must be Serializable interface or protocol
-        intent.putExtra("ROW_RENTAL_POST_DETAIL",   favRentalPropertyArrayList.get(rowPosition))
+//        intent.putExtra("ROW_RENTAL_POST_DETAIL",   favRentalPropertyArrayList.get(rowPosition))
 
 
         Log.d("TAG", "${favRentalPropertyArrayList.get(rowPosition)}")
