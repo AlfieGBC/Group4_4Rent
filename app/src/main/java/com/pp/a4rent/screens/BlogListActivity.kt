@@ -8,7 +8,7 @@ import com.pp.a4rent.adapters.BlogAdapter
 import com.pp.a4rent.databinding.ActivityBlogListBinding
 import com.pp.a4rent.models.Blog
 import com.pp.a4rent.repositories.BlogRepository
-import com.pp.a4rent.clickListeners.OnBlogClickListener
+import com.pp.a4rent.listeners.OnBlogClickListener
 
 class BlogListActivity : AppCompatActivity(), OnBlogClickListener {
     private lateinit var binding: ActivityBlogListBinding

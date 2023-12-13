@@ -17,7 +17,8 @@ class RentalsPostAdapter(
     private val context: Context,
     private val rentalsList: ArrayList<Property>,
     private val rowClickHandler: (Int) -> Unit,
-    private val favBtnClickHandler: (Int) -> Unit
+    private val favBtnClickHandler: (Int) -> Unit,
+    private val favList: List<Property>
 ) : RecyclerView.Adapter<RentalsPostAdapter.RentalsPostViewHolder>() {
 
     inner class RentalsPostViewHolder(itemView: View) : RecyclerView.ViewHolder (itemView) {
@@ -89,11 +90,19 @@ class RentalsPostAdapter(
         Log.d("TAG", " currRentalPost.favourite   ${currRentalPost.favourite}")
 
         // current rental post's favourite is true then, color the star
-        if (currRentalPost.favourite!!) {
-            btnFav.setChecked(true)
-        } else {
-            btnFav.setChecked(false)
+
+//        if (currRentalPost.favourite!!) {
+//            btnFav.setChecked(true)
+//        } else {
+//            btnFav.setChecked(false)
+//        }
+
+        val isFavorite = favList.any {
+                    it.propertyAddress.street == currRentalPost.propertyAddress.street &&
+                    it.propertyAddress.city == currRentalPost.propertyAddress.city
         }
+
+        btnFav.setChecked(isFavorite)
     }
 
 }

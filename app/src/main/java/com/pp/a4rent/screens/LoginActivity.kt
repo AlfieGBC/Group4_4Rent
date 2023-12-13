@@ -13,6 +13,7 @@ import com.pp.a4rent.ProfileActivity
 import com.pp.a4rent.MainActivity
 import com.pp.a4rent.R
 import com.pp.a4rent.databinding.ActivityLoginBinding
+import com.pp.a4rent.repositories.PropertyRepository
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -21,6 +22,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var prefs: SharedPreferences
 
     private lateinit var firebaseAuth : FirebaseAuth
+    private lateinit var propertyRepository: PropertyRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +46,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         binding.tvSignUpLink.setOnClickListener(this)
 
         binding.returnBack.setOnClickListener(this)
+
+        propertyRepository = PropertyRepository(applicationContext)
     }
 
     override fun onClick(view: View?) {
@@ -100,7 +104,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         this.firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    getUserRoleFromDatabase(email) { userRole ->
+                    propertyRepository.getUserRoleFromDatabase(email) { userRole ->
                         Log.d(TAG, "LogIn: Login successfully")
                         Log.d(TAG, "user role: $userRole")
 
@@ -127,33 +131,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
     }
-
-       // fun to retrieve the user roles from the database
-        private fun getUserRoleFromDatabase(email: String, callback: (String) -> Unit) {
-            val db = FirebaseFirestore.getInstance()
-
-            db.collection("Users")
-                .whereEqualTo("email", email)
-                .get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        val userRole = document.getString("role")
-                        if (userRole != null) {
-                            // Invoke the callback with the user's role
-                            callback.invoke(userRole)
-                            // Exit the loop once role is found
-                            return@addOnSuccessListener
-                        }
-                    }
-                    // If no role found, callback with a default role
-                    callback.invoke("guest")
-                }
-                .addOnFailureListener { exception ->
-                    Log.e(TAG, "Error getting user role", exception)
-                    // Invoke the callback with a default role in case of failure
-                    callback.invoke("guest")
-                }
-        }
 
 
         private fun saveToPrefs(email: String, password: String) {
