@@ -360,23 +360,23 @@ class PropertyRepository(private val context : Context) {
     }
 
     // For removing rental property posts from the favourite list
-//    fun deletePropertyFromFavList(favRentalPropertyToDelete: Property){
-//        try {
-//            db.collection(COLLECTION_USERS)
-//                .document(loggedInUserEmail)
-//                .collection(COLLECTION_FAV_LIST)
-//                .document(favRentalPropertyToDelete.propertyId)
-//                .delete()
-//                .addOnSuccessListener { docRef ->
-//                    Log.d(TAG, "deletePropertyFromFavList: document deleted successfully : $docRef")
-//                }
-//                .addOnFailureListener { ex ->
-//                    Log.e(TAG, "deletePropertyFromFavList: Failed to delete document: $ex")
-//                }
-//        } catch (ex: Exception) {
-//            Log.e(TAG, "deletePropertyFromFavList: Unable to delete rental post from fav list due to exception : $ex")
-//        }
-//
-//    }
+    fun deletePropertyFromFavList(favRentalPropertyToDelete: Property){
+        try {
+            db.collection(COLLECTION_USERS)
+                .document(loggedInUserEmail)
+                .collection(COLLECTION_FAV_LIST)
+                .document(favRentalPropertyToDelete.propertyId)
+                .delete()
+                .addOnSuccessListener { docRef ->
+                    Log.d(TAG, "deletePropertyFromFavList: document deleted successfully : $docRef")
+                }
+                .addOnFailureListener { ex ->
+                    Log.e(TAG, "deletePropertyFromFavList: Failed to delete document: $ex")
+                }
+        } catch (ex: Exception) {
+            Log.e(TAG, "deletePropertyFromFavList: Unable to delete rental post from fav list due to exception : $ex")
+        }
+
+    }
 
 }
