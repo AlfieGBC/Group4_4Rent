@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.location.Geocoder
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
+import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -33,6 +35,7 @@ class MyListingDetailsActivity : AppCompatActivity() {
 
     private lateinit var propertyRepository: PropertyRepository
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyListingDetailsBinding.inflate(layoutInflater)
@@ -50,50 +53,48 @@ class MyListingDetailsActivity : AppCompatActivity() {
 
         if (intent != null){
 
-            // get property id
-            val propertyId = if (intent.hasExtra("extra_property_id")) {
-                intent.getStringExtra("extra_property_id")
+            // get property obj
+            val currListingObj = if (intent.hasExtra("extra_property_obj")) {
+                intent.getSerializableExtra("extra_property_obj") as? Property
             } else {null}
 
-            if (propertyId != null){
+            if (currListingObj != null){
 
-                // get property object from database
-                propertyRepository.property.observe(this, androidx.lifecycle.Observer { currListingObj ->
+                // auto fill the views
+                this.binding.apply {
 
-                    this.binding.apply {
+                    // set spinner to previous state
+                    val spinnerPosition = getSpinnerPositionForPropertyType(currListingObj.propertyType)
+                    propertyTypeSpinnerListingDetails.setSelection(spinnerPosition)
 
-                        // set spinner to previous state
-                        val spinnerPosition = getSpinnerPositionForPropertyType(currListingObj.propertyType)
-                        propertyTypeSpinnerListingDetails.setSelection(spinnerPosition)
+                    // set the rest fields to previous states
+                    etNumOfBedroomListingDetails.setText(currListingObj.numberOfBedroom.toString())
+                    etNumOfKitchenListingDetails.setText(currListingObj.numberOKitchen.toString())
+                    etNumOfBathroomListingDetails.setText(currListingObj.numberOfBathroom.toString())
+                    etAreaListingDetails.setText(currListingObj.area.toString())
+                    etDescriptionListingDetails.setText(currListingObj.description)
+                    etAddressListingDetails.setText(currListingObj.propertyAddress.street)
+                    etAddressCityListingDetails.setText(currListingObj.propertyAddress.city)
+                    etAddressProvinceListingDetails.setText(currListingObj.propertyAddress.province)
+                    etAddressCountryListingDetails.setText(currListingObj.propertyAddress.country)
+                    etRentListingDetails.setText(currListingObj.rent.toString())
+                    isAvailableListingDetails.isChecked = currListingObj.available
+                }
 
-                        // set the rest fields to previous states
-                        etNumOfBedroomListingDetails.setText(currListingObj.numberOfBedroom.toString())
-                        etNumOfKitchenListingDetails.setText(currListingObj.numberOKitchen.toString())
-                        etNumOfBathroomListingDetails.setText(currListingObj.numberOfBathroom.toString())
-                        etAreaListingDetails.setText(currListingObj.area.toString())
-                        etDescriptionListingDetails.setText(currListingObj.description)
-                        etAddressListingDetails.setText(currListingObj.propertyAddress.street)
-                        etAddressCityListingDetails.setText(currListingObj.propertyAddress.city)
-                        etAddressProvinceListingDetails.setText(currListingObj.propertyAddress.province)
-                        etAddressCountryListingDetails.setText(currListingObj.propertyAddress.country)
-                        etRentListingDetails.setText(currListingObj.rent.toString())
-                        isAvailableListingDetails.isChecked = currListingObj.available
-                    }
+                // when SAVE button clicked
+                binding.btnSaveListingDetails.setOnClickListener {
+                    btnSaveClicked(currListingObj)
+                    finish()
+                }
 
-                    // when SAVE button clicked
-                    binding.btnSaveListingDetails.setOnClickListener {
-                        btnSaveClicked(currListingObj)
-                        finish()
-                    }
+                // when Delete btn is clicked
+                binding.btnDeleteListingDetails.setOnClickListener {
+                    btnDeleteClicked(currListingObj)
+                    finish()
+                }
 
-                    // when Delete btn is clicked
-                    binding.btnDeleteListingDetails.setOnClickListener {
-                        btnDeleteClicked(currListingObj)
-                        finish()
-                    }
-                })
             } else {
-                Log.e(TAG, "onCreate: propertyId is null.", )
+                Log.e(TAG, "onCreate: propertyObj is null.", )
             }
         }
     }

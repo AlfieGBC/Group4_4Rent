@@ -88,7 +88,7 @@ class MyListingsActivity : AppCompatActivity() {
 
     private fun listingRowClicked(position:Int){
         val intent = Intent(this@MyListingsActivity, MyListingDetailsActivity::class.java)
-        intent.putExtra("extra_property_id", myListingsList[position].propertyId)
+        intent.putExtra("extra_property_obj", myListingsList[position])
         startActivity(intent)
     }
 

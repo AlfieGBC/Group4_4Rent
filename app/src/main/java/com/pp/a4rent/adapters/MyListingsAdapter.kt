@@ -43,7 +43,7 @@ class MyListingsAdapter(
         tvRent.text = "$${currListing.rent}"
         tvNumOfRooms.text = "${currListing.numberOfBedroom} Beds | ${currListing.numberOfBathroom} Baths"
         tvPropertyType.text = currListing.propertyType.displayName
-//        tvAddress.text = currListing.propertyAddress
+        tvAddress.text = currListing.propertyAddress.street
     }
 
 }
