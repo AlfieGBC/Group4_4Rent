@@ -182,9 +182,17 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
         val userEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
         val propertyType = PropertyType.fromDisplayName(selectedPropertyTypeName)
         val propertyToAdd = Property(
-            UUID.randomUUID().toString(),
-            propertyType, userEmail, numOfBedrooms, numOfKitchens, numOfBathrooms,
-            area, description, address, rent, isAvailable, geo,
+            propertyType = propertyType,
+            ownerInfo = userEmail,
+            numberOfBedroom = numOfBedrooms,
+            numberOKitchen = numOfKitchens,
+            numberOfBathroom = numOfBathrooms,
+            area = area,
+            description = description,
+            propertyAddress = address,
+            rent = rent,
+            available = isAvailable,
+            geo = geo,
         )
         Log.d(TAG, "publishBtnClicked: propertyToAdd: $propertyToAdd")
 
