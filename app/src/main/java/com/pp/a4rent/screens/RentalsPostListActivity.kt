@@ -1,5 +1,5 @@
 package com.pp.a4rent.screens
-
+ 
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +21,10 @@ import com.pp.a4rent.databinding.ActivityRentalsPostListBinding
 import com.pp.a4rent.models.Property
 import com.pp.a4rent.models.User
 import com.pp.a4rent.repositories.PropertyRepository
+
+import android.view.View
+import android.widget.RadioButton
+import android.widget.RadioGroup
 
 class RentalsPostListActivity : AppCompatActivity() {
 
@@ -107,6 +111,20 @@ class RentalsPostListActivity : AppCompatActivity() {
                 favRentalPropertyArrayList.clear()
                 favRentalPropertyArrayList.addAll(rentalsList)
 
+            }
+        }
+
+        // TODO: (Alfie) testing google map
+        val toggle: RadioGroup = findViewById(R.id.rg_toggle)
+        toggle.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.rb_map -> {
+                    val intent = Intent(this, MapActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.rb_list -> {
+                    setContentView(binding.root)
+                }
             }
         }
 
