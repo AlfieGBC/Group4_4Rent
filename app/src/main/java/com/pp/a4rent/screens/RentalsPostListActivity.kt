@@ -275,40 +275,10 @@ class RentalsPostListActivity : AppCompatActivity(), OnRentalPostClickListener {
     override fun onRentalPropertySelected(property: Property) {
         val mainIntent = Intent(this, RentalPostDetailActivity::class.java)
         mainIntent.putExtra("EXTRA_PROPERTY", property)
-//        Log.d("CHECK", "$expenseArrayList")
         startActivity(mainIntent)
     }
 
     // rv: Favorite button click handler
-//    fun favButtonClicked(position:Int) {
-//
-//        var favRentals = searchedRentalsList.get(position)
-//
-//        // checks user is logged in or not,
-//        // - if yes, navigate user to short-listed rentals page (favourite page)
-//
-//        if (!loggedInUserEmail.isNotEmpty()) {
-//            this.rentalPropertyAdapter.notifyDataSetChanged()
-//            val userIntent = Intent(this@RentalsPostListActivity, LoginActivity::class.java)
-//            startActivity(userIntent)
-//        } else {
-//            rentalPropertyRepository.isPropertyExistInFavList(favRentals){ exists ->
-//                if (exists) {
-//                    rentalPropertyRepository.deletePropertyFromFavList(favRentals)
-//                    val snackbar = Snackbar.make(binding.root, "Removed from Fav Rental List", Snackbar.LENGTH_LONG)
-//                    snackbar.show()
-//                } else {
-//                    rentalPropertyRepository.addPropertyToFavList(favRentals)
-//                    val snackbar = Snackbar.make(binding.root, "Added to Favourite Rental List", Snackbar.LENGTH_LONG)
-//                    snackbar.show()
-//                }
-//            }
-//
-//
-//            Log.d(TAG, "FAV Rental To add ${favRentals}")
-//        }
-//    }
-
     override fun favButtonClicked(favRentals: Property) {
         // checks user is logged in or not,
         // - if yes, navigate user to short-listed rentals page (favourite page)
@@ -329,7 +299,6 @@ class RentalsPostListActivity : AppCompatActivity(), OnRentalPostClickListener {
                     snackbar.show()
                 }
             }
-
 
             Log.d(TAG, "FAV Rental To add ${favRentals}")
         }
@@ -444,7 +413,6 @@ class RentalsPostListActivity : AppCompatActivity(), OnRentalPostClickListener {
                     sharedPrefs.edit().remove("USER_PASSWORD").apply()
                 }
                 FirebaseAuth.getInstance().signOut()
-//                this@UserProfileInfoActivity.finish()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 return true
