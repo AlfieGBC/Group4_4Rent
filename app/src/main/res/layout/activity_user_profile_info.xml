@@ -48,7 +48,7 @@ You can edit and manage your account information here."
         android:paddingTop="10dp"
         android:paddingLeft="10dp"
         android:text="Role:"
-        android:textSize="25sp"
+        android:textSize="23sp"
         android:textColor="@android:color/black"
         app:layout_constraintTop_toBottomOf="@+id/tv_profile_subheading"
         tools:ignore="MissingConstraints" />
@@ -59,7 +59,7 @@ You can edit and manage your account information here."
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="User"
-        android:textSize="25sp"
+        android:textSize="23sp"
         android:textColor="#008ba6"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
@@ -67,6 +67,31 @@ You can edit and manage your account information here."
         app:layout_constraintTop_toBottomOf="@+id/tv_profile_subheading"
         />
 
+    <TextView
+        android:id="@+id/tv_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:paddingTop="10dp"
+        android:text="Email:"
+        android:textSize="23sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_role" />
+
+
+    <TextView
+        android:id="@+id/tv_email_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:text="email"
+        android:textSize="23sp"
+        android:textColor="#008ba6"
+        app:layout_constraintStart_toEndOf="@+id/tv_email"
+        app:layout_constraintTop_toBottomOf="@+id/tv_role_data" />
 
     <EditText
         android:id="@+id/et_first_name"
@@ -76,7 +101,7 @@ You can edit and manage your account information here."
         android:hint="First Name"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_role" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_email" />
 
     <EditText
         android:id="@+id/et_last_name"
@@ -89,16 +114,6 @@ You can edit and manage your account information here."
         app:layout_constraintTop_toBottomOf="@+id/et_first_name" />
 
     <EditText
-        android:id="@+id/et_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:hint="Email"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_last_name" />
-
-    <EditText
         android:id="@+id/et_phone_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -106,7 +121,7 @@ You can edit and manage your account information here."
         android:hint="Phone Number"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_email" />
+        app:layout_constraintTop_toBottomOf="@+id/et_last_name" />
 
     <EditText
         android:id="@+id/et_password"
