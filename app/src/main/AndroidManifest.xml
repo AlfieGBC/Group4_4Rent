@@ -47,7 +47,6 @@
         <activity
             android:name=".screens.BlogListActivity"
             android:exported="false" />
-        <!--   TODO: (Alfie) testing google map    -->
         <activity
             android:name=".screens.MapActivity"
             android:exported="false" />

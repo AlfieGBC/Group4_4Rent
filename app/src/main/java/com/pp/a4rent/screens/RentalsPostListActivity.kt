@@ -22,7 +22,6 @@ import com.pp.a4rent.repositories.PropertyRepository
 
 import android.widget.RadioGroup
 import com.pp.a4rent.listeners.OnRentalPostClickListener
-import java.io.Serializable
 
 class RentalsPostListActivity : AppCompatActivity(), OnRentalPostClickListener {
 
@@ -37,7 +36,7 @@ class RentalsPostListActivity : AppCompatActivity(), OnRentalPostClickListener {
     private lateinit var favRentalPropertyArrayList: ArrayList<Property>
     private var loggedInUserEmail = ""
 
-
+    private var receiveSearchInput: String? = null
 
     // Shared Preferences variables
     private lateinit var sharedPrefs: SharedPreferences
@@ -90,15 +89,12 @@ class RentalsPostListActivity : AppCompatActivity(), OnRentalPostClickListener {
         }
 
         // search system
-        val receiveSearchInput = intent.getStringExtra("FILTER_DATA_EXTRA")
+        receiveSearchInput = intent.getStringExtra("FILTER_DATA_EXTRA")
 
         if (receiveSearchInput != null) {
-            // Handle the search criteria and filter the rentals accordingly
-            // Update the UI based on the filtered rentals
             Log.d("TAG", "list: receiveSearchInput ${receiveSearchInput}")
         }
 
-        // TODO: (Alfie) testing google map
         val toggle: RadioGroup = findViewById(R.id.rg_toggle)
         toggle.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
@@ -113,131 +109,26 @@ class RentalsPostListActivity : AppCompatActivity(), OnRentalPostClickListener {
             }
         }
 
-//        // Get existing rental list from SharedPreferences
-//        this.prefEditor = this.sharedPreferences.edit()
-//
-//        val gson = Gson()
-//        val userJson = intent.getStringExtra("user")
-//        Log.d("TAG", "check ${userJson}")
-//        var savedRentalsFromSP: String? = null
-//        if(userJson != null) {
-//            val user = gson.fromJson(userJson, User::class.java)
-//            savedRentalsFromSP = sharedPreferences.getString("KEY_RENTALS_DATASOURCE"+user.userId, "")
-//        }
-//
-//        // get favourite rentals on activity create
-//        if (savedRentalsFromSP == null || savedRentalsFromSP == "") {
-//            // - if no, we should create a brand new list of fruits
-//            // do nothing!
-//        } else {
-//            // if yes, convert the string back to list of rentals
-//            val typeToken = object : TypeToken<List<PropertyRental>>() {}.type
-//            // convert the string back to a list
-//            val rentalsList = gson.fromJson<List<PropertyRental>>(savedRentalsFromSP, typeToken)
-//
-//            Log.d("TAG", "checkinggggg hai ${favouriteRentalPostsList}")
-//
-//            // replace this screen's savedRentals variable with whatever came from the sp
-//            favouriteRentalPostsList = rentalsList.toMutableList()
-//
-//            Log.d("TAG", "heram hai ${favouriteRentalPostsList}")
-//        }
+        // setup adapter
+        // Update adapter to accept a list of rentals
+        rentalPropertyAdapter = RentalsPostAdapter(
+            this,
+            // pass the rental list data to the adapter
+            searchedRentalsList,
+            this,
+            this,
+            favRentalPropertyArrayList
+            )
 
-        /// list loop in each item -> check if it exists in favourite or not
-        // if exists then set isFavourite = true
-//        for (rental in searchedRentalsList) {
-////            for (fav in favouriteRentalPostsList) {
-//                Log.d("TAG", "Rental found ${rental.propertyId}")
-//                if (rental.favourite == false) {
-//                    Log.d("TAG", "Favourite found ${rental.propertyId}")
-//                    rental.favourite = true
-////                }
-//            }
-//        }
-//
-//        // Search System
-//        // get intent data from main activity
-//        // receive the search input data
-//        val receiveSearchInput = intent.getStringExtra("FILTER_DATA_EXTRA")
-//
-//        if (receiveSearchInput != null) {
-//            Log.d("TAG", receiveSearchInput)
-//
-//            var found = false;
-//            // get the data from the array
-//            for (rental in rentalDatasource) {
-//                for (fav in favouriteRentalPostsList) {
-//                    Log.d("TAG", "Rental found ${rental.propertyId}")
-//                    if (rental.propertyId == fav.propertyId) {
-//                        Log.d("TAG", "Favourite found ${rental.propertyId}")
-//                        rental.favourite = true
-//                    }
-//                }
-//                // check condition
-//                if (rental.propertyType.displayName.toLowerCase() == receiveSearchInput.toLowerCase() ||
-//                    rental.propertyType.displayName.toLowerCase().contains(receiveSearchInput.toLowerCase()) ||
-//                    rental.propertyAddress.city.toLowerCase() == receiveSearchInput.toLowerCase() ||
-//                    rental.propertyAddress.city.toLowerCase().contains(receiveSearchInput.toLowerCase())
-////                    rental.propertyAddress.postalCode.toLowerCase() == receiveSearchInput.toLowerCase() ||
-////                    rental.propertyAddress.postalCode.toLowerCase().contains(receiveSearchInput.toString().toLowerCase()) ||
-//                    ) {
-//
-//                    Log.d("TAG", "PAss")
-//                    found = true
-//
-//                    // - if yes, then store that into a variable
-//                    val rentalToAdd = Property(
-//                        rental.propertyId,
-//                        rental.propertyType,
-//                        rental.ownerInfo,
-//                        rental.numberOfBedroom,
-//                        rental.numberOKitchen,
-//                        rental.numberOfBathroom,
-//                        rental.area,
-//                        rental.description,
-//                        rental.propertyAddress,
-////                        rental.postalCode,
-////                        rental.propertyAddress.city,
-//                        rental.rent,
-//                        rental.available,
-//                        rental.geo,
-//                        rental.imageFilename,
-//                        rental.favourite)
-//
-//                    // and add that into the empty list
-//                    searchedRentalsList.add(rentalToAdd)
-//
-                    // setup adapter
-                    // Update adapter to accept a list of rentals
-                    rentalPropertyAdapter = RentalsPostAdapter(
-                        this,
-                        // pass the rental list data to the adapter
-                        searchedRentalsList,
-                        this,
-                        this,
-                        favRentalPropertyArrayList
-                        )
-
-                    // setup rv
-                    binding.rvItems.adapter = rentalPropertyAdapter
-                    binding.rvItems.layoutManager = LinearLayoutManager(this)
-                    binding.rvItems.addItemDecoration(
-                        DividerItemDecoration(
-                            this,
-                            LinearLayoutManager.VERTICAL
-                        )
-                    )
-//
-//                }
-//            }
-//
-//            if (!found)
-//            {
-//                binding.tvRentalErrorMsg.setText("Result not found!")
-//            }
-//
-//        }
-
+        // setup rv
+        binding.rvItems.adapter = rentalPropertyAdapter
+        binding.rvItems.layoutManager = LinearLayoutManager(this)
+        binding.rvItems.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                LinearLayoutManager.VERTICAL
+            )
+        )
     }
 
     override fun onResume() {
@@ -246,41 +137,37 @@ class RentalsPostListActivity : AppCompatActivity(), OnRentalPostClickListener {
         rentalPropertyRepository.getAllProperties()
 
         rentalPropertyRepository.allProperties.observe(this) { rentalList ->
-
             if (rentalList != null) {
                 searchedRentalsList.clear()
                 searchedRentalsList.addAll(rentalList)
-                rentalPropertyAdapter.notifyDataSetChanged()
+                applyFilter()
             }
         }
-
     }
 
+    private fun updateUIAfterFiltering(filteredProperties: List<Property>) {
+        rentalPropertyAdapter.updateList(filteredProperties)
 
-    // rv:  Row click handler
-//    fun rowClicked(rowPosition: Int){
-//
-//        // checks user is logged in or not
-//        if (!loggedInUserEmail.isNotEmpty()) {
-//            val userIntent = Intent(this@RentalsPostListActivity, LoginActivity::class.java)
-//            startActivity(userIntent)
-//        } else {
-//            var selectedRental: Property = searchedRentalsList.get(rowPosition)
-//
-//            // snackbar
-//            val snackbar = Snackbar.make(binding.root, "${selectedRental.toString()}, for row${rowPosition}", Snackbar.LENGTH_LONG)
-//            snackbar.show()
-//
-//            // navigate to rental details page
-//            val intent = Intent(this, RentalPostDetailActivity::class.java)
-//            intent.putExtra("ROW_RENTAL_POST_DETAIL", rowPosition)
-//
-//            // send the details of the rental post to next screen
-//            Log.d("TAG", "${searchedRentalsList.get(rowPosition)}")
-//
-//            startActivity(intent)
-//        }
-//    }
+        // Update the count TextView
+        val resultCount = filteredProperties.size
+        binding.tvSearchResultCount.text = "${resultCount} Apartments for rent in ${receiveSearchInput}"
+        rentalPropertyAdapter.notifyDataSetChanged()
+    }
+
+    private fun applyFilter() {
+        val filteredProperties = if (receiveSearchInput != null) {
+            // Filter properties based on search criteria
+            searchedRentalsList.filter { property ->
+                val addressString = "${property.propertyAddress.street}, ${property.propertyAddress.city}, ${property.propertyAddress.province}"
+                addressString.contains(receiveSearchInput!!, ignoreCase = true)
+            }
+        } else {
+            emptyList()
+        }
+
+        updateUIAfterFiltering(filteredProperties)
+    }
+
 
     override fun onRentalPropertySelected(property: Property) {
         val mainIntent = Intent(this, RentalPostDetailActivity::class.java)
@@ -313,8 +200,6 @@ class RentalsPostListActivity : AppCompatActivity(), OnRentalPostClickListener {
             Log.d(TAG, "FAV Rental To add ${favRentals}")
         }
     }
-
-
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -10,7 +10,7 @@ import com.pp.a4rent.models.Property
 
 class RentalsPostAdapter(
     private val context: Context,
-    private val rentalsList: ArrayList<Property>,
+    private var rentalsList: ArrayList<Property>,
     private val onRentalPostClickListener: OnRentalPostClickListener,
     private val favBtnClickListener: OnRentalPostClickListener,
     private var favList: List<Property>
@@ -80,4 +80,8 @@ class RentalsPostAdapter(
         }
     }
 
+    fun updateList(newList: List<Property>) {
+        rentalsList = newList as ArrayList<Property>
+        notifyDataSetChanged()
+    }
 }
