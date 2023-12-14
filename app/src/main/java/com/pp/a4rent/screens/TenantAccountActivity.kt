@@ -62,7 +62,7 @@ class TenantAccountActivity : AppCompatActivity() {
         }
 
 //      Initialize SharedPreference and Editor instance
-        this.sharedPreferences = getSharedPreferences("MY_APP_PREFS", MODE_PRIVATE)
+        this.sharedPreferences = applicationContext.getSharedPreferences(packageName, MODE_PRIVATE)
 
         if (sharedPreferences.contains("USER_EMAIL")){
             loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
@@ -182,18 +182,16 @@ class TenantAccountActivity : AppCompatActivity() {
     // rv: Favorite button click handler
     fun favButtonClicked(position:Int) {
 
+        val favRentalToDelete = favRentalPropertyArrayList.get(position)
+        propertyRepository.deletePropertyFromFavList(favRentalToDelete)
 
-            val favRentalToDelete = favRentalPropertyArrayList.get(position)
-            propertyRepository.deletePropertyFromFavList(favRentalToDelete)
+        // After deleting the property, adapter must be notified
+        rentalPropertyAdapter.notifyDataSetChanged()
 
-            // After deleting the property, adapter must be notified
-            rentalPropertyAdapter.notifyDataSetChanged()
+        val snackbar = Snackbar.make(binding.root, "Favorite ${position} is deleted", Snackbar.LENGTH_LONG)
+        snackbar.show()
 
-            val snackbar = Snackbar.make(binding.root, "Favorite ${position} is deleted", Snackbar.LENGTH_LONG)
-            snackbar.show()
-
-
-
+        Log.d(TAG, "Check login : $loggedInUserEmail")
     }
 
 
@@ -229,6 +227,8 @@ class TenantAccountActivity : AppCompatActivity() {
 
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this, MainActivity::class.java)
+                loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
+                sidebarIntent.putExtra("USER_EMAIL", "NA")
 //                // get the user info from login page
 //                val userJson = intent.getStringExtra("user")
                 // pass this info to next page, which is tenant profile info page
@@ -254,6 +254,9 @@ class TenantAccountActivity : AppCompatActivity() {
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this@TenantAccountActivity, TenantAccountActivity::class.java)
 
+                loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
+                sidebarIntent.putExtra("USER_EMAIL", "NA")
+
 //                // get the user info from login page
 //                val userJson = intent.getStringExtra("user")
 //                // pass this info to next page, which is tenant profile info page
@@ -268,6 +271,10 @@ class TenantAccountActivity : AppCompatActivity() {
 
                 // navigate to 2nd screen
                 val sidebarTenantIntent = Intent(this@TenantAccountActivity, UserProfileInfoActivity::class.java)
+
+                loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
+                sidebarTenantIntent.putExtra("USER_EMAIL", "NA")
+
 //                // get the user info from login page
 //                val userJson = intent.getStringExtra("user")
 //                // pass this info to next page, which is tenant profile info page
@@ -278,12 +285,18 @@ class TenantAccountActivity : AppCompatActivity() {
             }
             R.id.mi_logout -> {
                 // navigate to 2nd screen
-//                val sidebarIntent = Intent(this, MainActivity::class.java)
-//                startActivity(sidebarIntent)
 
-                Log.d("TAG", "onOptionsItemSelected: Sign Out option is selected")
+                Log.d("TAG", "onOptionsItemSelected: Sign Out option is selected ${sharedPreferences.contains("USER_EMAIL")} ${sharedPreferences.edit().remove("USER_EMAIL").apply()}")
+                if (sharedPreferences.contains("USER_EMAIL")) {
+                    sharedPreferences.edit().remove("USER_EMAIL").apply()
+                }
+                if (sharedPreferences.contains("USER_PASSWORD")) {
+                    sharedPreferences.edit().remove("USER_PASSWORD").apply()
+                }
                 FirebaseAuth.getInstance().signOut()
-                this@TenantAccountActivity.finish()
+//                this@UserProfileInfoActivity.finish()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
                 return true
             }
             else -> super.onOptionsItemSelected(item)

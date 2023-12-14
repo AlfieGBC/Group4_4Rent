@@ -55,10 +55,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Initialize SharedPreference
-        sharedPreferences = getSharedPreferences("MY_APP_PREFS", MODE_PRIVATE)
+        sharedPreferences = applicationContext.getSharedPreferences(packageName, MODE_PRIVATE)
+        propertyRepository = PropertyRepository(applicationContext)
 
         if (sharedPreferences.contains("USER_EMAIL")){
             loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
+
+            Log.d(TAG, "Check login first: $loggedInUserEmail")
         }
 
         // For search button
@@ -81,6 +84,9 @@ class MainActivity : AppCompatActivity() {
         binding.btnSearchWinnipeg.setOnClickListener {
             this.goToWinnipegRentals()
         }
+
+
+        Log.d(TAG, "Check login : $loggedInUserEmail")
     }
 
     // Function to navigate users to the list of Rentals post page
@@ -147,11 +153,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_menu_options, menu)
 
-
+        Log.d(TAG, "Check login : $loggedInUserEmail")
         // checks user is logged in or not
         if (loggedInUserEmail.isNotEmpty()) {
             propertyRepository.getUserRoleFromDatabase(loggedInUserEmail) { userRole ->
-                Log.d(TAG, "user role: $userRole")
+                Log.d(TAG, "user role testing: $userRole")
 
                 // Show different menu options to the users based on their role
 
@@ -183,6 +189,8 @@ class MainActivity : AppCompatActivity() {
 //                val userJson = intent.getStringExtra("user")
 //                // pass this info to next page, which is tenant profile info page
 //                sidebarIntent.putExtra("user", userJson)
+                loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
+                sidebarIntent.putExtra("USER_EMAIL", "NA")
                 startActivity(sidebarIntent)
 
                 return true
@@ -226,6 +234,8 @@ class MainActivity : AppCompatActivity() {
 //                // pass this info to next page, which is tenant profile info page
 //                sidebarIntent.putExtra("user", userJson)
 
+                loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
+                sidebarIntent.putExtra("USER_EMAIL", "NA")
                 startActivity(sidebarIntent)
 
                 return true
@@ -246,12 +256,18 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.mi_logout -> {
                 // navigate to 2nd screen
-//                val sidebarIntent = Intent(this@MainActivity, MainActivity::class.java)
-//                startActivity(sidebarIntent)
 
-                Log.d(TAG, "onOptionsItemSelected: Sign Out option is selected")
+                Log.d("TAG", "onOptionsItemSelected: Sign Out option is selected ${sharedPreferences.contains("USER_EMAIL")} ${sharedPreferences.edit().remove("USER_EMAIL").apply()}")
+                if (sharedPreferences.contains("USER_EMAIL")) {
+                    sharedPreferences.edit().remove("USER_EMAIL").apply()
+                }
+                if (sharedPreferences.contains("USER_PASSWORD")) {
+                    sharedPreferences.edit().remove("USER_PASSWORD").apply()
+                }
                 FirebaseAuth.getInstance().signOut()
-                this@MainActivity.finish()
+//                this@UserProfileInfoActivity.finish()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
                 return true
             }
 
