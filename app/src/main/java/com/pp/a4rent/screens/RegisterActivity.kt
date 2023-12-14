@@ -30,12 +30,12 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnRegister.setOnClickListener(this)
-
         // initialize firebase auth
         this.firebaseAuth = FirebaseAuth.getInstance()
 
         this.userRepository = UserRepository(applicationContext)
+
+        binding.btnRegister.setOnClickListener(this)
 
         binding.tvLoginLink.setOnClickListener{
             startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
@@ -96,7 +96,8 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
 //            validData = false
 //        }
 //        else if (!email.contains("@")) {
-//            Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show()
+//            binding.etEmail.setError("Invalid email address")
+////            Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show()
 //            validData = false
 //        }
         else {
@@ -111,9 +112,11 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
 //        else if (password.length < minLength || password.length > maxLength) {
 //            binding.etPassword.setError("Password must be between $minLength and $maxLength characters long")
 ////            Toast.makeText(this, "Password must be between $minLength and $maxLength characters long", Toast.LENGTH_SHORT).show()
+//
 //            validData = false
 //        }
         else {
+
             if (binding.etConfirmPassword.getText().toString().isEmpty()) {
                 binding.etConfirmPassword.setError("Confirm Password Cannot be Empty")
                 validData = false
@@ -125,6 +128,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                     validData = false
                 } else {
                     password = binding.etPassword.getText().toString()
+                    Log.d(TAG, "ERROR:  ${password}")
                 }
             }
         }

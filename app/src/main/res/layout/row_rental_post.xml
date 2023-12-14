@@ -10,9 +10,9 @@
 
     <ImageView
         android:id="@+id/ivRentalPostImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_width="170dp"
+        android:layout_height="130dp"
+        android:layout_margin="8dp"
         android:contentDescription="Fruit Image Goes Here"
         android:src="@drawable/ic_launcher_background"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,7 +94,6 @@
         android:textColor="#4D575E"
         android:textSize="15sp"
         app:layout_constraintTop_toBottomOf="@id/tvDetail"
-
         app:layout_constraintStart_toStartOf="@id/tvTitle"/>
 
     <TextView
@@ -121,7 +120,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toEndOf="@+id/tvTitle"
-        tools:layout_editor_absoluteY="1dp" />
+        tools:layout_editor_absoluteY="1dp"
+        tools:ignore="MissingConstraints" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
