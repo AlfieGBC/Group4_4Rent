@@ -25,8 +25,6 @@ import java.io.Serializable
 
 class MyListingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMyListingsBinding
-//    private lateinit var sharedPreferences: SharedPreferences
-//    private lateinit var editor: SharedPreferences.Editor
     private var myListingsList = mutableListOf<Property>()
     private lateinit var adapter: MyListingsAdapter
     private lateinit var propertyRepository: PropertyRepository
@@ -40,11 +38,6 @@ class MyListingsActivity : AppCompatActivity() {
         // set up menu
         setSupportActionBar(this.binding.menu)
 
-        // initiate shared preference
-//        sharedPreferences = getSharedPreferences(packageName, Context.MODE_PRIVATE)
-//        editor = sharedPreferences.edit()
-
-
         // set up the adapter
         this.adapter = MyListingsAdapter(myListingsList) { pos -> listingRowClicked(pos) }
         binding.rvMyListings.adapter = adapter
@@ -57,32 +50,6 @@ class MyListingsActivity : AppCompatActivity() {
         )
         Log.d("myListingsList", "onCreate: myListingsList: $myListingsList\n" +
                 "myListingsList size: ${myListingsList.size}")
-
-        // get user object from intent
-//        val currIntent = this@MyListingsActivity.intent
-//        if (currIntent != null){
-//            userObj = if (currIntent.hasExtra("extra_userObj")) {
-//                currIntent.getSerializableExtra("extra_userObj") as User
-//            } else {null}
-//            if (userObj != null){
-//                // if user object exist
-//
-//                // get myListings list from sharedPreference
-//                val myListingsListJson = sharedPreferences.getString(userObj!!.userId, "")
-//                if (myListingsListJson != ""){
-//                    val typeToken = object : TypeToken<List<Property>>() {}.type
-//                    myListingsList = gson.fromJson<List<Property>>(myListingsListJson, typeToken).toMutableList()
-//                }
-//
-//
-//
-//            } else {
-//                // if no user object passed through, redirect user to Login page
-//                val intent = Intent(this@MyListingsActivity, LoginActivity::class.java)
-//                startActivity(intent)
-//            }
-//        }
-
     }
 
 
@@ -126,27 +93,19 @@ class MyListingsActivity : AppCompatActivity() {
             }
 
             R.id.mi_post_rental -> {
-                // pass through the user object
                 val intent = Intent(this, RentalFormActivity::class.java)
-//                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
 
             R.id.mi_my_account -> {
-
-                // pass through the user object
                 val intent = Intent(this, UserProfileInfoActivity::class.java)
-//                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }
 
             R.id.mi_my_listings -> {
-
-                // pass through the user object
                 val intent = Intent(this, MyListingsActivity::class.java)
-//                intent.putExtra("extra_userObj", userObj)
                 startActivity(intent)
                 return true
             }

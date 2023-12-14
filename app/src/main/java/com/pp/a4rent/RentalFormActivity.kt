@@ -217,11 +217,6 @@ class RentalFormActivity : AppCompatActivity(), View.OnClickListener {
         return when (item.itemId) {
             R.id.menu_item_home -> {
                 val sidebarIntent = Intent(this, MainActivity::class.java)
-
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                sidebarIntent.putExtra("user", userJson)
                 startActivity(sidebarIntent)
 
                 return true
