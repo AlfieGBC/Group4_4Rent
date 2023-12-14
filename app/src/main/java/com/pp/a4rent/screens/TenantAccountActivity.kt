@@ -10,22 +10,21 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
 import com.pp.a4rent.MainActivity
 
 import com.pp.a4rent.R
 import com.pp.a4rent.adapters.RentalsPostAdapter
 import com.pp.a4rent.databinding.ActivityTenantAccountBinding
+import com.pp.a4rent.listeners.OnRentalPostClickListener
 import com.pp.a4rent.models.Property
-import com.pp.a4rent.models.User
 import com.pp.a4rent.repositories.PropertyRepository
+import java.io.Serializable
 
-class TenantAccountActivity : AppCompatActivity() {
+class TenantAccountActivity : AppCompatActivity(), OnRentalPostClickListener {
     private lateinit var binding: ActivityTenantAccountBinding
     private var TAG = "Tenant_Account"
     private lateinit var rentalPropertyAdapter: RentalsPostAdapter
@@ -35,10 +34,8 @@ class TenantAccountActivity : AppCompatActivity() {
 
     // TODO: Shared Preferences variables
     lateinit var sharedPreferences: SharedPreferences
-    lateinit var prefEditor: SharedPreferences.Editor
 
     // TODO: Get the current fruit data source
-//    var favRentalPostsList:MutableList<PropertyRental> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,50 +66,13 @@ class TenantAccountActivity : AppCompatActivity() {
         }
 
 
-
-//
-//
-//        // Get existing rental list from SharedPreferences
-//        this.prefEditor = this.sharedPreferences.edit()
-
-//        val gson = Gson()
-//        val userJson = intent.getStringExtra("user")
-//        Log.d("TAG", "user ${userJson}")
-//        var resultsFromSP: String? = null
-//        var user: User? = null
-//        if(userJson != null) {
-//            user = gson.fromJson(userJson, User::class.java)
-//            resultsFromSP = sharedPreferences.getString("KEY_RENTALS_DATASOURCE"+user.userId, "")
-//            Log.d("TAG", "Incoming result ${"KEY_RENTALS_DATASOURCE"+user.userId}")
-//            Log.d("TAG", "Incoming result2 ${resultsFromSP}")
-//        }
-//
-//
-//        if (resultsFromSP == null || resultsFromSP == "" ) {
-//            // - if no, we should create a brand new list of fruits
-//            // do nothing!
-//        } else {
-//            // if yes, convert the string back to list of rentals
-//            val typeToken = object : TypeToken<List<PropertyRental>>() {}.type
-//            // convert the string back to a list
-//            val rentalsList = gson.fromJson<List<PropertyRental>>(resultsFromSP, typeToken)
-//
-//            // replace this screen's savedRentals variable with whatever came from the sp
-//
-//            favRentalPostsList.addAll(rentalsList.toMutableList())
-//
-//
-//            Log.d("TAG", "Finally ${favRentalPostsList}")
-//        }
-
-
         // setup adapter
         favRentalPropertyArrayList = ArrayList()
         rentalPropertyAdapter = RentalsPostAdapter(
             this,
             favRentalPropertyArrayList,
-            {pos -> rowClicked(pos) },
-            { pos -> favButtonClicked(pos) },
+            this,
+            this,
             favRentalPropertyArrayList
         )
 
@@ -156,39 +116,26 @@ class TenantAccountActivity : AppCompatActivity() {
     }
 
     // rv:  Row click handler
-    fun rowClicked(rowPosition: Int){
-
-        var selectedRental: Property = favRentalPropertyArrayList.get(rowPosition)
-
-        // snackbar
-        val snackbar = Snackbar.make(binding.root, "${selectedRental.toString()}, for row${rowPosition}", Snackbar.LENGTH_LONG)
-        snackbar.show()
-
-        // navigate to rental details page
-        val intent = Intent(this, RentalPostDetailActivity::class.java)
-        intent.putExtra("ROW_RENTAL_POST_DETAIL_POSITION", rowPosition)
-
-        Log.d("TAG", "${favRentalPropertyArrayList.get(rowPosition)}")
-
-        startActivity(intent)
-
+    override fun onRentalPropertySelected(property: Property) {
+        val mainIntent = Intent(this, RentalPostDetailActivity::class.java)
+        mainIntent.putExtra("EXTRA_EXPENSE", property as Serializable)
+        startActivity(mainIntent)
     }
 
-    // rv: Favorite button click handler
-    fun favButtonClicked(position:Int) {
+    override fun favButtonClicked(favRentals: Property) {
+        // checks user is logged in or not,
+        // - if yes, navigate user to short-listed rentals page (favourite page)
 
-        val favRentalToDelete = favRentalPropertyArrayList.get(position)
-        propertyRepository.deletePropertyFromFavList(favRentalToDelete)
+        propertyRepository.deletePropertyFromFavList(favRentals)
 
         // After deleting the property, adapter must be notified
         rentalPropertyAdapter.notifyDataSetChanged()
 
-        val snackbar = Snackbar.make(binding.root, "Favorite ${position} is deleted", Snackbar.LENGTH_LONG)
+        val snackbar = Snackbar.make(binding.root, "Favorite is deleted", Snackbar.LENGTH_LONG)
         snackbar.show()
 
         Log.d(TAG, "Check login : $loggedInUserEmail")
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_menu_options, menu)
@@ -276,7 +223,6 @@ class TenantAccountActivity : AppCompatActivity() {
                     sharedPreferences.edit().remove("USER_PASSWORD").apply()
                 }
                 FirebaseAuth.getInstance().signOut()
-//                this@UserProfileInfoActivity.finish()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 return true

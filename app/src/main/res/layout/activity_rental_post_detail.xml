@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:text="Rental Property Type"
-                android:textSize="30sp"
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -133,7 +133,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:text="Owner Info"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_marginBottom="20dp"/>
 
 
         </LinearLayout>
