@@ -43,12 +43,12 @@
     </RadioGroup>
 
     <TextView
-        android:id="@+id/tv_maps_header"
+        android:id="@+id/tv_SearchResultCount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/google_maps"
+        android:text=""
         android:textAlignment="center"
-        android:textSize="40sp"
+        android:textSize="16sp"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintVertical_bias="0.0"

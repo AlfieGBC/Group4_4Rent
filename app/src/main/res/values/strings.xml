@@ -3,4 +3,8 @@
     <string name="map">Map</string>
     <string name="list">List</string>
     <string name="google_maps">Google Maps</string>
+    <string name="mapView" />
+    <string name="listView" />
+    <string name="listview">listView</string>
+    <string name="mapview">mapView</string>
 </resources>

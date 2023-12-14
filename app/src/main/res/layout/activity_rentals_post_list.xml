@@ -21,7 +21,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/white" />
 
-    <!--    TODO: (Alfie) testing google map-->
     <RadioGroup
         android:id="@+id/rg_toggle"
         android:layout_width="match_parent"
@@ -46,12 +45,12 @@ xmlns:android="http://schemas.android.com/apk/res/android">
     </RadioGroup>
 
     <TextView
-        android:id="@+id/tv_rental_list_header"
+        android:id="@+id/tv_SearchResultCount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Rentals List"
+        android:text=""
         android:textAlignment="center"
-        android:textSize="40sp"
+        android:textSize="16sp"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintVertical_bias="0.0"
@@ -69,7 +68,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
         android:textStyle="bold"
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_rental_list_header"
+        app:layout_constraintTop_toBottomOf="@+id/tv_SearchResultCount"
         />
 
     <androidx.recyclerview.widget.RecyclerView
