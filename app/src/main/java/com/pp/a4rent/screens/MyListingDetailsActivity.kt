@@ -135,31 +135,31 @@ class MyListingDetailsActivity : AppCompatActivity() {
         }
 
         // re-calculate geo info
-//        val geocoder: Geocoder = Geocoder(applicationContext, Locale.getDefault())
-//        var latitude = 0.0
-//        var longitude = 0.0
-//        val addressToConvert = "$street $city $province $country"
-//        try {
-//            val searchResults:MutableList<android.location.Address>? = geocoder.getFromLocationName(addressToConvert, 1)
-//            if (searchResults == null) {
-//                Log.e(TAG, "searchResults variable is null")
-//                return
-//            }
-//
-//            if (searchResults.size == 0) {
-//                Log.d(TAG, "publishBtnClicked: Search results are empty.")
-//                return
-//            } else {
-//                val foundLocation: android.location.Address = searchResults.get(0)
-//                latitude = foundLocation.latitude
-//                longitude = foundLocation.longitude
-//                var message = "Coordinates are: ${foundLocation.latitude}, ${foundLocation.longitude}"
-//                Log.d(TAG, message)
-//            }
-//        } catch(ex:Exception) {
-//            Log.e(TAG, "Error encountered while getting coordinate location.")
-//            return
-//        }
+        val geocoder: Geocoder = Geocoder(applicationContext, Locale.getDefault())
+        var latitude = 0.0
+        var longitude = 0.0
+        val addressToConvert = "$street $city $province $country"
+        try {
+            val searchResults:MutableList<android.location.Address>? = geocoder.getFromLocationName(addressToConvert, 1)
+            if (searchResults == null) {
+                Log.e(TAG, "searchResults variable is null")
+                return
+            }
+
+            if (searchResults.size == 0) {
+                Log.d(TAG, "publishBtnClicked: Search results are empty.")
+                return
+            } else {
+                val foundLocation: android.location.Address = searchResults.get(0)
+                latitude = foundLocation.latitude
+                longitude = foundLocation.longitude
+                var message = "Coordinates are: ${foundLocation.latitude}, ${foundLocation.longitude}"
+                Log.d(TAG, message)
+            }
+        } catch(ex:Exception) {
+            Log.e(TAG, "Error encountered while getting coordinate location.")
+            return
+        }
 
         // update current listing object
         val propertyToUpdate = Property(
@@ -174,6 +174,7 @@ class MyListingDetailsActivity : AppCompatActivity() {
             propertyAddress = Address(street, city, province, country),
             rent = rentFromUI,
             available = isAvailable,
+            geo = Geo(latitude, longitude)
         )
         Log.d(TAG, "btnSaveClicked: propertyToUpdate: propertyToUpdate after updating: $propertyToUpdate")
 
@@ -183,10 +184,8 @@ class MyListingDetailsActivity : AppCompatActivity() {
         // update property in database
         propertyRepository.updateProperty(propertyToUpdate)
 
-        // TODO: update property in favList
-
+        Log.d(TAG, "btnSaveClicked: Updated successfully!")
         Snackbar.make(binding.root, "Updated successfully!", Snackbar.LENGTH_LONG).show()
-        val intent = Intent(this, MyListingsActivity::class.java)
-        startActivity(intent)
+        this@MyListingDetailsActivity.finish()
     }
 }

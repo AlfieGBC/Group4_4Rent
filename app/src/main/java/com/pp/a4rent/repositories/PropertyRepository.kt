@@ -191,10 +191,14 @@ class PropertyRepository(private val context : Context) {
                                     tempList.add(currProperty)
                                 }
 
-                                DocumentChange.Type.MODIFIED -> {}
+                                DocumentChange.Type.MODIFIED -> {
+                                    getAllProperties()
+                                    return@EventListener
+                                }
 
                                 DocumentChange.Type.REMOVED -> {
-                                    tempList.remove(currProperty)
+                                    getAllProperties()
+                                    return@EventListener
                                 }
                             }
                         }
@@ -230,9 +234,13 @@ class PropertyRepository(private val context : Context) {
                                     DocumentChange.Type.ADDED -> {
                                         tempList.add(currProperty)
                                     }
-                                    DocumentChange.Type.MODIFIED -> {}
+                                    DocumentChange.Type.MODIFIED -> {
+                                        getAllPropertiesFromPropertyList()
+                                        return@EventListener
+                                    }
                                     DocumentChange.Type.REMOVED -> {
-                                        tempList.remove(currProperty)
+                                        getAllPropertiesFromPropertyList()
+                                        return@EventListener
                                     }
                                 }
                             }
