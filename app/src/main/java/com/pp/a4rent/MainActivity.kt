@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
 
                 if (userRole == "tenant") {
                     menuInflater.inflate(R.menu.tenant_profile_options, menu)
-                } else if (userRole == "Landlord") {
+                } else if (userRole == "landlord") {
                     menuInflater.inflate(R.menu.landlord_profile_options, menu)
                 }
 
