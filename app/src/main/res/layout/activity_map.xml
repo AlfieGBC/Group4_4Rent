@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-xmlns:android="http://schemas.android.com/apk/res/android">
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.RentalsPostListActivity">
+    android:orientation="vertical"
+    android:id="@+id/rootLayout"
+    tools:context=".screens.MapActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/menu_toolbar"
@@ -21,35 +18,35 @@ xmlns:android="http://schemas.android.com/apk/res/android">
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/white" />
 
-    <!--    TODO: (Alfie) testing google map-->
     <RadioGroup
         android:id="@+id/rg_toggle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/menu_toolbar">
+
         <RadioButton
             android:id="@+id/rb_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:buttonTint="@android:color/holo_orange_light"
+            android:checked="true"
             android:text="@string/map" />
+
         <RadioButton
             android:id="@+id/rb_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/list"
-            android:checked="true" />
+            android:text="@string/list" />
     </RadioGroup>
 
     <TextView
-        android:id="@+id/tv_rental_list_header"
+        android:id="@+id/tv_maps_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Rentals List"
+        android:text="@string/google_maps"
         android:textAlignment="center"
         android:textSize="40sp"
         android:textColor="@color/black"
@@ -59,24 +56,23 @@ xmlns:android="http://schemas.android.com/apk/res/android">
         app:layout_constraintTop_toBottomOf="@+id/rg_toggle"
         />
 
-    <TextView
-        android:id="@+id/tv_rental_error_msg"
+    <FrameLayout
+        android:id="@+id/mapContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:textColor="#CF0808"
-        android:textStyle="bold"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_rental_list_header"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="8dp"
+        android:background="#EEEEEE">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvItems"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_rental_error_msg"/>
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MapsActivity" />
+    </FrameLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</LinearLayout>
+
+
+
