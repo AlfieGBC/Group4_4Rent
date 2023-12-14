@@ -47,7 +47,8 @@ class RentalsPostAdapter(
             binding.tvDetail.setText("${property.propertyType}")
 
             // address
-            binding.tvAddress.setText("${property.propertyAddress.street}, ${property.propertyAddress.city}, ${property.propertyAddress.province}, ${property.propertyAddress.country}")
+            binding.tvAddress.setText("${property.propertyAddress.street}, ${property.propertyAddress.city}, \n" +
+                    "${property.propertyAddress.province}, ${property.propertyAddress.country}")
 
             // city
             binding.tvCity.setText("${property.propertyAddress.city}")
