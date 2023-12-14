@@ -35,7 +35,7 @@ class PropertyRepository(private val context : Context) {
     private val FIELD_geo = "geo";
     private val FIELD_imageFilename = "imageFilename";
     private val FIELD_favourite = "favourite"
-    private val FIELD_ID = "id"
+    private val FIELD_propertyId = "propertyId"
 
     val property: MutableLiveData<Property> = MutableLiveData<Property>()
     var allProperties : MutableLiveData<List<Property>> = MutableLiveData<List<Property>>()
@@ -53,7 +53,7 @@ class PropertyRepository(private val context : Context) {
         try {
             val data: MutableMap<String, Any> = HashMap()
 
-            data[FIELD_ID] = newProperty.propertyId
+            data[FIELD_propertyId] = newProperty.propertyId
             data[FIELD_propertyType] = newProperty.propertyType
             data[FIELD_ownerInfo] = newProperty.ownerInfo
             data[FIELD_numberOfBedroom] = newProperty.numberOfBedroom
@@ -87,7 +87,7 @@ class PropertyRepository(private val context : Context) {
             try {
                 val data: MutableMap<String, Any> = HashMap()
 
-                data[FIELD_ID] = newProperty.propertyId
+                data[FIELD_propertyId] = newProperty.propertyId
                 data[FIELD_propertyType] = newProperty.propertyType
                 data[FIELD_ownerInfo] = newProperty.ownerInfo
                 data[FIELD_numberOfBedroom] = newProperty.numberOfBedroom
@@ -238,7 +238,6 @@ class PropertyRepository(private val context : Context) {
         val data: MutableMap<String, Any> = HashMap()
         Log.d(TAG, "updatePropertyInPropertyList: propertyToUpdate: $propertyToUpdate")
 
-
         data[FIELD_propertyType] = propertyToUpdate.propertyType
         data[FIELD_ownerInfo] = propertyToUpdate.ownerInfo
         data[FIELD_numberOfBedroom] = propertyToUpdate.numberOfBedroom
@@ -255,11 +254,25 @@ class PropertyRepository(private val context : Context) {
         try {
             db.collection(COLLECTION_USERS)
                 .document(loggedInUserEmail)
-                .collection(COLLECTION_PROPERTIES)
-                .document(propertyToUpdate.propertyId)
-                .update(data)
+                .collection(COLLECTION_PROPERTY_LIST)
+                .whereEqualTo(FIELD_propertyId, propertyToUpdate.propertyId)
+                .get()
                 .addOnSuccessListener {
                     Log.d(TAG, "updatePropertyInPropertyList: Updated successfully!")
+                    for (doc in it){
+                        val docID = doc.id
+                        db.collection(COLLECTION_USERS)
+                            .document(loggedInUserEmail)
+                            .collection(COLLECTION_PROPERTY_LIST)
+                            .document(docID)
+                            .update(data)
+                            .addOnSuccessListener {
+                                Log.d(TAG, "updatePropertyInPropertyList: Updated successfully!")
+                            }
+                            .addOnFailureListener {
+                                Log.e(TAG, "updatePropertyInPropertyList: Failed to update.", it)
+                            }
+                    }
                 }
                 .addOnFailureListener {
                     Log.e(TAG, "updatePropertyInPropertyList: Failed to update property: $propertyToUpdate", it)
@@ -285,7 +298,23 @@ class PropertyRepository(private val context : Context) {
         }
     }
 
-    fun deletePropertyFromPropertyList(){}
+    fun deletePropertyFromPropertyList(propertyToDelete: Property){
+        try {
+            db.collection(COLLECTION_USERS)
+                .document(loggedInUserEmail)
+                .collection(COLLECTION_PROPERTY_LIST)
+                .document(propertyToDelete.propertyId)
+                .delete()
+                .addOnSuccessListener {
+                    Log.d(TAG, "deleteProperty: Property deleted successfully! Property: $propertyToDelete")
+                }
+                .addOnFailureListener {
+                    Log.e(TAG, "deleteProperty: Failed to delete property: $propertyToDelete", it)
+                }
+        }catch (ex: Exception){
+            Log.e(TAG, "deleteProperty: Failed to delete property: $propertyToDelete due to exception.", ex)
+        }
+    }
 
 
     fun filterPropertyFromPropertyList() {
