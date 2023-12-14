@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.pp.a4rent.MyListingsActivity
 import com.pp.a4rent.R
 import com.pp.a4rent.databinding.ActivityMyListingDetailsBinding
 import com.pp.a4rent.models.Address
@@ -26,13 +27,6 @@ import java.util.Locale
 class MyListingDetailsActivity : AppCompatActivity() {
     private var TAG = this@MyListingDetailsActivity.toString()
     private lateinit var binding: ActivityMyListingDetailsBinding
-//    private lateinit var sharedPreferences: SharedPreferences
-//    private lateinit var editor: SharedPreferences.Editor
-//    private var myListingsList = mutableListOf<Property>()
-//    private var position: Int? = null
-//    private var userObj: User? = null
-//    private val gson = Gson()
-
     private lateinit var propertyRepository: PropertyRepository
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -46,10 +40,6 @@ class MyListingDetailsActivity : AppCompatActivity() {
         // set up spinner
         val propertyTypeAdapter = ArrayAdapter(this, R.layout.spinner_item_property_types, PropertyType.displayNames)
         binding.propertyTypeSpinnerListingDetails.adapter = propertyTypeAdapter
-
-        // initiate shared preference
-//        sharedPreferences = getSharedPreferences("com.pp.a4rent", Context.MODE_PRIVATE)
-//        editor = sharedPreferences.edit()
 
         if (intent != null){
 
@@ -105,11 +95,18 @@ class MyListingDetailsActivity : AppCompatActivity() {
     }
 
     private fun btnDeleteClicked(currListingObj: Property){
+
+        // delete from property collection
         propertyRepository.deleteProperty(currListingObj)
-        // delete from favList
-        // delete from propertyList
+
+        // delete from sub collections
+        propertyRepository.deletePropertyFromPropertyList(currListingObj)
+
+        // TODO
+
         Snackbar.make(binding.root, "Deleted successfully!", Snackbar.LENGTH_LONG).show()
-        finish()
+        val intent = Intent(this, MyListingsActivity::class.java)
+        startActivity(intent)
     }
 
     private fun btnSaveClicked(currListingObj: Property){
@@ -183,10 +180,13 @@ class MyListingDetailsActivity : AppCompatActivity() {
         // update property in propertyList
         propertyRepository.updatePropertyInPropertyList(propertyToUpdate)
 
-        // update property in favList
         // update property in database
-        Snackbar.make(binding.root, "Updated successfully!", Snackbar.LENGTH_LONG).show()
-        finish()
-    }
+        propertyRepository.updateProperty(propertyToUpdate)
 
+        // TODO: update property in favList
+
+        Snackbar.make(binding.root, "Updated successfully!", Snackbar.LENGTH_LONG).show()
+        val intent = Intent(this, MyListingsActivity::class.java)
+        startActivity(intent)
+    }
 }

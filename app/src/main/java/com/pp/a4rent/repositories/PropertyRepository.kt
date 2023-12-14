@@ -127,7 +127,6 @@ class PropertyRepository(private val context : Context) {
         }
     }
 
-
     fun addPropertyToPropertyList(newProperty: Property){
         if (loggedInUserEmail.isNotEmpty()){
             try {
@@ -166,7 +165,6 @@ class PropertyRepository(private val context : Context) {
         }
     }
 
-
     fun getAllProperties(){
         try {
             db.collection(COLLECTION_PROPERTIES)
@@ -204,7 +202,6 @@ class PropertyRepository(private val context : Context) {
             Log.d(TAG, "getAllProperties: Can't retrieve all the properties due to exception: $ex")
         }
     }
-
 
     fun getAllPropertiesFromPropertyList(){
         if (loggedInUserEmail.isNotEmpty()){
@@ -247,7 +244,6 @@ class PropertyRepository(private val context : Context) {
         }
     }
 
-
     fun updateProperty(propertyToUpdate: Property){
         val data: MutableMap<String, Any> = HashMap()
         Log.d(TAG, "updateProperty: propertyToUpdate: $propertyToUpdate")
@@ -267,10 +263,21 @@ class PropertyRepository(private val context : Context) {
 
         try {
             db.collection(COLLECTION_PROPERTIES)
-                .document(propertyToUpdate.propertyId)
-                .update(data)
+                .whereEqualTo(FIELD_propertyId, propertyToUpdate.propertyId)
+                .get()
                 .addOnSuccessListener {
-                    Log.d(TAG, "updateProperty: Updated successfully!")
+                    for (doc in it){
+                        val docID = doc.id
+                        db.collection(COLLECTION_PROPERTIES)
+                            .document(docID)
+                            .update(data)
+                            .addOnSuccessListener {
+                                Log.d(TAG, "updateProperty: Updated successfully!")
+                            }
+                            .addOnFailureListener {
+                                Log.e(TAG, "updateProperty: Failed to update.", it)
+                            }
+                    }
                 }
                 .addOnFailureListener {
                     Log.e(TAG, "updateProperty: Failed to update property: $propertyToUpdate", it)
@@ -283,7 +290,6 @@ class PropertyRepository(private val context : Context) {
     fun updatePropertyInPropertyList(propertyToUpdate: Property){
         val data: MutableMap<String, Any> = HashMap()
         Log.d(TAG, "updatePropertyInPropertyList: propertyToUpdate: $propertyToUpdate")
-
 
         data[FIELD_propertyType] = propertyToUpdate.propertyType
         data[FIELD_ownerInfo] = propertyToUpdate.ownerInfo
@@ -301,11 +307,24 @@ class PropertyRepository(private val context : Context) {
         try {
             db.collection(COLLECTION_USERS)
                 .document(loggedInUserEmail)
-                .collection(COLLECTION_PROPERTIES)
-                .document(propertyToUpdate.propertyId)
-                .update(data)
+                .collection(COLLECTION_PROPERTY_LIST)
+                .whereEqualTo(FIELD_propertyId, propertyToUpdate.propertyId)
+                .get()
                 .addOnSuccessListener {
-                    Log.d(TAG, "updatePropertyInPropertyList: Updated successfully!")
+                    for (doc in it){
+                        val docID = doc.id
+                        db.collection(COLLECTION_USERS)
+                            .document(loggedInUserEmail)
+                            .collection(COLLECTION_PROPERTY_LIST)
+                            .document(docID)
+                            .update(data)
+                            .addOnSuccessListener {
+                                Log.d(TAG, "updatePropertyInPropertyList: Updated successfully!")
+                            }
+                            .addOnFailureListener {
+                                Log.e(TAG, "updatePropertyInPropertyList: Failed to update.", it)
+                            }
+                    }
                 }
                 .addOnFailureListener {
                     Log.e(TAG, "updatePropertyInPropertyList: Failed to update property: $propertyToUpdate", it)
@@ -318,10 +337,19 @@ class PropertyRepository(private val context : Context) {
     fun deleteProperty(propertyToDelete: Property){
         try {
             db.collection(COLLECTION_PROPERTIES)
-                .document(propertyToDelete.propertyId)
-                .delete()
+                .whereEqualTo(FIELD_propertyId, propertyToDelete.propertyId)
+                .get()
                 .addOnSuccessListener {
-                    Log.d(TAG, "deleteProperty: Property deleted successfully! Property: $propertyToDelete")
+                    for (doc in it){
+                        val docID = doc.id
+                        db.collection(COLLECTION_PROPERTIES).document(docID).delete()
+                            .addOnSuccessListener {
+                                Log.d(TAG, "deleteProperty: Deleted successfully.")
+                            }
+                            .addOnFailureListener {
+                                Log.e(TAG, "deleteProperty: Failed to deleted.", it)
+                            }
+                    }
                 }
                 .addOnFailureListener {
                     Log.e(TAG, "deleteProperty: Failed to delete property: $propertyToDelete", it)
@@ -331,7 +359,34 @@ class PropertyRepository(private val context : Context) {
         }
     }
 
-    fun deletePropertyFromPropertyList(){}
+    fun deletePropertyFromPropertyList(propertyToDelete: Property){
+        try {
+            db.collection(COLLECTION_USERS)
+                .document(loggedInUserEmail)
+                .collection(COLLECTION_PROPERTY_LIST)
+                .whereEqualTo(FIELD_propertyId, propertyToDelete.propertyId)
+                .get()
+                .addOnSuccessListener {
+                    for (doc in it){
+                        val docID = doc.id
+                        db.collection(COLLECTION_USERS).document(loggedInUserEmail)
+                            .collection(COLLECTION_PROPERTY_LIST).document(docID)
+                            .delete()
+                            .addOnSuccessListener {
+                                Log.d(TAG, "deletePropertyFromPropertyList: Property deleted successfully! Property: $propertyToDelete")
+                            }
+                            .addOnFailureListener {
+                                Log.e(TAG, "deletePropertyFromPropertyList: Failed to delete property: $propertyToDelete", it)
+                            }
+                    }
+                }
+                .addOnFailureListener {
+                    Log.e(TAG, "deletePropertyFromPropertyList: Failed to delete property: $propertyToDelete", it)
+                }
+        }catch (ex: Exception){
+            Log.e(TAG, "deletePropertyFromPropertyList: Failed to delete property: $propertyToDelete due to exception.", ex)
+        }
+    }
 
 
     fun filterPropertyFromPropertyList() {
