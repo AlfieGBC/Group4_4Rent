@@ -64,5 +64,6 @@ dependencies {
 
     // Use the FusedLocationProviderClient class to get the location
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
 }

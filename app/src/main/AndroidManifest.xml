@@ -15,6 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme._4Rent"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCY0iMsPafQmiCmLPPu8mAEVmlSqxwqRT4" />
+
         <activity
             android:name=".screens.MyListingDetailsActivity"
             android:exported="false" />
@@ -41,6 +46,10 @@
             android:exported="false" />
         <activity
             android:name=".screens.BlogListActivity"
+            android:exported="false" />
+        <!--   TODO: (Alfie) testing google map    -->
+        <activity
+            android:name=".screens.MapActivity"
             android:exported="false" />
         <activity
             android:name=".screens.BlogDetailActivity"
