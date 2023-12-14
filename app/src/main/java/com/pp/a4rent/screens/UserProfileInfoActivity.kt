@@ -58,8 +58,6 @@ class UserProfileInfoActivity : AppCompatActivity() {
         this.rentalPropertyRepository = PropertyRepository(applicationContext)
 
         // initiate shared preference
-//        sharedPrefs = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
-
         sharedPrefs = this.getSharedPreferences(packageName, Context.MODE_PRIVATE)
         editor = sharedPrefs.edit()
 
@@ -104,7 +102,6 @@ class UserProfileInfoActivity : AppCompatActivity() {
                 Log.d("TAG", "user role: $userRole")
 
                 // Show different menu options to the users based on their role
-
                 if (userRole == "tenant") {
                     menuInflater.inflate(R.menu.tenant_profile_options, menu)
                 } else if (userRole == "Landlord") {
@@ -126,11 +123,6 @@ class UserProfileInfoActivity : AppCompatActivity() {
 
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this, MainActivity::class.java)
-
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                sidebarIntent.putExtra("user", userJson)
                 startActivity(sidebarIntent)
 
                 return true
@@ -150,12 +142,6 @@ class UserProfileInfoActivity : AppCompatActivity() {
 
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this, TenantAccountActivity::class.java)
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                sidebarIntent.putExtra("user", userJson)
-
-
                 startActivity(sidebarIntent)
 
                 return true
@@ -166,11 +152,6 @@ class UserProfileInfoActivity : AppCompatActivity() {
 
                 // navigate to 2nd screen
                 val sidebarTenantIntent = Intent(this, UserProfileInfoActivity::class.java)
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                sidebarTenantIntent.putExtra("user", userJson)
-
                 loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
                 sidebarTenantIntent.putExtra("USER_EMAIL", "NA")
                 startActivity(sidebarTenantIntent)
@@ -179,9 +160,7 @@ class UserProfileInfoActivity : AppCompatActivity() {
             }
 
             R.id.mi_post_rental -> {
-                // pass through the user object
                 val intent = Intent(this, RentalFormActivity::class.java)
-//                intent.putExtra("extra_userObj", userObj)
                 loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
                 intent.putExtra("USER_EMAIL", "NA")
                 startActivity(intent)
@@ -189,9 +168,7 @@ class UserProfileInfoActivity : AppCompatActivity() {
             }
             R.id.mi_my_account -> {
 
-                // pass through the user object
                 val intent = Intent(this, UserProfileInfoActivity::class.java)
-//                intent.putExtra("extra_userObj", userObj)
                 loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
                 intent.putExtra("USER_EMAIL", "NA")
                 startActivity(intent)
@@ -201,7 +178,6 @@ class UserProfileInfoActivity : AppCompatActivity() {
 
                 // pass through the user object
                 val intent = Intent(this, MyListingsActivity::class.java)
-//                intent.putExtra("extra_userObj", userObj)
                 loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
                 intent.putExtra("USER_EMAIL", "NA")
                 startActivity(intent)
@@ -210,9 +186,6 @@ class UserProfileInfoActivity : AppCompatActivity() {
 
             R.id.mi_logout -> {
                 // navigate to 2nd screen
-//                val sidebarIntent = Intent(this, MainActivity::class.java)
-//                startActivity(sidebarIntent)
-
                 Log.d("TAG", "onOptionsItemSelected: Sign Out option is selected ${sharedPrefs.contains("USER_EMAIL")} ${sharedPrefs.edit().remove("USER_EMAIL").apply()}")
                 if (sharedPrefs.contains("USER_EMAIL")) {
                     sharedPrefs.edit().remove("USER_EMAIL").apply()
@@ -221,7 +194,6 @@ class UserProfileInfoActivity : AppCompatActivity() {
                     sharedPrefs.edit().remove("USER_PASSWORD").apply()
                 }
                 FirebaseAuth.getInstance().signOut()
-//                this@UserProfileInfoActivity.finish()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 return true

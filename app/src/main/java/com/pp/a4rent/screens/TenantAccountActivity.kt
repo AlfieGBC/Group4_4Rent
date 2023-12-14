@@ -159,6 +159,7 @@ class TenantAccountActivity : AppCompatActivity() {
     fun rowClicked(rowPosition: Int){
 
         var selectedRental: Property = favRentalPropertyArrayList.get(rowPosition)
+
         // snackbar
         val snackbar = Snackbar.make(binding.root, "${selectedRental.toString()}, for row${rowPosition}", Snackbar.LENGTH_LONG)
         snackbar.show()
@@ -167,13 +168,7 @@ class TenantAccountActivity : AppCompatActivity() {
         val intent = Intent(this, RentalPostDetailActivity::class.java)
         intent.putExtra("ROW_RENTAL_POST_DETAIL_POSITION", rowPosition)
 
-        // send the details of the rental post to next screen
-        // rentalDatasource -> PropertyRental class must be Serializable interface or protocol
-//        intent.putExtra("ROW_RENTAL_POST_DETAIL",   favRentalPropertyArrayList.get(rowPosition))
-
-
         Log.d("TAG", "${favRentalPropertyArrayList.get(rowPosition)}")
-
 
         startActivity(intent)
 
@@ -205,7 +200,6 @@ class TenantAccountActivity : AppCompatActivity() {
                 Log.d(TAG, "user role: $userRole")
 
                 // Show different menu options to the users based on their role
-
                 if (userRole == "tenant") {
                     menuInflater.inflate(R.menu.tenant_profile_options, menu)
                 } else if (userRole == "Landlord") {
@@ -229,10 +223,7 @@ class TenantAccountActivity : AppCompatActivity() {
                 val sidebarIntent = Intent(this, MainActivity::class.java)
                 loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
                 sidebarIntent.putExtra("USER_EMAIL", "NA")
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-                // pass this info to next page, which is tenant profile info page
-//                sidebarIntent.putExtra("user", userJson)
+
                 startActivity(sidebarIntent)
 
                 return true
@@ -257,10 +248,6 @@ class TenantAccountActivity : AppCompatActivity() {
                 loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
                 sidebarIntent.putExtra("USER_EMAIL", "NA")
 
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                sidebarIntent.putExtra("user", userJson)
                 startActivity(sidebarIntent)
 
                 return true
@@ -275,17 +262,12 @@ class TenantAccountActivity : AppCompatActivity() {
                 loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
                 sidebarTenantIntent.putExtra("USER_EMAIL", "NA")
 
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                sidebarTenantIntent.putExtra("user", userJson)
                 startActivity(sidebarTenantIntent)
 
                 return true
             }
             R.id.mi_logout -> {
                 // navigate to 2nd screen
-
                 Log.d("TAG", "onOptionsItemSelected: Sign Out option is selected ${sharedPreferences.contains("USER_EMAIL")} ${sharedPreferences.edit().remove("USER_EMAIL").apply()}")
                 if (sharedPreferences.contains("USER_EMAIL")) {
                     sharedPreferences.edit().remove("USER_EMAIL").apply()

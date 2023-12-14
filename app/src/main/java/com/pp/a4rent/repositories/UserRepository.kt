@@ -19,7 +19,6 @@ class UserRepository(private val context: Context) {
     private val FIELD_PASSWORD = "password"
     private val FIELD_PHONE = "phoneNumber"
     private val FIELD_ROLE = "role"
-    private var loggedInUserEmail = ""
 
     var currentUser : MutableLiveData<User> = MutableLiveData<User>()
 

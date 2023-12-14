@@ -320,7 +320,6 @@ class RentalsPostListActivity : AppCompatActivity() {
                 Log.d(TAG, "user role: $userRole")
 
                 // Show different menu options to the users based on their role
-
                 if (userRole == "tenant") {
                     menuInflater.inflate(R.menu.tenant_profile_options, menu)
                 } else if (userRole == "Landlord") {
@@ -346,10 +345,7 @@ class RentalsPostListActivity : AppCompatActivity() {
 
                 loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
                 sidebarIntent.putExtra("USER_EMAIL", "NA")
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                sidebarIntent.putExtra("user", userJson)
+
                 startActivity(sidebarIntent)
 
                 return true
@@ -390,10 +386,6 @@ class RentalsPostListActivity : AppCompatActivity() {
 
                 loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
                 sidebarIntent.putExtra("USER_EMAIL", "NA")
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                sidebarIntent.putExtra("user", userJson)
 
                 startActivity(sidebarIntent)
 
@@ -408,10 +400,7 @@ class RentalsPostListActivity : AppCompatActivity() {
 
                 loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
                 sidebarTenantIntent.putExtra("USER_EMAIL", "NA")
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                sidebarTenantIntent.putExtra("user", userJson)
+
                 startActivity(sidebarTenantIntent)
 
                 return true
@@ -419,8 +408,6 @@ class RentalsPostListActivity : AppCompatActivity() {
 
             R.id.mi_logout -> {
                 // navigate to 2nd screen
-//                val sidebarIntent = Intent(this, MainActivity::class.java)
-//                startActivity(sidebarIntent)
 
                 Log.d("TAG", "onOptionsItemSelected: Sign Out option is selected ${sharedPrefs.contains("USER_EMAIL")} ${sharedPrefs.edit().remove("USER_EMAIL").apply()}")
                 if (sharedPrefs.contains("USER_EMAIL")) {

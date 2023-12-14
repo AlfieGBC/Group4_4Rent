@@ -149,7 +149,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun goToTenantAccount() {
         val intent = Intent(this, TenantAccountActivity::class.java)
-//        val intent = Intent(this, TenantProfileInfoActivity::class.java)
         startActivity(intent)
     }
 
