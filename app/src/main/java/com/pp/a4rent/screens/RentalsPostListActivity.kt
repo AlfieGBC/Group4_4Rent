@@ -307,18 +307,6 @@ class RentalsPostListActivity : AppCompatActivity() {
             }
 
 
-//
-//            if (!rentalExists) {
-//                Log.d("TAG", "Rental added")
-//                favRentalsToAdd.favourite = true
-//            } else {
-//                if (rentalToDelete != null) {
-//                    rentalPropertyRepository.deletePropertyFromFavList(rentalToDelete)
-//                    rentalToDelete.favourite = false
-//                }
-//            }
-
-
             Log.d(TAG, "FAV Rental To add ${favRentals}")
         }
     }

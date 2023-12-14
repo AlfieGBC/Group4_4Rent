@@ -181,23 +181,19 @@ class TenantAccountActivity : AppCompatActivity() {
 
     // rv: Favorite button click handler
     fun favButtonClicked(position:Int) {
-        val snackbar = Snackbar.make(binding.root, "Favorite ${position}", Snackbar.LENGTH_LONG)
-        snackbar.show()
 
 
-        val favRentalToDelete = favRentalPropertyArrayList.get(position)
-        favRentalToDelete.favourite = false
-        this.propertyRepository.deletePropertyFromFavList(favRentalToDelete)
+            val favRentalToDelete = favRentalPropertyArrayList.get(position)
+            propertyRepository.deletePropertyFromFavList(favRentalToDelete)
 
-//        val gson = Gson()
-//        val userJson = intent.getStringExtra("user")
-//        if(userJson != null) {
-//            val user = gson.fromJson(userJson, User::class.java)
-//            favRentalPropertyArrayList.removeAt(position)
-//            rentalPropertyAdapter.notifyItemRemoved(position)
-//            prefEditor.putString("KEY_RENTALS_DATASOURCE"+user.userId, Gson().toJson(favRentalPropertyArrayList))
-//            prefEditor.apply()
-//        }
+            // After deleting the property, adapter must be notified
+            rentalPropertyAdapter.notifyDataSetChanged()
+
+            val snackbar = Snackbar.make(binding.root, "Favorite ${position} is deleted", Snackbar.LENGTH_LONG)
+            snackbar.show()
+
+
+
     }
 
 

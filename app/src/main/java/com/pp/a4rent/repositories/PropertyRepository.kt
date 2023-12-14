@@ -35,7 +35,7 @@ class PropertyRepository(private val context : Context) {
     private val FIELD_geo = "geo";
     private val FIELD_imageFilename = "imageFilename";
     private val FIELD_favourite = "favourite"
-    private val FIELD_ID = "id"
+    private val FIELD_propertyId = "propertyId"
 
     val property: MutableLiveData<Property> = MutableLiveData<Property>()
     var allProperties : MutableLiveData<List<Property>> = MutableLiveData<List<Property>>()
@@ -98,7 +98,7 @@ class PropertyRepository(private val context : Context) {
         try {
             val data: MutableMap<String, Any> = HashMap()
 
-            data[FIELD_ID] = newProperty.propertyId
+            data[FIELD_propertyId] = newProperty.propertyId
             data[FIELD_propertyType] = newProperty.propertyType
 
             data[FIELD_ownerInfo] = newProperty.ownerInfo
@@ -133,7 +133,7 @@ class PropertyRepository(private val context : Context) {
             try {
                 val data: MutableMap<String, Any> = HashMap()
 
-                data[FIELD_ID] = newProperty.propertyId
+                data[FIELD_propertyId] = newProperty.propertyId
                 data[FIELD_propertyType] = newProperty.propertyType
                 data[FIELD_ownerInfo] = newProperty.ownerInfo
                 data[FIELD_numberOfBedroom] = newProperty.numberOfBedroom
@@ -346,6 +346,7 @@ class PropertyRepository(private val context : Context) {
             try {
                 val data: MutableMap<String, Any> = HashMap()
 
+                data[FIELD_propertyId] = favRentalProperty.propertyId
                 data[FIELD_propertyType] = favRentalProperty.propertyType
                 data[FIELD_ownerInfo] = favRentalProperty.ownerInfo
                 data[FIELD_numberOfBedroom] = favRentalProperty.numberOfBedroom
@@ -385,7 +386,7 @@ class PropertyRepository(private val context : Context) {
             db.collection(COLLECTION_USERS)
                 .document(loggedInUserEmail)
                 .collection(COLLECTION_FAV_LIST)
-                .whereEqualTo(FIELD_propertyAddress, favRentalProperty.propertyAddress)
+                .whereEqualTo(FIELD_propertyId, favRentalProperty.propertyId)
                 .get()
                 .addOnSuccessListener { documents ->
                     val exists = !documents.isEmpty
@@ -446,23 +447,36 @@ class PropertyRepository(private val context : Context) {
     }
 
     // For removing rental property posts from the favourite list
-    fun deletePropertyFromFavList(favRentalPropertyToDelete: Property){
+    fun deletePropertyFromFavList(favRentalPropertyToDelete: Property) {
         try {
+            // remove single document from the "COLLECTION_FAV_LIST"
             db.collection(COLLECTION_USERS)
                 .document(loggedInUserEmail)
                 .collection(COLLECTION_FAV_LIST)
-                .document(favRentalPropertyToDelete.propertyId)
-                .delete()
-                .addOnSuccessListener { docRef ->
-                    Log.d(TAG, "deletePropertyFromFavList: document deleted successfully : $docRef")
+                .whereEqualTo("propertyId", favRentalPropertyToDelete.propertyId)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        for (document in querySnapshot.documents) {
+                            document.reference.delete()
+                                .addOnSuccessListener {
+                                    Log.d(TAG, "Property deleted successfully")
+                                    this.getAllPropertiesFromFavList()
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.e(TAG, "Error deleting document: $e")
+                                }
+                        }
+                    } else {
+                        Log.d(TAG, "Document not found")
+                    }
                 }
-                .addOnFailureListener { ex ->
-                    Log.e(TAG, "deletePropertyFromFavList: Failed to delete document: $ex")
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "Failed to query documents: $e")
                 }
         } catch (ex: Exception) {
-            Log.e(TAG, "deletePropertyFromFavList: Unable to delete rental post from fav list due to exception : $ex")
+            Log.e(TAG, "Error: $ex")
         }
-
     }
 
     fun deleteAllPropertyFromFavList() {

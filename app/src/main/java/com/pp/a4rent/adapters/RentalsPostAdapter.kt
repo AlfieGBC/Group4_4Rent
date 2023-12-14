@@ -98,8 +98,7 @@ class RentalsPostAdapter(
 //        }
 
         val isFavorite = favList.any {
-                    it.propertyAddress.street == currRentalPost.propertyAddress.street &&
-                    it.propertyAddress.city == currRentalPost.propertyAddress.city
+                    it.propertyId == currRentalPost.propertyId
         }
 
         btnFav.setChecked(isFavorite)
