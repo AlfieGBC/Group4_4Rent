@@ -134,11 +134,6 @@ class MainActivity : AppCompatActivity() {
             val rentalPostListIntent = Intent(this@MainActivity, RentalsPostListActivity::class.java)
             rentalPostListIntent.putExtra("FILTER_DATA_EXTRA", etSearchKeyword)
 
-//            val userJson = intent.getStringExtra("user")
-//            // pass this info to next page, which is tenant profile info page
-//            rentalPostListIntent.putExtra("user", userJson)
-            
-
             startActivity(rentalPostListIntent)
         }
 
@@ -184,12 +179,7 @@ class MainActivity : AppCompatActivity() {
 
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this@MainActivity, MainActivity::class.java)
-
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                sidebarIntent.putExtra("user", userJson)
-                loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
+               loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
                 sidebarIntent.putExtra("USER_EMAIL", "NA")
                 startActivity(sidebarIntent)
 
@@ -229,10 +219,6 @@ class MainActivity : AppCompatActivity() {
 
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this, TenantAccountActivity::class.java)
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                sidebarIntent.putExtra("user", userJson)
 
                 loggedInUserEmail = sharedPreferences.getString("USER_EMAIL", "NA").toString()
                 sidebarIntent.putExtra("USER_EMAIL", "NA")
@@ -246,10 +232,7 @@ class MainActivity : AppCompatActivity() {
 
                 // navigate to 2nd screen
                 val sidebarTenantIntent = Intent(this, UserProfileInfoActivity::class.java)
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                sidebarTenantIntent.putExtra("user", userJson)
+
                 startActivity(sidebarTenantIntent)
 
                 return true
@@ -273,28 +256,19 @@ class MainActivity : AppCompatActivity() {
 
             R.id.mi_post_rental -> {
                 val intent = Intent(this, RentalFormActivity::class.java)
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                intent.putExtra("user", userJson)
+
                 startActivity(intent)
                 return true
             }
             R.id.mi_my_account -> {
                 val intent = Intent(this, UserProfileInfoActivity::class.java)
-                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                intent.putExtra("user", userJson)
+
                 startActivity(intent)
                 return true
             }
             R.id.mi_my_listings -> {
                 val intent = Intent(this, MyListingsActivity::class.java)
-//                // get the user info from login page
-//                val userJson = intent.getStringExtra("user")
-//                // pass this info to next page, which is tenant profile info page
-//                intent.putExtra("user", userJson)
+
                 startActivity(intent)
                 return true
             }
