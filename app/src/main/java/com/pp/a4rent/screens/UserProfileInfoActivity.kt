@@ -17,6 +17,7 @@ import com.pp.a4rent.R
 import com.pp.a4rent.RentalFormActivity
 import com.pp.a4rent.databinding.ActivityUserProfileInfoBinding
 import com.pp.a4rent.models.User
+import com.pp.a4rent.repositories.PropertyRepository
 import com.pp.a4rent.repositories.UserRepository
 
 class UserProfileInfoActivity : AppCompatActivity() {
@@ -26,6 +27,10 @@ class UserProfileInfoActivity : AppCompatActivity() {
     private lateinit var editor: SharedPreferences.Editor
 
     private lateinit var userRepository: UserRepository
+    private lateinit var rentalPropertyRepository: PropertyRepository
+
+    private var loggedInUserEmail = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_tenant_profile_info)
@@ -50,6 +55,7 @@ class UserProfileInfoActivity : AppCompatActivity() {
         }
 
         this.userRepository = UserRepository(applicationContext)
+        this.rentalPropertyRepository = PropertyRepository(applicationContext)
 
         // initiate shared preference
 //        sharedPrefs = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
@@ -58,7 +64,8 @@ class UserProfileInfoActivity : AppCompatActivity() {
         editor = sharedPrefs.edit()
 
         if (sharedPrefs.contains("USER_EMAIL")){
-            userRepository.getUser(sharedPrefs.getString("USER_EMAIL", "NA").toString())
+            loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
+            userRepository.getUser(loggedInUserEmail)
         }
 
         this.binding.btnUpdateProfile.setOnClickListener {
@@ -90,7 +97,24 @@ class UserProfileInfoActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_menu_options, menu)
-        menuInflater.inflate(R.menu.landlord_profile_options, menu)
+
+        // checks user is logged in or not
+        if (loggedInUserEmail.isNotEmpty()) {
+            rentalPropertyRepository.getUserRoleFromDatabase(loggedInUserEmail) { userRole ->
+                Log.d("TAG", "user role: $userRole")
+
+                // Show different menu options to the users based on their role
+
+                if (userRole == "tenant") {
+                    menuInflater.inflate(R.menu.tenant_profile_options, menu)
+                } else if (userRole == "Landlord") {
+                    menuInflater.inflate(R.menu.landlord_profile_options, menu)
+                }
+
+            }
+        } else {
+            menuInflater.inflate(R.menu.guest_menu_options, menu)
+        }
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -103,10 +127,10 @@ class UserProfileInfoActivity : AppCompatActivity() {
                 // navigate to 2nd screen
                 val sidebarIntent = Intent(this, MainActivity::class.java)
 
-                // get the user info from login page
-                val userJson = intent.getStringExtra("user")
-                // pass this info to next page, which is tenant profile info page
-                sidebarIntent.putExtra("user", userJson)
+//                // get the user info from login page
+//                val userJson = intent.getStringExtra("user")
+//                // pass this info to next page, which is tenant profile info page
+//                sidebarIntent.putExtra("user", userJson)
                 startActivity(sidebarIntent)
 
                 return true
@@ -121,10 +145,45 @@ class UserProfileInfoActivity : AppCompatActivity() {
                 return true
             }
 
+            R.id.mi_tenant_favourite -> {
+                Log.d("TAG", "onOptionsItemSelected: Favourite option is selected")
+
+                // navigate to 2nd screen
+                val sidebarIntent = Intent(this, TenantAccountActivity::class.java)
+//                // get the user info from login page
+//                val userJson = intent.getStringExtra("user")
+//                // pass this info to next page, which is tenant profile info page
+//                sidebarIntent.putExtra("user", userJson)
+
+
+                startActivity(sidebarIntent)
+
+                return true
+            }
+
+            R.id.mi_tenant_profile -> {
+                Log.d("TAG", "onOptionsItemSelected: Tenant Profile option is selected")
+
+                // navigate to 2nd screen
+                val sidebarTenantIntent = Intent(this, UserProfileInfoActivity::class.java)
+//                // get the user info from login page
+//                val userJson = intent.getStringExtra("user")
+//                // pass this info to next page, which is tenant profile info page
+//                sidebarTenantIntent.putExtra("user", userJson)
+
+                loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
+                sidebarTenantIntent.putExtra("USER_EMAIL", "NA")
+                startActivity(sidebarTenantIntent)
+
+                return true
+            }
+
             R.id.mi_post_rental -> {
                 // pass through the user object
                 val intent = Intent(this, RentalFormActivity::class.java)
 //                intent.putExtra("extra_userObj", userObj)
+                loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
+                intent.putExtra("USER_EMAIL", "NA")
                 startActivity(intent)
                 return true
             }
@@ -133,6 +192,8 @@ class UserProfileInfoActivity : AppCompatActivity() {
                 // pass through the user object
                 val intent = Intent(this, UserProfileInfoActivity::class.java)
 //                intent.putExtra("extra_userObj", userObj)
+                loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
+                intent.putExtra("USER_EMAIL", "NA")
                 startActivity(intent)
                 return true
             }
@@ -141,6 +202,8 @@ class UserProfileInfoActivity : AppCompatActivity() {
                 // pass through the user object
                 val intent = Intent(this, MyListingsActivity::class.java)
 //                intent.putExtra("extra_userObj", userObj)
+                loggedInUserEmail = sharedPrefs.getString("USER_EMAIL", "NA").toString()
+                intent.putExtra("USER_EMAIL", "NA")
                 startActivity(intent)
                 return true
             }
@@ -150,9 +213,17 @@ class UserProfileInfoActivity : AppCompatActivity() {
 //                val sidebarIntent = Intent(this, MainActivity::class.java)
 //                startActivity(sidebarIntent)
 
-                Log.d("TAG", "onOptionsItemSelected: Sign Out option is selected")
+                Log.d("TAG", "onOptionsItemSelected: Sign Out option is selected ${sharedPrefs.contains("USER_EMAIL")} ${sharedPrefs.edit().remove("USER_EMAIL").apply()}")
+                if (sharedPrefs.contains("USER_EMAIL")) {
+                    sharedPrefs.edit().remove("USER_EMAIL").apply()
+                }
+                if (sharedPrefs.contains("USER_PASSWORD")) {
+                    sharedPrefs.edit().remove("USER_PASSWORD").apply()
+                }
                 FirebaseAuth.getInstance().signOut()
-                this@UserProfileInfoActivity.finish()
+//                this@UserProfileInfoActivity.finish()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
                 return true
 
             }

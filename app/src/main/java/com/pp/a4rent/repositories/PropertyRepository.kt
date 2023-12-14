@@ -57,8 +57,11 @@ class PropertyRepository(private val context : Context) {
             .whereEqualTo("email", email)
             .get()
             .addOnSuccessListener { documents ->
+                Log.d(TAG, "Hello listener" + documents)
+                Log.d(TAG, "Hello listener" + email)
                 for (document in documents) {
                     val userRole = document.getString("role")
+                    Log.e(TAG, "Role " + userRole)
                     if (userRole != null) {
                         // Invoke the callback with the user's role
                         callback.invoke(userRole)
@@ -70,6 +73,7 @@ class PropertyRepository(private val context : Context) {
                 callback.invoke("guest")
             }
             .addOnFailureListener { exception ->
+                Log.e(TAG, "Hello")
                 Log.e(TAG, "Error getting user role", exception)
                 // Invoke the callback with a default role in case of failure
                 callback.invoke("guest")

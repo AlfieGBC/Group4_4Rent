@@ -87,8 +87,6 @@ class RentalsPostAdapter(
 
         val btnFav = holder.itemView.findViewById<CheckBox>(R.id.btnFavorite)
 
-        Log.d("TAG", " currRentalPost.favourite   ${currRentalPost.favourite}")
-
         // current rental post's favourite is true then, color the star
 
 //        if (currRentalPost.favourite!!) {
