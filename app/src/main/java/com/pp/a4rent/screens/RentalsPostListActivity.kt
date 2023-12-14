@@ -13,20 +13,18 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
 import com.pp.a4rent.MainActivity
 import com.pp.a4rent.R
 import com.pp.a4rent.adapters.RentalsPostAdapter
 import com.pp.a4rent.databinding.ActivityRentalsPostListBinding
 import com.pp.a4rent.models.Property
-import com.pp.a4rent.models.User
 import com.pp.a4rent.repositories.PropertyRepository
 
-import android.view.View
-import android.widget.RadioButton
 import android.widget.RadioGroup
+import com.pp.a4rent.listeners.OnRentalPostClickListener
+import java.io.Serializable
 
-class RentalsPostListActivity : AppCompatActivity() {
+class RentalsPostListActivity : AppCompatActivity(), OnRentalPostClickListener {
 
     private lateinit var binding: ActivityRentalsPostListBinding
     private val TAG : String = "TorontoRentalsActivity"
@@ -41,31 +39,8 @@ class RentalsPostListActivity : AppCompatActivity() {
 
 
 
-    // made this mutable because we know that later on, we have to add rentals to it
-//       private var rentalDatasource:MutableList<PropertyRental> = mutableListOf<PropertyRental>(
-//        PropertyRental(1,PropertyType.APARTMENT, Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "Humber Line 123 Street, NY","Toronto", "N2M 8C9", 2500.0, true, "peter",false),
-//        PropertyRental(2, PropertyType.CONDO, Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","Bloor St , NY","North York", "S2M 3C9",2500.0, true, "amy",false ),
-//        PropertyRental(3,PropertyType.CONDO, Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", " Line 123 Street, Victoria, Vancouver","vancouver", "B2D 5N6", 2700.0, true, "alex",false),
-//        PropertyRental(4,PropertyType.BASEMENT, Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "12 vi Street, Van","Vancouver", "B2D 5N6",2300.0, true, "jane",false),
-//        PropertyRental(5,PropertyType.CONDO, Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "123 st abc, winnipeg", "Winnipeg","N4M 8C9",2500.0, true, "peter",false),
-//        PropertyRental(6,PropertyType.APARTMENT, Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","12 Keele Street, NY","North York", "N2M 8C9",2500.0, true, "amy",false),
-//        PropertyRental(7, PropertyType.APARTMENT, Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "16 victoria st, BC","vancouver", "C2M 8C9",2500.0, true, "alex",false),
-//        PropertyRental(8,PropertyType.HOUSE, Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo", "879 Islington av, Etobicoke", "toronto", "N2B 8C9",2500.0, true, "jane",false),
-//        PropertyRental(9,PropertyType.CONDO, Owner("Peter", "peter@gmail.com", 123), 12, 2,3, 220.0,"cool condo", "456 abc st, winnipeg","winnipeg", "N2W 6C6",2500.0, true, "peter",false),
-//        PropertyRental(10,PropertyType.CONDO, Owner("Amy", "amy@gmail.com", 123), 12, 2,3, 500.0,"cool condo","78 jane st, north york","north york", "N2M 5C6",2500.0, true, "amy",false),
-//        PropertyRental(11,PropertyType.BASEMENT, Owner("Alex", "alex@gmail.com", 123), 12, 2,3, 330.0,"cool condo", "45 dupont st, toronto","Toronto", "N2MH 4C9",2500.0, true, "alex",false),
-//        PropertyRental(12,PropertyType.HOUSE, Owner("Jane", "jane@gmail.com", 123), 12, 2,3, 800.0,"cool condo","46 dufferin st, toronto", "toronto", "I2O 8C3",2500.0, true, "jane",false),
-//    )
-
-
-
-
-//    // Shared Preferences variables
+    // Shared Preferences variables
     private lateinit var sharedPrefs: SharedPreferences
-//    lateinit var prefEditor: SharedPreferences.Editor
-
-    // Get the current data source
-//    var favouriteRentalPostsList:MutableList<Property> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -228,8 +203,8 @@ class RentalsPostListActivity : AppCompatActivity() {
                         this,
                         // pass the rental list data to the adapter
                         searchedRentalsList,
-                        {pos -> rowClicked(pos) },
-                        {pos -> favButtonClicked(pos)},
+                        this,
+                        this,
                         favRentalPropertyArrayList
                         )
 
@@ -273,37 +248,68 @@ class RentalsPostListActivity : AppCompatActivity() {
 
 
     // rv:  Row click handler
-    fun rowClicked(rowPosition: Int){
+//    fun rowClicked(rowPosition: Int){
+//
+//        // checks user is logged in or not
+//        if (!loggedInUserEmail.isNotEmpty()) {
+//            val userIntent = Intent(this@RentalsPostListActivity, LoginActivity::class.java)
+//            startActivity(userIntent)
+//        } else {
+//            var selectedRental: Property = searchedRentalsList.get(rowPosition)
+//
+//            // snackbar
+//            val snackbar = Snackbar.make(binding.root, "${selectedRental.toString()}, for row${rowPosition}", Snackbar.LENGTH_LONG)
+//            snackbar.show()
+//
+//            // navigate to rental details page
+//            val intent = Intent(this, RentalPostDetailActivity::class.java)
+//            intent.putExtra("ROW_RENTAL_POST_DETAIL", rowPosition)
+//
+//            // send the details of the rental post to next screen
+//            Log.d("TAG", "${searchedRentalsList.get(rowPosition)}")
+//
+//            startActivity(intent)
+//        }
+//    }
 
-        // checks user is logged in or not
-        if (!loggedInUserEmail.isNotEmpty()) {
-            val userIntent = Intent(this@RentalsPostListActivity, LoginActivity::class.java)
-            startActivity(userIntent)
-        } else {
-            var selectedRental: Property = searchedRentalsList.get(rowPosition)
-
-            // snackbar
-            val snackbar = Snackbar.make(binding.root, "${selectedRental.toString()}, for row${rowPosition}", Snackbar.LENGTH_LONG)
-            snackbar.show()
-
-            // navigate to rental details page
-            val intent = Intent(this, RentalPostDetailActivity::class.java)
-            intent.putExtra("ROW_RENTAL_POST_DETAIL_POSITION", rowPosition)
-
-            // send the details of the rental post to next screen
-            Log.d("TAG", "${searchedRentalsList.get(rowPosition)}")
-
-            startActivity(intent)
-        }
-
-
+    override fun onRentalPropertySelected(property: Property) {
+        val mainIntent = Intent(this, RentalPostDetailActivity::class.java)
+        mainIntent.putExtra("EXTRA_PROPERTY", property)
+//        Log.d("CHECK", "$expenseArrayList")
+        startActivity(mainIntent)
     }
 
     // rv: Favorite button click handler
-    fun favButtonClicked(position:Int) {
+//    fun favButtonClicked(position:Int) {
+//
+//        var favRentals = searchedRentalsList.get(position)
+//
+//        // checks user is logged in or not,
+//        // - if yes, navigate user to short-listed rentals page (favourite page)
+//
+//        if (!loggedInUserEmail.isNotEmpty()) {
+//            this.rentalPropertyAdapter.notifyDataSetChanged()
+//            val userIntent = Intent(this@RentalsPostListActivity, LoginActivity::class.java)
+//            startActivity(userIntent)
+//        } else {
+//            rentalPropertyRepository.isPropertyExistInFavList(favRentals){ exists ->
+//                if (exists) {
+//                    rentalPropertyRepository.deletePropertyFromFavList(favRentals)
+//                    val snackbar = Snackbar.make(binding.root, "Removed from Fav Rental List", Snackbar.LENGTH_LONG)
+//                    snackbar.show()
+//                } else {
+//                    rentalPropertyRepository.addPropertyToFavList(favRentals)
+//                    val snackbar = Snackbar.make(binding.root, "Added to Favourite Rental List", Snackbar.LENGTH_LONG)
+//                    snackbar.show()
+//                }
+//            }
+//
+//
+//            Log.d(TAG, "FAV Rental To add ${favRentals}")
+//        }
+//    }
 
-        var favRentals = searchedRentalsList.get(position)
-
+    override fun favButtonClicked(favRentals: Property) {
         // checks user is logged in or not,
         // - if yes, navigate user to short-listed rentals page (favourite page)
 
@@ -328,6 +334,9 @@ class RentalsPostListActivity : AppCompatActivity() {
             Log.d(TAG, "FAV Rental To add ${favRentals}")
         }
     }
+
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_menu_options, menu)

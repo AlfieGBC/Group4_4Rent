@@ -1,9 +1,7 @@
 package com.pp.a4rent.screens
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.pp.a4rent.adapters.BlogAdapter
 import com.pp.a4rent.databinding.ActivityBlogDetailBinding
 import com.pp.a4rent.models.Blog
 
