@@ -70,7 +70,7 @@ class UserProfileInfoActivity : AppCompatActivity() {
             userRepository.updateUserProfile(User(
                 firstName = this.binding.etFirstName.text.toString(),
                 lastName = this.binding.etLastName.text.toString(),
-                email = this.binding.etEmail.text.toString(),
+                email = this.binding.tvEmailData.text.toString(),
                 password = this.binding.etPassword.text.toString(),
                 phoneNumber = this.binding.etPhoneNumber.text.toString(),
                 role = this.binding.tvRoleData.text.toString()
@@ -86,7 +86,7 @@ class UserProfileInfoActivity : AppCompatActivity() {
                 this.binding.tvRoleData.setText(user.role)
                 this.binding.etFirstName.setText(user.firstName)
                 this.binding.etLastName.setText(user.lastName)
-                this.binding.etEmail.setText(user.email)
+                this.binding.tvEmailData.setText(user.email)
                 this.binding.etPassword.setText(user.password)
                 this.binding.etPhoneNumber.setText(user.phoneNumber)
             }

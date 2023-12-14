@@ -54,7 +54,7 @@ class UserRepository(private val context: Context) {
 
             data[FIELD_FIRST_NAME] = userToUpdate.firstName
             data[FIELD_LAST_NAME] = userToUpdate.lastName
-            data[FIELD_EMAIL] = userToUpdate.email
+//            data[FIELD_EMAIL] = userToUpdate.email
             data[FIELD_PASSWORD] = userToUpdate.password
             data[FIELD_PHONE] = userToUpdate.phoneNumber
 
