@@ -42,6 +42,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         propertyRepository = PropertyRepository(this)
         propertyRepository.getAllProperties()
 
+        val receiveSearchInput = intent.getStringExtra("FILTER_DATA_EXTRA")
+        if (receiveSearchInput != null) {
+            // Handle the search criteria and filter the rentals accordingly
+            // Update the UI based on the filtered rentals
+            Log.d("TAG", "map: receiveSearchInput ${receiveSearchInput}")
+        }
+
         // switch view
         val toggle: RadioGroup = findViewById(R.id.rg_toggle)
         toggle.setOnCheckedChangeListener { group, checkedId ->
@@ -51,6 +58,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 R.id.rb_list -> {
                     val intent = Intent(this, RentalsPostListActivity::class.java)
+                    intent.putExtra("FILTER_DATA_EXTRA", receiveSearchInput)
                     startActivity(intent)
                 }
             }

@@ -114,12 +114,22 @@ class RentalsPostListActivity : AppCompatActivity() {
             }
         }
 
+        // search system
+        val receiveSearchInput = intent.getStringExtra("FILTER_DATA_EXTRA")
+
+        if (receiveSearchInput != null) {
+            // Handle the search criteria and filter the rentals accordingly
+            // Update the UI based on the filtered rentals
+            Log.d("TAG", "list: receiveSearchInput ${receiveSearchInput}")
+        }
+
         // TODO: (Alfie) testing google map
         val toggle: RadioGroup = findViewById(R.id.rg_toggle)
         toggle.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 R.id.rb_map -> {
                     val intent = Intent(this, MapActivity::class.java)
+                    intent.putExtra("FILTER_DATA_EXTRA", receiveSearchInput)
                     startActivity(intent)
                 }
                 R.id.rb_list -> {
