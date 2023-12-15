@@ -118,7 +118,7 @@ class TenantAccountActivity : AppCompatActivity(), OnRentalPostClickListener {
     // rv:  Row click handler
     override fun onRentalPropertySelected(property: Property) {
         val mainIntent = Intent(this, RentalPostDetailActivity::class.java)
-        mainIntent.putExtra("EXTRA_EXPENSE", property as Serializable)
+        mainIntent.putExtra("EXTRA_PROPERTY", property)
         startActivity(mainIntent)
     }
 
