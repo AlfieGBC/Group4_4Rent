@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         // display menu bar on the screen
         setSupportActionBar(this.binding.menuToolbar)
-        // Change the title
+        // Change the titleR
         supportActionBar?.title = "4Rent"
 
         // For changing the color of overflow icon
