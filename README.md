@@ -10,7 +10,7 @@ The 4 Rent Mobile Application introduces a role-based rental management system w
 * Ching-Ying Lin
 
 ## Project Demo
-### Screenshots
+![](https://github.com/AlfieGBC/Group4_4Rent/blob/pabita/app/src/main/res/drawable/4%20Rent%20demo.gif)
 
 
 ## Technologies
