@@ -16,9 +16,9 @@ The 4 Rent Mobile Application introduces a role-based rental management system w
 ## Technologies
 I used the following technologies to build this Mobile App.
 * Programming Language: Kotlin
-* Frontend - XML
-* Backend - Kotlin
-* Storing sessions: Shared Preferences
+* Frontend: XML
+* Backend: Kotlin
+* Database: Firebase (Firestore)
 * IDE: Android Studio
 
 ## Features
@@ -26,5 +26,6 @@ This Mobile Application has the following features:
 * Searching System
 * Filtering System
 * Favourite System
-* Authentication system (Login/Signup)
-* CRUD for rentals
+* Google Map
+* Authentication system (Log in/Signup)
+* CRUD for rentals posts, user info
